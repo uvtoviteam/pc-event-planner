@@ -76,7 +76,7 @@ public class MainMenu {
             stage.setTitle("Create EVent");
             stage.setScene(scene);
             stage.show();
-            Stage stagelogin= (Stage) LogoutButton.getScene().getWindow();
+            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
             stagelogin.close();
         } catch (IOException ex) {
             ex.printStackTrace();

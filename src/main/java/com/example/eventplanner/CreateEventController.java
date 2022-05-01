@@ -2,19 +2,16 @@ package com.example.eventplanner;
 
 import genericclasses.DatabaseComm;
 import genericclasses.Event;
-import genericclasses.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class CreateEventController {
     @FXML
@@ -29,74 +26,66 @@ public class CreateEventController {
     @FXML
     private Button cancelButton, createButton;
 
-//    private ObservableList<EventModel> eventModel;
-//
-//    @FXML
-//    public TableColumn<Event, Integer> eventID;
-//    @FXML
-//    public TableColumn<Event,String> eventName;
-//
-//    @FXML
-//    public TableColumn<Event, Integer> participantsNum;
-//
-//    @FXML
-//    public TableColumn<Event, LocalDateTime> startDateT;
-//
-//    @FXML
-//    public TableColumn<Event, LocalDateTime> endDateT;
-//
-//    @FXML
-//    TableView<EventModel> eventTableView = MainMenu.getEventTableView();
-
-
+    @FXML
+    private Label errorLabel;
 
     @FXML
     protected void onCreateButtonClick() {
         String name = nameField.getText();
         String description = descriptionField.getText();
-        int numberp = Integer.parseInt(participantNumber.getText());
+        int numberp = 0;
+        LocalDate sd = startDate.getValue(), ed = endDate.getValue();
+        LocalDateTime sDate = LocalDateTime.now(), eDate = LocalDateTime.now();
 
-        LocalDateTime sDate = startDate.getValue().atStartOfDay();
-        LocalDateTime eDate = endDate.getValue().atStartOfDay();
+        if(!participantNumber.getText().isEmpty())
+            numberp = Integer.parseInt(participantNumber.getText());
 
-        Event newEvent = new Event(name, description, sDate, eDate, numberp);
-        int code= DatabaseComm.add_event(newEvent);
+        if(sd != null)
+            sDate = sd.atStartOfDay();
+        if(ed != null)
+            eDate = ed.atStartOfDay();
 
-        if(code==0)
-        {
-//            Event event = DatabaseComm.getEventDetails(newEvent.getNume());
-//            System.out.println(event);
-//            eventModel = FXCollections.observableArrayList(
-//                    new EventModel(event.getId(), event.getNume(), event.getDescription(), event.getStartdateLocal(), event.getEnddateLocal(), new ArrayList<User>(),event.getLimit())
-//            );
-//
-//            eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
-//            eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
-//            participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
-//            startDateT.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
-//            endDateT.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
-//            eventTableView.setItems(eventModel);
-
-            FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
-            Scene scene = null;
-            try {
-                scene = new Scene(fxmlLoader.load());
-                Stage stage= new Stage();
-                stage.setMinWidth(640);
-                stage.setMinHeight(480);
-                stage.setTitle("Main Menu");
-                stage.setScene(scene);
-                stage.show();
-                Stage stagelogin= (Stage) createButton.getScene().getWindow();
-                stagelogin.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
+        int allOK = 1;
+        if(name.isEmpty() || description.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setText("Please fill all fields!");
+            allOK = 0;
+        } else {
+            if(sDate.isAfter(eDate)) {
+                errorLabel.setTextFill(Color.RED);
+                errorLabel.setText("Please enter a valid time period!");
+                allOK = 0;
             }
-            //move to main menu
         }
-        else{
-            //Error message
-            System.out.println("Couldn't create event");
+
+        if(allOK == 1) {
+            Event newEvent = new Event(name, description, sDate, eDate, numberp);
+            int code = DatabaseComm.add_event(newEvent);
+
+            if (code == 0) {
+                Event event = DatabaseComm.getEventDetails(newEvent.getNume());
+                System.out.println("latest: " + event);
+
+                FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                    Stage stage = new Stage();
+                    stage.setMinWidth(640);
+                    stage.setMinHeight(480);
+                    stage.setTitle("Main Menu");
+                    stage.setScene(scene);
+                    stage.show();
+                    Stage stageN = (Stage) createButton.getScene().getWindow();
+                    stageN.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                //move to main menu
+            } else {
+                //Error message
+                System.out.println("Couldn't create event");
+            }
         }
     }
 
@@ -113,8 +102,8 @@ public class CreateEventController {
             stage.setTitle("Main Menu");
             stage.setScene(scene);
             stage.show();
-            Stage stagelogin= (Stage) createButton.getScene().getWindow();
-            stagelogin.close();
+            Stage stageN = (Stage) cancelButton.getScene().getWindow();
+            stageN.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

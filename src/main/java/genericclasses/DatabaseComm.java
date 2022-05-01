@@ -126,7 +126,7 @@ public class DatabaseComm {
             stmnt = conn.prepareStatement(query);
             stmnt.setString(1, name);
             ResultSet rs = stmnt.executeQuery();
-            if (!rs.next()) {
+            if (rs.next()) {
                 return new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
                         rs.getDate(4).toLocalDate().atStartOfDay(), rs.getDate(5).toLocalDate().atStartOfDay(), rs.getInt(6));
             }

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="508.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
+<AnchorPane prefHeight="554.0" prefWidth="556.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
     <children>
-        <TextField fx:id="nameField" layoutX="125.0" layoutY="93.0" prefHeight="31.0" prefWidth="332.0" />
-        <TextArea fx:id="descriptionField" layoutX="125.0" layoutY="156.0" prefHeight="129.0" prefWidth="332.0" />
-        <Label layoutX="258.0" layoutY="31.0" text="Create Event" />
-        <Label layoutX="125.0" layoutY="72.0" text="Event Name" />
-        <Label layoutX="126.0" layoutY="135.0" text="Event Description" />
-        <Button fx:id="cancelButton" layoutX="125.0" layoutY="423.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
-        <Button fx:id="createButton" layoutX="203.0" layoutY="423.0" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />
-        <DatePicker fx:id="endDate" layoutX="295.0" layoutY="312.0" prefHeight="31.0" prefWidth="162.0" />
-        <DatePicker fx:id="startDate" layoutX="126.0" layoutY="312.0" prefHeight="31.0" prefWidth="162.0" />
-        <Label layoutX="126.0" layoutY="291.0" text="Starting Date" />
-        <Label layoutX="295.0" layoutY="291.0" text="Ending Date" />
-      <TextField fx:id="participantNumber" layoutX="126.0" layoutY="371.0" prefHeight="31.0" prefWidth="162.0" />
-      <Label layoutX="126.0" layoutY="350.0" text="Number of Parcicipants" />
+        <TextField fx:id="nameField" layoutX="112.0" layoutY="97.0" prefHeight="31.0" prefWidth="332.0" />
+        <TextArea fx:id="descriptionField" layoutX="112.0" layoutY="160.0" prefHeight="129.0" prefWidth="332.0" />
+        <Label layoutX="211.0" layoutY="34.0" text="Create Event" />
+        <Label layoutX="112.0" layoutY="76.0" text="Event Name" />
+        <Label layoutX="113.0" layoutY="139.0" text="Event Description" />
+        <Button fx:id="cancelButton" layoutX="112.0" layoutY="461.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
+        <Button fx:id="createButton" layoutX="190.0" layoutY="461.0" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />
+        <DatePicker fx:id="endDate" layoutX="282.0" layoutY="316.0" prefHeight="31.0" prefWidth="162.0" />
+        <DatePicker fx:id="startDate" layoutX="113.0" layoutY="316.0" prefHeight="31.0" prefWidth="162.0" />
+        <Label layoutX="113.0" layoutY="295.0" text="Starting Date" />
+        <Label layoutX="282.0" layoutY="295.0" text="Ending Date" />
+      <TextField fx:id="participantNumber" layoutX="113.0" layoutY="375.0" prefHeight="31.0" prefWidth="162.0" />
+      <Label layoutX="113.0" layoutY="354.0" text="Number of Parcicipants" />
+      <Label fx:id="errorLabel" layoutX="113.0" layoutY="416.0" prefHeight="31.0" prefWidth="332.0" textFill="#ff1a1a" />
     </children>
 </AnchorPane>
