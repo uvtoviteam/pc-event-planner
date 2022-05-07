@@ -2,6 +2,8 @@ package com.example.eventplanner;
 
 import genericclasses.DatabaseComm;
 import genericclasses.Event;
+import genericclasses.Session;
+import genericclasses.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,6 +30,9 @@ public class CreateEventController {
 
     @FXML
     private Label errorLabel;
+
+    @FXML
+    private CheckBox daytimeCheck, nighttimeCheck, weekendCheck, formalCheck, casualCheck, sportsCheck, charityCheck;
 
     @FXML
     protected void onCreateButtonClick() {
@@ -58,13 +63,33 @@ public class CreateEventController {
             }
         }
 
+        // get the creator id
+        User creator = Session.getInstance().getUser();
+        int creatorId = DatabaseComm.getUserId(creator);
+
         if(allOK == 1) {
             Event newEvent = new Event(name, description, sDate, eDate, numberp);
-            int code = DatabaseComm.add_event(newEvent);
+            int code = DatabaseComm.add_event(newEvent, creatorId);
 
             if (code == 0) {
-                Event event = DatabaseComm.getEventDetails(newEvent.getNume());
-                System.out.println("latest: " + event);
+                Event event = DatabaseComm.getLatestEvent();
+              //  System.out.println("latest: " + event);
+
+                // add the filters
+                if(daytimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 1);
+                if(nighttimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 2);
+                if(weekendCheck.isSelected())
+                    DatabaseComm.add_filter(event, 3);
+                if(formalCheck.isSelected())
+                    DatabaseComm.add_filter(event, 4);
+                if(casualCheck.isSelected())
+                    DatabaseComm.add_filter(event, 5);
+                if(sportsCheck.isSelected())
+                    DatabaseComm.add_filter(event, 6);
+                if(charityCheck.isSelected())
+                    DatabaseComm.add_filter(event, 7);
 
                 FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
                 Scene scene = null;

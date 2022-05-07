@@ -79,7 +79,7 @@ public class DatabaseComm {
     }
 
     // adding an event to the database
-    public static int add_event(Event event){
+    public static int add_event(Event event, int creator){
         MysqlDataSource dataSource = SQLOnLaunch();
         Connection conn= null;
 
@@ -92,13 +92,43 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String query = "INSERT INTO EVENT (`NAME`, `DESCRIPTION`, `STARTDATE`, `ENDDATE`, `LIMIT`) VALUES (?, ?, ?, ?, ?)";
-            stmnt = conn.prepareStatement(query);
+            String queryEvent = "INSERT INTO EVENTS (`NAME`, `DESCRIPTION`, `START_DATE`, `END_DATE`, `CREATOR`, `LIMIT`) VALUES (?, ?, ?, ?, ?, ?)";
+            stmnt = conn.prepareStatement(queryEvent);
             stmnt.setString(1, event.getNume());
             stmnt.setString(2, event.getDescription());
             stmnt.setDate(3, event.getStartdate());
             stmnt.setDate(4, event.getEnddate());
-            stmnt.setInt(5, event.getLimit());
+            //creator here
+            stmnt.setInt(5, creator);
+            stmnt.setInt(6, event.getLimit());
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // registering an event with it's filter in the database
+    public static int add_filter(Event event, int filter){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "INSERT INTO EVENT_FILTER (`EVENT_ID`, `FILTER_ID`) VALUES (?, ?)";
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, event.getId());
+            stmnt.setInt(2, filter);
+
             stmnt.executeUpdate();
 
         }catch(SQLException var11){
@@ -122,13 +152,13 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String query = "SELECT * FROM EVENT WHERE name = ?";
+            String query = "SELECT * FROM EVENTS WHERE name = ?";
             stmnt = conn.prepareStatement(query);
             stmnt.setString(1, name);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
-                return new Event(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getDate(4).toLocalDate().atStartOfDay(), rs.getDate(5).toLocalDate().atStartOfDay(), rs.getInt(6));
+                return new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8));
             }
             return new Event();
 
@@ -137,5 +167,65 @@ public class DatabaseComm {
         }
 
         return new Event();
+    }
+
+    // get latest event
+    public static Event getLatestEvent(){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM EVENTS ORDER BY EVENT_ID DESC LIMIT 1";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8));
+            }
+            return new Event();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return new Event();
+    }
+
+    // get user id
+    public static int getUserId(User user){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM USERACCOUNT WHERE NAME = ?";
+            stmnt = conn.prepareStatement(query);
+            stmnt.setString(1, user.getUsername());
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
     }
 }
