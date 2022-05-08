@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -47,6 +48,7 @@ public class MainMenu {
     public TableColumn<Event, LocalDateTime> endDate;
 
     List<Event> eventList=new ArrayList<>();
+
     ArrayList<User> userList=new ArrayList<>();
     private void addUser(){
         userList.add(new User(2, "Ion", "12345678", "ion.gmail.com"));
@@ -54,12 +56,12 @@ public class MainMenu {
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            new EventModel( 1,"Event 1","Test",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(),50)
+            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50)
             );
     @FXML
     protected void onTestEvent(){
         addUser();
-        eventModels.add(new EventModel( 2,"Event 2","Test event description",LocalDateTime.now(),LocalDateTime.now(),userList,50));
+        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -117,8 +119,6 @@ public class MainMenu {
             stage.setTitle("Event Management");
             stage.setScene(scene);
             //stage.setResizable(false);
-            EventManagerController controller=  fxmlLoader.getController();
-            controller.start(new User(1,"ion","test","ret@gmail.com"),stage); // will need an actual user with id
             stage.show();
             Stage stagelogin= (Stage) EventManagementButton.getScene().getWindow();
             stagelogin.close();
@@ -136,7 +136,34 @@ public class MainMenu {
     }
 
     @FXML
-    protected void onMouseClickTable(ActionEvent event){
+    protected void onMouseClickTable(){
+        //eventTableView.getSelectionModel().getSelectedItem();
+        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+        Scene scene = null;
+        if (eventSelected == null) System.out.println("couldn't find event");
+        else {
+
+
+            try {
+                Stage stage = new Stage();
+                scene = new Scene(fxmlLoader.load());
+                stage.setMinWidth(304);
+                stage.setMinHeight(262);
+                stage.setTitle("View Event");
+                stage.setScene(scene);
+                //stage.setResizable(false);
+                ViewEventController controller = fxmlLoader.<ViewEventController>getController();
+                controller.initialize(eventSelected);
+                stage.show();
+
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
 
     }
 

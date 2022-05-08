@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
+<AnchorPane prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
    <children>
       <Button fx:id="CreateEventButton" layoutX="163.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCreateEventButtonClick" text="Create Event" />
       <Button fx:id="NotifButton" layoutX="24.0" layoutY="241.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="34.0" prefWidth="111.0" text="Notifications" />
