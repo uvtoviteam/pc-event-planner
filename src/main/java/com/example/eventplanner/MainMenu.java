@@ -75,8 +75,23 @@ public class MainMenu {
 
     @FXML
     protected void onCreateEventButtonClick(){
-
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+            Stage stage= new Stage();
+            stage.setMinWidth(304);
+            stage.setMinHeight(262);
+            stage.setTitle("Create EVent");
+            stage.setScene(scene);
+            stage.show();
+            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
+            stagelogin.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
+
     @FXML
     protected void onNotifButtonClick(){
 

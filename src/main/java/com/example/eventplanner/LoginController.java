@@ -1,6 +1,8 @@
 package com.example.eventplanner;
 
 import genericclasses.DatabaseComm;
+import genericclasses.Session;
+import genericclasses.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -46,6 +48,10 @@ public class LoginController {
                 ex.printStackTrace();
             }
             //move to main menu
+
+
+            Session session = Session.getInstance();
+            session.setUser(new User(user));
         }
         else{
             //Error message for wrong name or password
