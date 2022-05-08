@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="pc-event-planner" target="17" />
+      <module name="pc-event-planner" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>
