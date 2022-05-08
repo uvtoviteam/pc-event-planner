@@ -10,8 +10,8 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 public class DatabaseComm {
     private static MysqlDataSource SQLOnLaunch() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUser("root"); // user
-        dataSource.setPassword("Cr157124"); //pass
+        dataSource.setUser("eventplan"); // user
+        dataSource.setPassword("new_password"); //pass
         dataSource.setURL("jdbc:mysql://localhost:3306/event_planner"); //in loc de event_planner, pui ce database ai
         return dataSource;
     }
