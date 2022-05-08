@@ -1,6 +1,8 @@
 package com.example.eventplanner;
 
+import genericclasses.DatabaseComm;
 import genericclasses.Event;
+import genericclasses.Session;
 import genericclasses.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +20,7 @@ import org.w3c.dom.events.MouseEvent;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainMenu {
@@ -50,18 +53,26 @@ public class MainMenu {
     List<Event> eventList=new ArrayList<>();
 
     ArrayList<User> userList=new ArrayList<>();
+
+    public void setButtonClass(){
+        Button buttonsarr[]={TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,ViewEventButton,RefreshButton,EventManagementButton};
+        List<Button> buttons;
+        buttons=Arrays.asList(buttonsarr);
+        Session.ButtonConfig(buttons);
+    }
+
     private void addUser(){
-        userList.add(new User(2, "Ion", "12345678", "ion.gmail.com"));
+        userList.add(new User(2, "Ion", "ion.gmail.com"));
     }
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50)
+            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
             );
     @FXML
     protected void onTestEvent(){
         addUser();
-        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50));
+        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,1));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -98,7 +109,15 @@ public class MainMenu {
     }
     @FXML
     protected void onRefreshButtonClick(){
-
+        int currentUser = Session.getInstance().getUser().getId();
+        eventTableView.getItems().clear();
+        eventModels = DatabaseComm.refreshlist(currentUser,false);
+        eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Usersize"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventTableView.setItems(eventModels);
     }
     @FXML
     protected void onViewEventButtonClick(){
@@ -134,6 +153,8 @@ public class MainMenu {
             stage.setTitle("Event Management");
             stage.setScene(scene);
             //stage.setResizable(false);
+            EventManagerController controller=  fxmlLoader.getController();
+            controller.start(Session.getInstance().getUser(),stage); // will need an actual user with id
             stage.show();
             Stage stagelogin= (Stage) EventManagementButton.getScene().getWindow();
             stagelogin.close();

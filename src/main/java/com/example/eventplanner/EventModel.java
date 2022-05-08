@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,8 +22,9 @@ public class EventModel {
     public SimpleStringProperty EndDate;
     public SimpleListProperty<User> userlist;
     public SimpleIntegerProperty Participants;
+    public SimpleIntegerProperty creator;
     protected LocalDateTime startDatePrivate,endDatePrivate;
-    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit){
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, Integer creator){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ID=new SimpleIntegerProperty(id);
         this.EventName=new SimpleStringProperty(nume);
@@ -32,6 +35,7 @@ public class EventModel {
         this.Participants=new SimpleIntegerProperty(limit);
         this.startDatePrivate=startdate;
         this.endDatePrivate=enddate;
+        this.creator=new SimpleIntegerProperty(creator);
         System.out.println(startDatePrivate);
     }
 
@@ -99,6 +103,8 @@ public class EventModel {
         return userlist.get();
     }
 
+    public int getUsersize() {return userlist.size();}
+
     public SimpleListProperty<User> userlistProperty() {
         return userlist;
     }
@@ -142,5 +148,31 @@ public class EventModel {
             return startDatePrivate.getMinute();
         else
             return endDatePrivate.getMinute();
+    }
+    public Timestamp getStartDatePrivate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(startDatePrivate.format(formatter).toString());
+        return sqlDate;
+    }
+
+    public Timestamp getEndDatePrivate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(endDatePrivate.format(formatter).toString());
+        return sqlDate;
+    }
+    public void setStartDatePrivate(LocalDateTime date){
+        this.startDatePrivate=date;
+        this.setStartdate(date.toString());
+    }
+    public void setEndDatePrivate(LocalDateTime date){
+        this.endDatePrivate=date;
+        this.setEnddate(date.toString());
+    }
+
+    public SimpleIntegerProperty getCreator(){
+        return creator;
+    }
+    public void setCreator(int creator){
+        this.creator=new SimpleIntegerProperty(creator);
     }
 }

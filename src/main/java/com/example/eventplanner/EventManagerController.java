@@ -1,6 +1,8 @@
 package com.example.eventplanner;
 
+import genericclasses.DatabaseComm;
 import genericclasses.Event;
+import genericclasses.Session;
 import genericclasses.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -70,10 +72,11 @@ public class EventManagerController {
     private TableColumn<?, ?> startDate;
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            new EventModel( 1,"Event 1","Test",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(),50)
+            //new EventModel( 1,"Event 1","Test",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(),50,1)
     );
 
     void start(User person,Stage stage){
+        int currentId=person.getId();
         eventManagerTableView.setRowFactory(tv -> {
             TableRow<EventModel> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -86,13 +89,17 @@ public class EventManagerController {
             return row ;
         });
         //eventModels.add(new EventModel( 2,"Event 2","Test event description", LocalDateTime.now(),LocalDateTime.now(),userList,50));
+        System.out.println("Current id:"+currentId);
+        eventModels=DatabaseComm.refreshlist(currentId,true);
         eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
         eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
         participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
         startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
         endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
         eventManagerTableView.setItems(eventModels);
+        //eventManagerTableView.refresh();
         System.out.println("Complete.");
+
     }
 
     void startEditEvent(EventModel event){

@@ -1,6 +1,8 @@
 package com.example.eventplanner;
 
+import genericclasses.DatabaseComm;
 import genericclasses.Event;
+import genericclasses.Session;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,6 +50,7 @@ public class EventEditController {
     @FXML
     private Spinner<Integer> Min2=new Spinner<>();
 
+    EventModel currentEvent;
 
     @FXML
     void onBackButtonPress(ActionEvent event) {
@@ -65,6 +68,9 @@ public class EventEditController {
             stage.setTitle("Event Manager");
             stage.setScene(scene);
             //stage.setResizable(false);
+            EventManagerController controller=  fxmlLoader.getController();
+            controller.start(Session.getInstance().getUser(),stage); // will need an actual user with id
+            stage.show();
             stage.show();
             Stage stagelogin= (Stage) BackButton.getScene().getWindow();
             stagelogin.close();
@@ -90,6 +96,7 @@ public class EventEditController {
         Hour2.getValueFactory().setValue(event.getHour(false));
         Min1.getValueFactory().setValue(event.getMinute(true));
         Min2.getValueFactory().setValue(event.getMinute(false));
+        currentEvent=event;
     }
 
     @FXML
@@ -98,12 +105,26 @@ public class EventEditController {
         LocalDateTime sDate,eDate;
         String eName,Desc;
         eName = EventNameField.getText();
-        Desc = EventNameField.getText();
-        sDate = LocalDateTime.parse(StartDateField.getValue()+" "+Hour1.getValue()+":"+Min1.getValue()+":00",formatter);
-        eDate = LocalDateTime.parse(EndDateField.getValue()+" "+Hour2.getValue()+":"+Min2.getValue()+":00",formatter);
+        Desc = DescArea.getText();
+        String formattedHour1 = String.format("%02d", Hour1.getValue());
+        String formattedHour2 = String.format("%02d", Hour2.getValue());
+        String formattedMin1 = String.format("%02d", Min1.getValue());
+        String formattedMin2 = String.format("%02d", Min2.getValue());
+        sDate = LocalDateTime.parse(StartDateField.getValue()+" "+formattedHour1+":"+formattedMin1+":00",formatter);
+        eDate = LocalDateTime.parse(EndDateField.getValue()+" "+formattedHour2+":"+formattedMin2+":00",formatter);
         System.out.println(sDate);
         System.out.println(eDate);
-        goBack();
+        if(DatabaseComm.updateEvent(currentEvent)==0){
+            //DatabaseComm.commitQueries();
+            currentEvent.setNume(eName);
+            currentEvent.setDescription(Desc);
+            currentEvent.setStartDatePrivate(sDate);
+            currentEvent.setEndDatePrivate(eDate);
+            DatabaseComm.updateEvent(currentEvent);
+            goBack();}
+        else{
+            System.out.println("Error occured.");
+        }
     }
 
 }

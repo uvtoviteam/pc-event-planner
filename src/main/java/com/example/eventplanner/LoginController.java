@@ -36,6 +36,8 @@ public class LoginController {
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load());
+                MainMenu controller=  fxmlLoader.getController();
+                controller.setButtonClass();
                 Stage stage= new Stage();
                 stage.setMinWidth(640);
                 stage.setMinHeight(480);
@@ -49,9 +51,9 @@ public class LoginController {
             }
             //move to main menu
 
-
+            User sessionUser = DatabaseComm.getUserInfo(user);
             Session session = Session.getInstance();
-            session.setUser(new User(user));
+            session.setUser(sessionUser);
         }
         else{
             //Error message for wrong name or password

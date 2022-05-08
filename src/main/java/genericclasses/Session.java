@@ -1,5 +1,10 @@
 package genericclasses;
 
+import javafx.scene.control.Button;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Session {
     User user;
 
@@ -23,5 +28,11 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static void ButtonConfig(List<Button> buttons){
+        for(Button i : buttons){
+            i.getStyleClass().add("button-4");
+        }
     }
 }

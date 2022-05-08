@@ -4,8 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import com.example.eventplanner.EventModel;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DatabaseComm {
     private static MysqlDataSource SQLOnLaunch() {
@@ -200,6 +206,35 @@ public class DatabaseComm {
     }
 
     // get user id
+    public static User getUserInfo(String user){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM USERACCOUNT WHERE NAME = ?";
+            stmnt = conn.prepareStatement(query);
+            stmnt.setString(1, user);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                User newuser=new User(rs.getInt(1),rs.getString(2),rs.getString(4));
+                return newuser;
+            }
+            return null;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return null;
+    }
     public static int getUserId(User user){
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
@@ -227,5 +262,125 @@ public class DatabaseComm {
         }
 
         return 0;
+    }
+    public static int updateEvent(EventModel event){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "UPDATE EVENTS SET `NAME`=?, `DESCRIPTION`=?, `START_DATE`=?, `END_DATE`=?, `CREATOR`=?, `LIMIT`=? WHERE event_id=?";
+            System.out.println(event.getEndDatePrivate());
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setString(1, event.getNume());
+            stmnt.setString(2, event.getDescription());
+            stmnt.setTimestamp(3, event.getStartDatePrivate());
+            stmnt.setTimestamp(4, event.getEndDatePrivate());
+            stmnt.setInt(5, event.getCreator().get());
+            stmnt.setInt(6, event.getLimit());
+            stmnt.setInt(7,event.getID());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
+    }
+    public static int commitQueries(){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+        try {
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 1;
+        }
+        return 0;
+    }
+    public static ObservableList<EventModel> refreshlist(int userId, boolean onlyCreator){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query;
+            if(onlyCreator==false){
+                 query = "SELECT * FROM events"; //WHERE end_date >= Sysdate() ";
+                 stmnt = conn.prepareStatement(query);}
+            else{
+                 query = "SELECT * FROM events WHERE creator=?";
+                stmnt = conn.prepareStatement(query);
+                stmnt.setInt(1, userId);
+            };
+
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, limit ;
+            int creator, status;
+            String name , description;
+            LocalDateTime sdate , edate ;
+            ArrayList<User> Luser = new ArrayList<>();
+
+
+
+
+            while(rs.next()){
+
+                id = rs.getInt("event_id");
+                creator = rs.getInt("creator");
+                name = rs.getString("name");
+                description = rs.getString("description");
+                sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
+                edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
+                limit = rs.getInt("limit");
+
+                query = "SELECT user_id FROM enrolments WHERE event_id =?";
+
+                stmnt = conn.prepareStatement(query);
+                stmnt.setInt(1,id);
+                rs2 = stmnt.executeQuery();
+                while(rs2.next()){
+                    //Aici se aduga idurile;
+
+
+                };
+                System.out.println("Event:"+name);
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+        System.out.println(Rflist.size());
+        return Rflist ;
+
     }
 }
