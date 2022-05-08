@@ -5,16 +5,15 @@ import genericclasses.Session;
 import genericclasses.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginController {
     @FXML
@@ -24,6 +23,14 @@ public class LoginController {
 
     @FXML
     private Button RegisterButton,LoginButton;
+
+    public void setButtonClass(){
+        Button buttonsarr[]={RegisterButton,LoginButton};
+        List<Button> buttons;
+        buttons= Arrays.asList(buttonsarr);
+        Session.ButtonConfig(buttons);
+    }
+
 
     @FXML
     protected void onLoginButtonClick() {
@@ -38,6 +45,8 @@ public class LoginController {
                 scene = new Scene(fxmlLoader.load());
                 MainMenu controller=  fxmlLoader.getController();
                 controller.setButtonClass();
+                String css = this.getClass().getResource("Style.css").toExternalForm();
+                scene.getStylesheets().add(css);
                 Stage stage= new Stage();
                 stage.setMinWidth(640);
                 stage.setMinHeight(480);
@@ -68,6 +77,10 @@ public class LoginController {
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
+            RegisterScreen controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             Stage stage= new Stage();
             stage.setMinWidth(209);
             stage.setMinHeight(400);

@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 public class CreateEventController {
     @FXML
@@ -33,6 +35,14 @@ public class CreateEventController {
 
     @FXML
     private CheckBox daytimeCheck, nighttimeCheck, weekendCheck, formalCheck, casualCheck, sportsCheck, charityCheck;
+
+    public void setButtonClass(){
+        Button buttonsarr[]={cancelButton, createButton};
+        List<Button> buttons;
+        buttons= Arrays.asList(buttonsarr);
+        Session.ButtonConfig(buttons);
+    }
+
 
     @FXML
     protected void onCreateButtonClick() {
@@ -95,6 +105,10 @@ public class CreateEventController {
                 Scene scene = null;
                 try {
                     scene = new Scene(fxmlLoader.load());
+                    MainMenu controller=  fxmlLoader.getController();
+                    controller.setButtonClass();
+                    String css = this.getClass().getResource("Style.css").toExternalForm();
+                    scene.getStylesheets().add(css);
                     Stage stage = new Stage();
                     stage.setMinWidth(640);
                     stage.setMinHeight(480);
@@ -121,6 +135,10 @@ public class CreateEventController {
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
+            MainMenu controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             Stage stage= new Stage();
             stage.setMinWidth(640);
             stage.setMinHeight(480);

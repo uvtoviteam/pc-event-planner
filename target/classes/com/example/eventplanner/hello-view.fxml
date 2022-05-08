@@ -8,7 +8,7 @@
 
 <AnchorPane minHeight="262.0" minWidth="304.0" prefHeight="262.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.LoginController">
    <children>
-       <Button fx:id="LoginButton" layoutX="174.0" layoutY="187.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="59.0" text="Login" AnchorPane.rightAnchor="70.8" />
+       <Button fx:id="LoginButton" layoutX="166.0" layoutY="186.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="59.0" text="Login" AnchorPane.rightAnchor="78.80000000000001" />
    
                 <Label fx:id="welcomeText" alignment="CENTER" layoutX="69.0" layoutY="-4.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="178.0" text="Welcome to the login screen!" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="56.599999999999994" />
       <TextField fx:id="UserField" layoutX="76.0" layoutY="60.0" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="78.4" />

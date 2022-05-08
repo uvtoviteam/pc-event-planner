@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="489.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
+<AnchorPane prefHeight="489.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
     <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d3d2d2" height="492.0" layoutX="456.0" stroke="TRANSPARENT" strokeType="INSIDE" width="220.0" />
         <TextField fx:id="nameField" layoutX="89.0" layoutY="94.0" prefHeight="31.0" prefWidth="332.0" />
@@ -21,7 +24,7 @@
         <Label layoutX="90.0" layoutY="299.0" text="Starting Date" />
         <Label layoutX="259.0" layoutY="299.0" text="Ending Date" />
       <TextField fx:id="participantNumber" layoutX="90.0" layoutY="399.0" prefHeight="31.0" prefWidth="162.0" />
-      <Label layoutX="92.0" layoutY="369.0" text="Number of Parcicipants" />
+      <Label layoutX="92.0" layoutY="369.0" text="Number of Participants" />
       <Label fx:id="errorLabel" layoutX="89.0" layoutY="440.0" prefHeight="31.0" prefWidth="332.0" />
       <CheckBox fx:id="daytimeCheck" layoutX="494.0" layoutY="94.0" mnemonicParsing="false" text="Daytime Event" />
       <Label layoutX="494.0" layoutY="64.0" text="Event Filters" />

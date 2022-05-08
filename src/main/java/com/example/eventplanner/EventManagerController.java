@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class EventManagerController {
     @FXML
@@ -75,6 +77,13 @@ public class EventManagerController {
             //new EventModel( 1,"Event 1","Test",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(),50,1)
     );
 
+    public void setButtonClass(){
+        Button buttonsarr[]={NotifButton,LogoutButton,DeleteButton,CalendarButton,BackButton,SettingsButton};
+        List<Button> buttons;
+        buttons= Arrays.asList(buttonsarr);
+        Session.ButtonConfig(buttons);
+    }
+
     void start(User person,Stage stage){
         int currentId=person.getId();
         eventManagerTableView.setRowFactory(tv -> {
@@ -114,6 +123,9 @@ public class EventManagerController {
             stage.setScene(scene);
             //stage.setResizable(false);
             EventEditController controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             controller.setEventData(event);
             stage.show();
             Stage stagelogin = (Stage) BackButton.getScene().getWindow();
@@ -130,12 +142,40 @@ public class EventManagerController {
 
     @FXML
     void onDeleteButtonClick(ActionEvent event) {
-
+        EventModel selectedEvent=eventManagerTableView.getSelectionModel().getSelectedItem();
+        if(selectedEvent!=null){
+            if(DatabaseComm.deleteEvent(selectedEvent)==0)
+            {
+                eventManagerTableView.getItems().clear();
+            eventModels=DatabaseComm.refreshlist(Session.getInstance().getUser().getId(),true);
+            eventManagerTableView.setItems(eventModels);
+            }
+            else { //error
+                 }
+        }
     }
 
     @FXML
     void onLogoutButtonClick(ActionEvent event) {
-
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+            LoginController controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
+            Stage stage= new Stage();
+            stage.setMinWidth(304);
+            stage.setMinHeight(262);
+            stage.setTitle("Login Screen");
+            stage.setScene(scene);
+            stage.show();
+            Stage stagelogin= (Stage) LogoutButton.getScene().getWindow();
+            stagelogin.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
@@ -160,6 +200,10 @@ public class EventManagerController {
         try {
             Stage stage = new Stage();
             scene = new Scene(fxmlLoader.load());
+            MainMenu controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             stage.setMinWidth(304);
             stage.setMinHeight(262);
             stage.setTitle("Main Menu");

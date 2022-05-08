@@ -297,6 +297,36 @@ public class DatabaseComm {
         return 0;
 
     }
+
+    public static int deleteEvent(EventModel event){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "DELETE FROM events WHERE event_id=?";
+            //System.out.println(event.getEndDatePrivate());
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, event.getID());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
+    }
+
     public static int commitQueries(){
         MysqlDataSource dataSource = SQLOnLaunch();
         Connection conn= null;

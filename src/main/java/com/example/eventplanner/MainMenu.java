@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MainMenu {
     @FXML
-    Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,ViewEventButton,RefreshButton,EventManagementButton;
+    Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
     @FXML
     TextField SearchField;
@@ -55,7 +55,7 @@ public class MainMenu {
     ArrayList<User> userList=new ArrayList<>();
 
     public void setButtonClass(){
-        Button buttonsarr[]={TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,ViewEventButton,RefreshButton,EventManagementButton};
+        Button buttonsarr[]={TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton};
         List<Button> buttons;
         buttons=Arrays.asList(buttonsarr);
         Session.ButtonConfig(buttons);
@@ -90,10 +90,14 @@ public class MainMenu {
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
+            CreateEventController controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             Stage stage= new Stage();
             stage.setMinWidth(304);
             stage.setMinHeight(262);
-            stage.setTitle("Create EVent");
+            stage.setTitle("Create Event");
             stage.setScene(scene);
             stage.show();
             Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
@@ -129,6 +133,10 @@ public class MainMenu {
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
+            LoginController controller=  fxmlLoader.getController();
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             Stage stage= new Stage();
             stage.setMinWidth(304);
             stage.setMinHeight(262);
@@ -155,6 +163,9 @@ public class MainMenu {
             //stage.setResizable(false);
             EventManagerController controller=  fxmlLoader.getController();
             controller.start(Session.getInstance().getUser(),stage); // will need an actual user with id
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             stage.show();
             Stage stagelogin= (Stage) EventManagementButton.getScene().getWindow();
             stagelogin.close();
@@ -190,6 +201,9 @@ public class MainMenu {
                 stage.setScene(scene);
                 //stage.setResizable(false);
                 ViewEventController controller = fxmlLoader.<ViewEventController>getController();
+                controller.setButtonClass();
+                String css = this.getClass().getResource("Style.css").toExternalForm();
+                scene.getStylesheets().add(css);
                 controller.initialize(eventSelected);
                 stage.show();
 

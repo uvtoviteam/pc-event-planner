@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 public class EventEditController {
 
@@ -52,6 +54,14 @@ public class EventEditController {
 
     EventModel currentEvent;
 
+    public void setButtonClass(){
+        Button buttonsarr[]={SaveButton,BackButton};
+        List<Button> buttons;
+        buttons= Arrays.asList(buttonsarr);
+        Session.ButtonConfig(buttons);
+    }
+
+
     @FXML
     void onBackButtonPress(ActionEvent event) {
         goBack();
@@ -70,6 +80,9 @@ public class EventEditController {
             //stage.setResizable(false);
             EventManagerController controller=  fxmlLoader.getController();
             controller.start(Session.getInstance().getUser(),stage); // will need an actual user with id
+            controller.setButtonClass();
+            String css = this.getClass().getResource("Style.css").toExternalForm();
+            scene.getStylesheets().add(css);
             stage.show();
             stage.show();
             Stage stagelogin= (Stage) BackButton.getScene().getWindow();

@@ -12,6 +12,10 @@ public class LoginScreen extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        LoginController controller=  fxmlLoader.getController();
+        controller.setButtonClass();
+        String css = this.getClass().getResource("Style.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setMinWidth(304);
         stage.setMinHeight(262);
         stage.setTitle("Login Screen");
