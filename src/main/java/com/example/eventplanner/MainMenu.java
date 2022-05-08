@@ -4,6 +4,7 @@ import genericclasses.Event;
 import genericclasses.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -46,6 +47,10 @@ public class MainMenu {
     public TableColumn<Event, LocalDateTime> endDate;
 
     List<Event> eventList=new ArrayList<>();
+    ArrayList<User> userList=new ArrayList<>();
+    private void addUser(){
+        userList.add(new User(2, "Ion", "12345678", "ion.gmail.com"));
+    }
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
@@ -53,6 +58,8 @@ public class MainMenu {
             );
     @FXML
     protected void onTestEvent(){
+        addUser();
+        eventModels.add(new EventModel( 2,"Event 2","Test event description",LocalDateTime.now(),LocalDateTime.now(),userList,50));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -110,6 +117,8 @@ public class MainMenu {
             stage.setTitle("Event Management");
             stage.setScene(scene);
             //stage.setResizable(false);
+            EventManagerController controller=  fxmlLoader.getController();
+            controller.start(new User(1,"ion","test","ret@gmail.com"),stage); // will need an actual user with id
             stage.show();
             Stage stagelogin= (Stage) EventManagementButton.getScene().getWindow();
             stagelogin.close();
@@ -123,6 +132,11 @@ public class MainMenu {
     }
     @FXML
     protected void onCalendarButtonClick(){
+
+    }
+
+    @FXML
+    protected void onMouseClickTable(ActionEvent event){
 
     }
 

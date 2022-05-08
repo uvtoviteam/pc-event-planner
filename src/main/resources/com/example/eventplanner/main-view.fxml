@@ -26,7 +26,7 @@
       <Text layoutX="44.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner" />
       <ImageView fx:id="logo" fitHeight="137.0" fitWidth="136.0" layoutX="12.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="TestEventButton" layoutX="163.0" layoutY="353.0" mnemonicParsing="false" onAction="#onTestEvent" text="Test Events" />
-      <TableView fx:id="eventTableView" layoutX="155.0" layoutY="55.0" prefHeight="234.0" prefWidth="484.0">
+      <TableView fx:id="eventTableView" layoutX="155.0" layoutY="55.0" onMouseClicked="#onMouseClickTable" prefHeight="234.0" prefWidth="484.0">
         <columns>
           <TableColumn fx:id="eventID" prefWidth="31.199951171875" text="ID" />
             <TableColumn fx:id="eventName" prefWidth="100.0" text="Event Name" />

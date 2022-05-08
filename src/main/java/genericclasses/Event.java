@@ -12,6 +12,7 @@ public class Event {
     LocalDateTime startdate;
     LocalDateTime enddate;
     ArrayList<User> userlist;
+    User creator;
     int limit;
     public Event(){
         id=1;
