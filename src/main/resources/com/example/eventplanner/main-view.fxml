@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
+<AnchorPane prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
    <children>
       <Button fx:id="CreateEventButton" layoutX="163.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCreateEventButtonClick" text="Create Event" />
       <Button fx:id="NotifButton" layoutX="24.0" layoutY="241.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="34.0" prefWidth="111.0" text="Notifications" />
@@ -26,7 +26,7 @@
       <Text layoutX="44.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner" />
       <ImageView fx:id="logo" fitHeight="137.0" fitWidth="136.0" layoutX="12.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="TestEventButton" layoutX="163.0" layoutY="353.0" mnemonicParsing="false" onAction="#onTestEvent" text="Test Events" />
-      <TableView fx:id="eventTableView" layoutX="155.0" layoutY="55.0" prefHeight="234.0" prefWidth="484.0">
+      <TableView fx:id="eventTableView" layoutX="155.0" layoutY="55.0" onMouseClicked="#onMouseClickTable" prefHeight="234.0" prefWidth="484.0">
         <columns>
           <TableColumn fx:id="eventID" prefWidth="31.199951171875" text="ID" />
             <TableColumn fx:id="eventName" prefWidth="100.0" text="Event Name" />

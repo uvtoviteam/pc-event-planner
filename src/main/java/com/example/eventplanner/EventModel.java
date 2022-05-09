@@ -7,7 +7,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class EventModel {
     public SimpleStringProperty EndDate;
     public SimpleListProperty<User> userlist;
     public SimpleIntegerProperty Participants;
+    protected LocalDateTime startDatePrivate,endDatePrivate;
     public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ID=new SimpleIntegerProperty(id);
@@ -27,6 +30,9 @@ public class EventModel {
         this.EndDate=new SimpleStringProperty(enddate.format(formatter).toString());
         this.userlist=new SimpleListProperty<User>(FXCollections.observableList(userlist));
         this.Participants=new SimpleIntegerProperty(limit);
+        this.startDatePrivate=startdate;
+        this.endDatePrivate=enddate;
+        System.out.println(startDatePrivate);
     }
 
     public int getID() {
@@ -111,5 +117,30 @@ public class EventModel {
 
     public void setLimit(int limit) {
         this.Participants.set(limit);
+    }
+
+    public LocalDate getDate(boolean which){
+        if(which)
+            return startDatePrivate.toLocalDate();
+        else
+            return endDatePrivate.toLocalDate();
+    };
+    public LocalTime getTime(boolean which){
+        if(which)
+            return startDatePrivate.toLocalTime();
+        else
+            return endDatePrivate.toLocalTime();
+    }
+    public int getHour(boolean which){
+        if(which)
+            return startDatePrivate.getHour();
+        else
+            return endDatePrivate.getHour();
+    }
+    public int getMinute(boolean which){
+        if(which)
+            return startDatePrivate.getMinute();
+        else
+            return endDatePrivate.getMinute();
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane accessibleRole="TEXT" opacity="0.86" prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.ViewEventController">
+   <children>
+      <Text fontSmoothingType="LCD" layoutX="271.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View Event" textAlignment="CENTER">
+         <font>
+            <Font name="Baskerville Old Face" size="27.0" />
+         </font></Text>
+      <AnchorPane prefHeight="482.0" prefWidth="644.0">
+         <children>
+            <Text fx:id="TextId" layoutX="21.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event ID: " wrappingWidth="57.41486358642584">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="TextId1" layoutX="21.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name:" wrappingWidth="77.41485595703125">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="TextId11" layoutX="21.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Description:" wrappingWidth="103.01490020751953">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="TextId111" layoutX="21.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Date:" wrappingWidth="57.41486358642584">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="TextId112" layoutX="22.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date:" wrappingWidth="63.8148193359375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="TextId113" layoutX="18.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants: " wrappingWidth="70.21484375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <Text fx:id="IdEvent" layoutX="102.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="NameEvent" layoutX="114.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="283.01483154296875" />
+            <Text fx:id="DescriptionEvent" layoutX="144.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="403.01480865478516" />
+            <Text fx:id="Start" layoutX="102.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="End" layoutX="101.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="Participants" layoutX="117.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="38.93670654296875" />
+         </children></AnchorPane>
+   </children>
+</AnchorPane>
