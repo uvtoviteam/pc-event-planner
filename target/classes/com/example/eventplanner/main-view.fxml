@@ -5,28 +5,63 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="482.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
 
     <children>
       <Button fx:id="CreateEventButton" layoutX="171.0" layoutY="315.0" mnemonicParsing="false" onAction="#onCreateEventButtonClick" prefHeight="26.0" prefWidth="111.0" text="Create Event" />
-      <Button fx:id="NotifButton" layoutX="24.0" layoutY="241.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="34.0" prefWidth="111.0" text="Notifications" />
-      <Text fx:id="NotifText" layoutX="24.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current notifications:" />
+      <Separator layoutX="137.0" orientation="VERTICAL" prefHeight="484.0" prefWidth="10.0">
+         <effect>
+            <Shadow blurType="TWO_PASS_BOX" height="18.7" radius="4.175" width="0.0">
+               <color>
+                  <Color opacity="0.2500000298023224" />
+               </color>
+            </Shadow>
+         </effect>
+      </Separator>
+      <AnchorPane fx:id="anchormenu" layoutX="-2.0" layoutY="-1.0" prefHeight="484.0" prefWidth="142.0">
+         <children>
+            <Button fx:id="NotifButton" layoutX="14.0" layoutY="249.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="34.0" prefWidth="111.0" text="Notifications">
+               <effect>
+                  <InnerShadow height="15.04" radius="3.51" width="1.0" />
+               </effect>
+            </Button>
+            <Text fx:id="NotifText" layoutX="14.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current notifications:" />
+            <Button fx:id="LogoutButton" layoutX="13.0" layoutY="422.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="34.0" prefWidth="111.0" text="Log out">
+               <effect>
+                  <InnerShadow height="15.0" radius="3.5" width="1.0" />
+               </effect>
+            </Button>
+            <Button fx:id="SettingsButton" layoutX="13.0" layoutY="361.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="34.0" prefWidth="111.0" text="Account Settings">
+               <effect>
+                  <InnerShadow height="8.0" radius="1.75" width="1.0" />
+               </effect>
+            </Button>
+            <Button fx:id="CalendarButton" layoutX="14.0" layoutY="306.0" mnemonicParsing="false" onAction="#onCalendarButtonClick" prefHeight="34.0" prefWidth="111.0" text="Calendar">
+               <effect>
+                  <InnerShadow height="8.0" radius="1.75" width="1.0" />
+               </effect>
+            </Button>
+            <Text layoutX="33.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner" />
+            <ImageView fx:id="logo" fitHeight="137.0" fitWidth="136.0" layoutX="1.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+         <effect>
+            <Bloom threshold="0.98" />
+         </effect>
+      </AnchorPane>
       <Button fx:id="RefreshButton" layoutX="322.0" layoutY="315.0" mnemonicParsing="false" onAction="#onRefreshButtonClick" prefHeight="26.0" prefWidth="111.0" text="Refresh list" />
       <Button fx:id="EventManagementButton" layoutX="480.0" layoutY="315.0" mnemonicParsing="false" onAction="#onEventManagementButtonClick" text="Event Management" />
-      <Button fx:id="LogoutButton" layoutX="23.0" layoutY="414.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="34.0" prefWidth="111.0" text="Log out" />
-      <Button fx:id="SettingsButton" layoutX="23.0" layoutY="353.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="34.0" prefWidth="111.0" text="Account Settings" />
       <TextField fx:id="SearchField" layoutX="480.0" layoutY="28.0" />
       <Text layoutX="521.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search event" />
-      <Separator layoutX="149.0" orientation="VERTICAL" prefHeight="482.0" prefWidth="6.0" />
-      <Button fx:id="CalendarButton" layoutX="24.0" layoutY="298.0" mnemonicParsing="false" onAction="#onCalendarButtonClick" prefHeight="34.0" prefWidth="111.0" text="Calendar" />
-      <Text layoutX="44.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner" />
-      <ImageView fx:id="logo" fitHeight="137.0" fitWidth="136.0" layoutX="12.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="TestEventButton" layoutX="195.0" layoutY="370.0" mnemonicParsing="false" onAction="#onTestEvent" text="Test Events" />
-      <TableView fx:id="eventTableView" layoutX="155.0" layoutY="55.0" onMouseClicked="#onMouseClickTable" prefHeight="234.0" prefWidth="484.0">
+      <TableView fx:id="eventTableView" layoutX="146.0" layoutY="63.0" onMouseClicked="#onMouseClickTable" prefHeight="234.0" prefWidth="484.0">
         <columns>
           <TableColumn fx:id="eventID" prefWidth="31.199951171875" text="ID" />
             <TableColumn fx:id="eventName" prefWidth="100.0" text="Event Name" />
