@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="489.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
+    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d3d2d2" height="492.0" layoutX="456.0" stroke="TRANSPARENT" strokeType="INSIDE" width="220.0" />
+        <TextField fx:id="nameField" layoutX="89.0" layoutY="94.0" prefHeight="31.0" prefWidth="332.0" />
+        <TextArea fx:id="descriptionField" layoutX="89.0" layoutY="164.0" prefHeight="129.0" prefWidth="332.0" />
+        <Label layoutX="296.0" layoutY="22.0" text="Create Event" />
+        <Label layoutX="89.0" layoutY="64.0" text="Event Name" />
+        <Label layoutX="90.0" layoutY="134.0" text="Event Description" />
+        <Button fx:id="cancelButton" layoutX="497.0" layoutY="399.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" textAlignment="CENTER" />
+        <Button fx:id="createButton" layoutX="573.0" layoutY="399.0" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" textAlignment="CENTER" />
+        <DatePicker fx:id="endDate" layoutX="259.0" layoutY="329.0" prefHeight="31.0" prefWidth="162.0" />
+        <DatePicker fx:id="startDate" layoutX="90.0" layoutY="329.0" prefHeight="31.0" prefWidth="162.0" />
+        <Label layoutX="90.0" layoutY="299.0" text="Starting Date" />
+        <Label layoutX="259.0" layoutY="299.0" text="Ending Date" />
+      <TextField fx:id="participantNumber" layoutX="90.0" layoutY="399.0" prefHeight="31.0" prefWidth="162.0" />
+      <Label layoutX="92.0" layoutY="369.0" text="Number of Parcicipants" />
+      <Label fx:id="errorLabel" layoutX="89.0" layoutY="440.0" prefHeight="31.0" prefWidth="332.0" />
+      <CheckBox fx:id="daytimeCheck" layoutX="494.0" layoutY="94.0" mnemonicParsing="false" text="Daytime Event" />
+      <Label layoutX="494.0" layoutY="64.0" text="Event Filters" />
+      <CheckBox fx:id="casualCheck" layoutX="494.0" layoutY="214.0" mnemonicParsing="false" text="Casual Event" />
+      <CheckBox fx:id="weekendCheck" layoutX="494.0" layoutY="154.0" mnemonicParsing="false" text="Weekend Event" />
+      <CheckBox fx:id="nighttimeCheck" layoutX="494.0" layoutY="124.0" mnemonicParsing="false" text="Nighttime Event" />
+      <CheckBox fx:id="formalCheck" layoutX="494.0" layoutY="184.0" mnemonicParsing="false" text="Formal Event" />
+      <CheckBox fx:id="sportsCheck" layoutX="494.0" layoutY="244.0" mnemonicParsing="false" text="Sports Event" />
+      <CheckBox fx:id="charityCheck" layoutX="494.0" layoutY="274.0" mnemonicParsing="false" text="Charity Event" />
+    </children>
+</AnchorPane>
