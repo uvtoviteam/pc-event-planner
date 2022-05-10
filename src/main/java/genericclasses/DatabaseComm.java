@@ -4,14 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.example.eventplanner.EventModel;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DatabaseComm {
     private static MysqlDataSource SQLOnLaunch() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUser("eventplan"); // user
-        dataSource.setPassword("new_password"); //pass
+        dataSource.setUser("root"); // user
+        dataSource.setPassword("Cr157124"); //pass
         dataSource.setURL("jdbc:mysql://localhost:3306/event_planner"); //in loc de event_planner, pui ce database ai
         return dataSource;
     }
@@ -96,8 +103,8 @@ public class DatabaseComm {
             stmnt = conn.prepareStatement(queryEvent);
             stmnt.setString(1, event.getNume());
             stmnt.setString(2, event.getDescription());
-            stmnt.setDate(3, event.getStartdate());
-            stmnt.setDate(4, event.getEnddate());
+            stmnt.setTimestamp(3, event.getStartdate());
+            stmnt.setTimestamp(4, event.getEnddate());
             //creator here
             stmnt.setInt(5, creator);
             stmnt.setInt(6, event.getLimit());
@@ -227,5 +234,130 @@ public class DatabaseComm {
         }
 
         return 0;
+    }
+
+    public static ObservableList<EventModel> refreshlist(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM events WHERE end_date > Sysdate() ";
+            stmnt = conn.prepareStatement(query);
+            //stmnt.setString(1, name);
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, participants ;
+            int creator, status;
+            String name , description;
+            LocalDateTime sdate , edate ;
+            ArrayList<User> Luser = new ArrayList<>();
+
+
+
+
+            while(rs.next()){
+                id = rs.getInt("event_id");
+                creator = rs.getInt("creator");
+                name = rs.getString("name");
+                description = rs.getString("description");
+                sdate =  LocalDateTime.parse(rs.getString("start_date"), formatter);
+                edate = LocalDateTime.parse(rs.getString("end_date"), formatter);
+                participants = rs.getInt("limit");
+
+                query = "SELECT user_id FROM enrolments WHERE event_id = " + id;
+
+                stmnt = conn.prepareStatement(query);
+               // stmnt.setInt(1, id);
+                rs2 = stmnt.executeQuery();
+                while(rs2.next()){
+                    //Aici se aduga idurile;
+
+
+                };
+
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, participants));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+        return Rflist ;
+
+    }
+
+    // get all events
+    public static ArrayList<Event> getAllEvents(){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM EVENTS  WHERE END_DATE > Sysdate()";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+            }
+            return events;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return events;
+    }
+
+    // get filtered events
+    public static ArrayList<Event> getFilteredEvents(int filter){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM events JOIN event_filter WHERE events.event_id = event_filter.event_id AND filter_id = " + filter;
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+            }
+            return events;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return events;
     }
 }

@@ -2,8 +2,11 @@ package genericclasses;
 
 
 import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Event {
@@ -51,14 +54,14 @@ public class Event {
         return description;
     }
 
-    public Date getStartdate() {
-        java.sql.Date sqlDate = java.sql.Date.valueOf(startdate.toLocalDate());
-        return sqlDate;
+    public Timestamp getStartdate() {
+        java.sql.Timestamp sqlTime = java.sql.Timestamp.valueOf(startdate);
+        return sqlTime;
     }
 
-    public Date getEnddate() {
-        java.sql.Date sqlDate = java.sql.Date.valueOf(enddate.toLocalDate());
-        return sqlDate;
+    public Timestamp getEnddate() {
+        java.sql.Timestamp sqlTime = java.sql.Timestamp.valueOf(enddate);
+        return sqlTime;
     }
 
     public LocalDateTime getStartdateLocal() {
@@ -75,6 +78,10 @@ public class Event {
 
     public int getId() {
         return id;
+    }
+
+    public ArrayList<User> getUserlist() {
+        return userlist;
     }
 
     @Override

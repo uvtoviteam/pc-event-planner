@@ -4,6 +4,8 @@ module com.example.eventplanner {
     requires java.naming;
     requires java.sql;
     requires mysql.connector.java;
+    requires GMapsFX;
+    requires java.desktop;
 
 
     opens com.example.eventplanner to javafx.fxml;
