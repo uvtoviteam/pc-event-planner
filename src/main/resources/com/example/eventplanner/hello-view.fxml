@@ -20,9 +20,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="430.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.LoginController">
+<AnchorPane maxWidth="500.0" minWidth="500.0" prefHeight="430.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.LoginController">
    <children>
-      <Circle layoutX="307.0" layoutY="263.0" radius="196.0" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Circle layoutX="320.0" layoutY="267.0" radius="196.0" stroke="TRANSPARENT" strokeType="INSIDE">
          <fill>
             <RadialGradient centerX="0.5616740340178233" centerY="0.5303030194658223" focusDistance="-0.055045906556855595" radius="0.3715596242782173">
                <stops>
@@ -45,7 +45,7 @@
             </RadialGradient>
          </fill>
       </Circle>
-      <Circle layoutX="156.0" layoutY="155.0" radius="163.0" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Circle layoutX="169.0" layoutY="159.0" radius="163.0" stroke="TRANSPARENT" strokeType="INSIDE">
          <fill>
             <RadialGradient centerX="0.5616740340178233" centerY="0.5303030194658223" focusDistance="-0.055045906556855595" radius="0.3715596242782173">
                <stops>
@@ -68,7 +68,7 @@
             </RadialGradient>
          </fill>
       </Circle>
-      <Circle layoutX="137.0" layoutY="310.0" radius="80.0" rotate="119.5" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Circle layoutX="150.0" layoutY="314.0" radius="80.0" rotate="119.5" stroke="TRANSPARENT" strokeType="INSIDE">
          <fill>
             <RadialGradient centerX="0.3149779819706988" centerY="0.5227272871768835" focusAngle="-63.43" focusDistance="-0.3302751768619643" radius="0.5550458628103274">
                <stops>
@@ -96,7 +96,7 @@
             </RadialGradient>
          </fill>
       </Circle>
-      <Circle layoutX="343.0" layoutY="154.0" radius="80.0" rotate="31.0" stroke="TRANSPARENT" strokeType="INSIDE">
+      <Circle layoutX="356.0" layoutY="158.0" radius="80.0" rotate="31.0" stroke="TRANSPARENT" strokeType="INSIDE">
          <fill>
             <RadialGradient centerX="0.5088106062968922" centerY="0.8484848231980295" radius="0.5">
                <stops>
@@ -119,23 +119,23 @@
             </RadialGradient>
          </fill>
       </Circle>
-       <Button fx:id="LoginButton" layoutX="243.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Login" textFill="WHITE" AnchorPane.rightAnchor="377.0" />
+       <Button fx:id="LoginButton" layoutX="259.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Login" textFill="WHITE" AnchorPane.rightAnchor="171.0" />
    
-                <Label fx:id="welcomeText" alignment="CENTER" layoutX="96.0" layoutY="79.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="308.0" text="Login" textAlignment="CENTER" textFill="#9772fb" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="286.0">
+                <Label fx:id="welcomeText" alignment="CENTER" layoutX="185.0" layoutY="80.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="308.0" text="Login" textAlignment="CENTER" textFill="#9772fb" AnchorPane.leftAnchor="185.0" AnchorPane.rightAnchor="197.0">
          <font>
             <Font size="20.0" />
          </font></Label>
-      <TextField fx:id="UserField" layoutX="153.0" layoutY="157.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="160.0" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="377.0" />
-      <Label layoutX="153.0" layoutY="138.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="99.0" text="Username" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="243.0">
+      <TextField fx:id="UserField" layoutX="170.0" layoutY="156.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="160.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" />
+      <Label layoutX="170.0" layoutY="138.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="99.0" text="Username" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="226.0">
          <padding>
             <Insets right="20.0" />
          </padding></Label>
-      <Label alignment="BOTTOM_LEFT" layoutX="152.0" layoutY="211.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="87.0" text="Password" AnchorPane.leftAnchor="152.0" AnchorPane.rightAnchor="256.0">
+      <Label alignment="BOTTOM_LEFT" layoutX="169.0" layoutY="211.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="87.0" text="Password" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="239.0">
          <padding>
             <Insets right="20.0" />
          </padding></Label>
-      <Button fx:id="RegisterButton" layoutX="153.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Register" textFill="#764af1" AnchorPane.leftAnchor="153.0" />
-      <PasswordField fx:id="PassField" layoutX="153.0" layoutY="230.0" prefHeight="31.0" prefWidth="160.0" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="377.0" />
+      <Button fx:id="RegisterButton" layoutX="170.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Register" textFill="#764af1" AnchorPane.leftAnchor="170.0" />
+      <PasswordField fx:id="PassField" layoutX="170.0" layoutY="230.0" prefHeight="31.0" prefWidth="160.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#764af1" height="46.0" stroke="TRANSPARENT" strokeType="INSIDE" width="500.0" />
       <Label layoutX="13.0" layoutY="7.0" text="Event Planner" textFill="WHITE">
          <font>

@@ -17,14 +17,29 @@ public class RegisterScreen {
     TextField UserField,PassField,ConfirmPassField,EmailField;
 
     @FXML
-    Button RegisterButton;
+    Button RegisterButton, CancelButton;
 
     @FXML
     Label TestLabel;
 
     @FXML
     protected void onCancelButtonClick(){
-
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("hello-view.fxml"));
+        Scene scene = null;
+        try {
+            Stage stage= new Stage();
+            scene = new Scene(fxmlLoader.load());
+//            stage.setMinWidth(304);
+//            stage.setMinHeight(262);
+            stage.setTitle("Login");
+            stage.setScene(scene);
+            //stage.setResizable(false);
+            stage.show();
+            Stage stagelogin= (Stage) CancelButton.getScene().getWindow();
+            stagelogin.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
