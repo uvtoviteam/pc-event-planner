@@ -15,13 +15,13 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="692.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
+<AnchorPane prefHeight="500.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.CreateEventController">
     <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f2f2" height="500.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e5e5e5" height="500.0" layoutX="230.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d8d8d8" height="500.0" layoutX="460.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#125fa6" height="46.0" layoutY="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="692.0" />
-      <Label layoutX="46.0" layoutY="122.0" text="Details" textAlignment="CENTER" textFill="#aeaeae">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#764af1" height="46.0" layoutY="-1.0" stroke="TRANSPARENT" strokeType="INSIDE" width="692.0" />
+      <Label layoutX="46.0" layoutY="122.0" text="Details" textAlignment="CENTER" textFill="#9772fb">
          <font>
             <Font size="16.0" />
          </font>
@@ -29,22 +29,22 @@
             <Insets left="50.0" right="50.0" />
          </padding>
       </Label>
-        <TextField fx:id="nameField" layoutX="20.0" layoutY="191.0" prefHeight="26.0" prefWidth="194.0" />
-        <TextArea fx:id="descriptionField" layoutX="20.0" layoutY="252.0" prefHeight="130.0" prefWidth="194.0" />
-        <Label layoutX="13.0" layoutY="7.0" text="Create a New Event" textFill="WHITE">
+        <TextField fx:id="nameField" layoutX="20.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Give your event a name" />
+        <TextArea fx:id="descriptionField" layoutX="20.0" layoutY="240.0" prefHeight="130.0" prefWidth="194.0" promptText="Let people know more about your event" />
+        <Label layoutX="13.0" layoutY="7.0" text="Create a new event" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font></Label>
-        <Label layoutX="23.0" layoutY="162.0" text="Event Name" />
-        <Label layoutX="21.0" layoutY="230.0" text="Event Description" />
+        <Label layoutX="20.0" layoutY="160.0" text="Name" />
+        <Label layoutX="20.0" layoutY="220.0" text="Description" />
         <Button fx:id="cancelButton" layoutX="521.0" layoutY="455.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textAlignment="CENTER" />
-        <Button fx:id="createButton" layoutX="598.0" layoutY="455.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefWidth="70.0" style="-fx-background-color: #125fa6;" text="Create" textAlignment="CENTER" textFill="WHITE" />
-        <DatePicker fx:id="endDate" layoutX="284.0" layoutY="357.0" prefHeight="26.0" prefWidth="140.0" />
-        <DatePicker fx:id="startDate" layoutX="284.0" layoutY="190.0" prefHeight="26.0" prefWidth="140.0" />
-        <Label layoutX="284.0" layoutY="161.0" text="Starting Date" />
-      <TextField fx:id="participantNumber" layoutX="23.0" layoutY="425.0" prefHeight="26.0" prefWidth="194.0" />
-      <Label layoutX="284.0" layoutY="329.0" text="Ending Date" />
-      <Label fx:id="errorLabel" layoutX="24.0" layoutY="452.0" prefHeight="31.0" prefWidth="206.0" />
+        <Button fx:id="createButton" layoutX="598.0" layoutY="455.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Create" textAlignment="CENTER" textFill="WHITE" />
+        <DatePicker fx:id="endDate" layoutX="284.0" layoutY="350.0" prefHeight="26.0" prefWidth="140.0" promptText="Ending day" />
+        <DatePicker fx:id="startDate" layoutX="284.0" layoutY="180.0" prefHeight="26.0" prefWidth="140.0" promptText="Starting day" />
+        <Label layoutX="284.0" layoutY="160.0" text="Starting Date" />
+      <TextField fx:id="participantNumber" layoutX="20.0" layoutY="400.0" prefHeight="26.0" prefWidth="194.0" promptText="Number of people expected" />
+      <Label layoutX="284.0" layoutY="330.0" text="Ending Date" />
+      <Label fx:id="errorLabel" layoutX="20.0" layoutY="452.0" prefHeight="31.0" prefWidth="413.0" />
       <CheckBox fx:id="daytimeCheck" layoutX="476.0" layoutY="276.0" mnemonicParsing="false" text="Daytime " />
       <Label layoutX="476.0" layoutY="250.0" text="Type of Event" />
       <CheckBox fx:id="casualCheck" layoutX="570.0" layoutY="306.0" mnemonicParsing="false" text="Casual " />
@@ -53,37 +53,28 @@
       <CheckBox fx:id="formalCheck" layoutX="476.0" layoutY="306.0" mnemonicParsing="false" text="Formal " />
       <CheckBox fx:id="sportsCheck" layoutX="476.0" layoutY="336.0" mnemonicParsing="false" text="Sports" />
       <CheckBox fx:id="charityCheck" layoutX="570.0" layoutY="336.0" mnemonicParsing="false" text="Charity " />
-      <Label layoutX="23.0" layoutY="397.0" text="Number of Participants" />
-      <Spinner fx:id="startH" layoutX="284.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
-      <Spinner fx:id="startM" layoutX="354.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
-      <Spinner fx:id="endH" layoutX="284.0" layoutY="400.0" prefHeight="26.0" prefWidth="70.0" />
-      <Spinner fx:id="endM" layoutX="354.0" layoutY="400.0" prefHeight="26.0" prefWidth="70.0" />
-      <Label layoutX="478.0" layoutY="162.0" text="Location" />
-      <Label layoutX="323.0" layoutY="122.0" text=" Time" textAlignment="CENTER" textFill="#aeaeae">
+      <Label layoutX="19.0" layoutY="380.0" text="Number of Participants" />
+      <Spinner fx:id="startH" layoutX="284.0" layoutY="210.0" prefHeight="26.0" prefWidth="70.0" />
+      <Spinner fx:id="startM" layoutX="354.0" layoutY="210.0" prefHeight="26.0" prefWidth="70.0" />
+      <Spinner fx:id="endH" layoutX="284.0" layoutY="380.0" prefHeight="26.0" prefWidth="70.0" />
+      <Spinner fx:id="endM" layoutX="354.0" layoutY="380.0" prefHeight="26.0" prefWidth="70.0" />
+      <Label layoutX="478.0" layoutY="160.0" text="Location" />
+      <Label layoutX="323.0" layoutY="122.0" text=" Time" textAlignment="CENTER" textFill="#9772fb">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="537.0" layoutY="122.0" text="Other Info" textAlignment="CENTER" textFill="#aeaeae">
+      <Label layoutX="537.0" layoutY="122.0" text="Other Info" textAlignment="CENTER" textFill="#9772fb">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Line endX="80.0" layoutX="272.0" layoutY="254.0" rotate="90.0" startX="-80.0" stroke="#125fa6" strokeWidth="2.0" />
-      <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="339.0" radiusX="5.0" radiusY="5.0" stroke="#125fa6" strokeType="INSIDE" strokeWidth="2.0" />
-      <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="171.0" radiusX="5.0" radiusY="5.0" stroke="#125fa6" strokeType="INSIDE" strokeWidth="2.0" />
-      <TextField fx:id="location" layoutX="476.0" layoutY="191.0" prefHeight="26.0" prefWidth="194.0" />
-      <Circle fill="#1f93ff00" layoutX="120.0" layoutY="95.0" radius="20.0" stroke="#aeaeae" strokeType="INSIDE" strokeWidth="2.0" />
-      <Label layoutX="65.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="1" textAlignment="CENTER" textFill="#aeaeae">
-         <font>
-            <Font size="16.0" />
-         </font>
-         <padding>
-            <Insets left="50.0" right="50.0" />
-         </padding>
-      </Label>
-      <Circle fill="#1f93ff00" layoutX="346.0" layoutY="95.0" radius="20.0" stroke="#aeaeae" strokeType="INSIDE" strokeWidth="2.0" />
-      <Label layoutX="291.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="2" textAlignment="CENTER" textFill="#aeaeae">
+      <Line endX="80.0" layoutX="272.0" layoutY="254.0" rotate="90.0" startX="-80.0" stroke="#9772fb" strokeWidth="2.0" />
+      <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="339.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+      <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="171.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+      <TextField fx:id="location" layoutX="476.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Location address" />
+      <Circle fill="#1f93ff00" layoutX="120.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+      <Label layoutX="65.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="1" textAlignment="CENTER" textFill="#9772fb">
          <font>
             <Font size="16.0" />
          </font>
@@ -91,8 +82,17 @@
             <Insets left="50.0" right="50.0" />
          </padding>
       </Label>
-      <Circle fill="#1f93ff00" layoutX="575.0" layoutY="95.0" radius="20.0" stroke="#aeaeae" strokeType="INSIDE" strokeWidth="2.0" />
-      <Label layoutX="520.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="3" textAlignment="CENTER" textFill="#aeaeae">
+      <Circle fill="#1f93ff00" layoutX="346.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+      <Label layoutX="291.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="2" textAlignment="CENTER" textFill="#9772fb">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <padding>
+            <Insets left="50.0" right="50.0" />
+         </padding>
+      </Label>
+      <Circle fill="#1f93ff00" layoutX="575.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+      <Label layoutX="520.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="3" textAlignment="CENTER" textFill="#9772fb">
          <font>
             <Font size="16.0" />
          </font>

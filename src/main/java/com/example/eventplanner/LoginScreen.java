@@ -11,10 +11,10 @@ public class LoginScreen extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setMinWidth(304);
-        stage.setMinHeight(262);
-        stage.setTitle("Login Screen");
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setMinWidth(500);
+        stage.setMinHeight(430);
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }

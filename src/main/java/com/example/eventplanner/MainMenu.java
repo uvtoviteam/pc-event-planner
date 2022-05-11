@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
@@ -86,7 +87,7 @@ public class MainMenu implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
         Scene scene = null;
         try {
-            scene = new Scene(fxmlLoader.load());
+            scene = new Scene(fxmlLoader.load(), Color.web("#764AF1"));
             Stage stage= new Stage();
             stage.setMinWidth(304);
             stage.setMinHeight(262);

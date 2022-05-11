@@ -1,20 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="262.0" minWidth="304.0" prefHeight="262.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.LoginController">
+<AnchorPane prefHeight="430.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.LoginController">
    <children>
-       <Button fx:id="LoginButton" layoutX="174.0" layoutY="187.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="59.0" text="Login" AnchorPane.rightAnchor="70.8" />
+      <Circle layoutX="307.0" layoutY="263.0" radius="196.0" stroke="TRANSPARENT" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5616740340178233" centerY="0.5303030194658223" focusDistance="-0.055045906556855595" radius="0.3715596242782173">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006729475100942127">
+                     <color>
+                        <Color blue="0.9399999976158142" green="0.2913999855518341" opacity="0.5197568535804749" red="0.4535500109195709" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color opacity="0.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Circle>
+      <Circle layoutX="156.0" layoutY="155.0" radius="163.0" stroke="TRANSPARENT" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5616740340178233" centerY="0.5303030194658223" focusDistance="-0.055045906556855595" radius="0.3715596242782173">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006729475100942127">
+                     <color>
+                        <Color blue="0.9399999976158142" green="0.2913999855518341" opacity="0.5197568535804749" red="0.4535500109195709" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color opacity="0.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Circle>
+      <Circle layoutX="137.0" layoutY="310.0" radius="80.0" rotate="119.5" stroke="TRANSPARENT" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.3149779819706988" centerY="0.5227272871768835" focusAngle="-63.43" focusDistance="-0.3302751768619643" radius="0.5550458628103274">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.0861372812920592">
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.4202836227554739">
+                     <color>
+                        <Color blue="0.9843137264251709" green="0.4470588266849518" red="0.5921568870544434" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color blue="0.9490196108818054" green="0.9490196108818054" red="0.9490196108818054" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Circle>
+      <Circle layoutX="343.0" layoutY="154.0" radius="80.0" rotate="31.0" stroke="TRANSPARENT" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5088106062968922" centerY="0.8484848231980295" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.3082099596231494">
+                     <color>
+                        <Color blue="0.9450980424880981" green="0.29019609093666077" red="0.4627451002597809" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color blue="0.9399999976158142" green="0.9399999976158142" opacity="0.0" red="0.9399999976158142" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Circle>
+       <Button fx:id="LoginButton" layoutX="243.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Login" textFill="WHITE" AnchorPane.rightAnchor="377.0" />
    
-                <Label fx:id="welcomeText" alignment="CENTER" layoutX="69.0" layoutY="-4.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="178.0" text="Welcome to the login screen!" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="56.599999999999994" />
-      <TextField fx:id="UserField" layoutX="76.0" layoutY="60.0" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="78.4" />
-      <Label alignment="CENTER" layoutX="72.0" layoutY="31.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="150.0" text="Username" AnchorPane.leftAnchor="72.0" AnchorPane.rightAnchor="81.6" />
-      <Label alignment="CENTER" layoutX="77.0" layoutY="102.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="150.0" text="Password" AnchorPane.leftAnchor="72.0" AnchorPane.rightAnchor="81.6" />
-      <Button fx:id="RegisterButton" layoutX="76.0" layoutY="187.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRegisterButtonClick" text="Register" AnchorPane.leftAnchor="76.0" />
-      <PasswordField fx:id="PassField" layoutX="76.0" layoutY="120.0" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="78.4" />
+                <Label fx:id="welcomeText" alignment="CENTER" layoutX="96.0" layoutY="79.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="308.0" text="Login" textAlignment="CENTER" textFill="#9772fb" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="286.0">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <TextField fx:id="UserField" layoutX="153.0" layoutY="157.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="160.0" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="377.0" />
+      <Label layoutX="153.0" layoutY="138.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="99.0" text="Username" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="243.0">
+         <padding>
+            <Insets right="20.0" />
+         </padding></Label>
+      <Label alignment="BOTTOM_LEFT" layoutX="152.0" layoutY="211.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="87.0" text="Password" AnchorPane.leftAnchor="152.0" AnchorPane.rightAnchor="256.0">
+         <padding>
+            <Insets right="20.0" />
+         </padding></Label>
+      <Button fx:id="RegisterButton" layoutX="153.0" layoutY="284.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Register" textFill="#764af1" AnchorPane.leftAnchor="153.0" />
+      <PasswordField fx:id="PassField" layoutX="153.0" layoutY="230.0" prefHeight="31.0" prefWidth="160.0" AnchorPane.leftAnchor="153.0" AnchorPane.rightAnchor="377.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#764af1" height="46.0" stroke="TRANSPARENT" strokeType="INSIDE" width="500.0" />
+      <Label layoutX="13.0" layoutY="7.0" text="Event Planner" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
