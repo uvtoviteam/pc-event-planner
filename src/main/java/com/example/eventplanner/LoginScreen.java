@@ -14,8 +14,8 @@ public class LoginScreen extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         LoginController controller=  fxmlLoader.getController();
         controller.setButtonClass();
-        String css = this.getClass().getResource("Style.css").toExternalForm();
-        scene.getStylesheets().add(css);
+       // String css = this.getClass().getResource("Style.css").toExternalForm();
+        //scene.getStylesheets().add(css);
         stage.setMinWidth(304);
         stage.setMinHeight(262);
         stage.setTitle("Login Screen");
