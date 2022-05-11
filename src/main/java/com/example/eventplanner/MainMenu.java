@@ -9,23 +9,26 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class MainMenu{
+public class MainMenu implements Initializable {
     @FXML
     Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
@@ -34,6 +37,10 @@ public class MainMenu{
 
     @FXML
     Text NotifText;
+
+    ObservableList<String> filtersName = FXCollections.observableArrayList("All Events", "Daytime Events", "Nighttime Events", "Weekend Events", "Formal Events", "Casual Events", "Sport Events", "Charity Events");
+    @FXML
+    ChoiceBox filters;
 
     @FXML
     TableView<EventModel> eventTableView = new TableView<>();
@@ -392,5 +399,81 @@ public class MainMenu{
         eventmanagerpane.setVisible(false);
         // NOT DONE YET, ONLY HAS THE EVENTMANAGER SETVISIBLE
         //eventmanagerpane.getChildren();
+    }
+
+    @FXML
+    protected void onSearch(){
+        String[] keys = SearchField.getText().split(" ");
+        ArrayList<Event> events = DatabaseComm.getAllEvents();
+
+        ArrayList<Event> results = new ArrayList<>();
+
+        for(Event e : events)
+            for(String k : keys)
+                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                    results.add(e);
+                    continue;
+                }
+
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit()));
+
+        eventTableView.getItems().clear();
+        eventModels = resultsTable;
+        eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventTableView.setItems(eventModels);
+
+    }
+
+    @FXML
+    protected void onFilter(){
+        String key = filters.getValue().toString();
+
+        int filter = 0;
+        if(key.equals("Daytime Events"))
+            filter = 1;
+        else if(key.equals("Nighttime Events"))
+            filter = 2;
+        else if(key.equals("Weekend Events"))
+            filter = 3;
+        else if(key.equals("Formal Events"))
+            filter = 4;
+        else if(key.equals("Casual Events"))
+            filter = 5;
+        else if(key.equals("Sport Events"))
+            filter = 6;
+        else if(key.equals("Charity Events"))
+            filter = 7;
+
+        ArrayList<Event> results = new ArrayList<>();
+        if(filter != 0)
+            results = DatabaseComm.getFilteredEvents(filter);
+        else
+            results = DatabaseComm.getAllEvents();
+
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit()));
+
+        eventTableView.getItems().clear();
+        eventModels = resultsTable;
+        eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventTableView.setItems(eventModels);
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        filters.setItems(filtersName);
+        filters.setValue("All Events");
     }
 }

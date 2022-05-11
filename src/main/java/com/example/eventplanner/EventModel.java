@@ -39,6 +39,20 @@ public class EventModel {
         System.out.println(startDatePrivate);
     }
 
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.ID=new SimpleIntegerProperty(id);
+        this.EventName=new SimpleStringProperty(nume);
+        this.description=new SimpleStringProperty(description);
+        this.StartDate=new SimpleStringProperty(startdate.format(formatter).toString());
+        this.EndDate=new SimpleStringProperty(enddate.format(formatter).toString());
+        this.userlist=new SimpleListProperty<User>(FXCollections.observableList(userlist));
+        this.Participants=new SimpleIntegerProperty(limit);
+        this.startDatePrivate=startdate;
+        this.endDatePrivate=enddate;
+        System.out.println(startDatePrivate);
+    }
+
     public int getID() {
         return ID.get();
     }

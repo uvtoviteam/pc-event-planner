@@ -10,14 +10,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import javafx.fxml.Initializable;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
-public class CreateEventController {
+public class CreateEventController implements Initializable{
     @FXML
     private TextField nameField, participantNumber;
 
@@ -42,7 +45,42 @@ public class CreateEventController {
         buttons= Arrays.asList(buttonsarr);
         Session.ButtonConfig(buttons);
     }
+    @FXML
+    private Spinner<Integer> startH = new Spinner<>();
 
+    @FXML
+    private Spinner<Integer> startM = new Spinner<>();
+
+    @FXML
+    private Spinner<Integer> endH = new Spinner<>();;
+
+    @FXML
+    private Spinner<Integer> endM = new Spinner<>();
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        //configure spinners
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        startH.setValueFactory(valueFactoryHs);
+        endH.setValueFactory(valueFactoryHe);
+        startM.setValueFactory(valueFactoryMs);
+        endM.setValueFactory(valueFactoryMe);
+
+        startH.getValueFactory().setValue(12);
+        endH.getValueFactory().setValue(12);
+        startM.getValueFactory().setValue(0);
+        endM.getValueFactory().setValue(0);
+    }
+
+    public String twoDigits(int x) {
+        if(x < 10)
+            return "0" + x;
+        else
+            return "" + x;
+    }
 
     @FXML
     protected void onCreateButtonClick() {
@@ -50,15 +88,12 @@ public class CreateEventController {
         String description = descriptionField.getText();
         int numberp = 0;
         LocalDate sd = startDate.getValue(), ed = endDate.getValue();
-        LocalDateTime sDate = LocalDateTime.now(), eDate = LocalDateTime.now();
+        LocalDateTime sDate, eDate;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if(!participantNumber.getText().isEmpty())
             numberp = Integer.parseInt(participantNumber.getText());
-
-        if(sd != null)
-            sDate = sd.atStartOfDay();
-        if(ed != null)
-            eDate = ed.atStartOfDay();
 
         int allOK = 1;
         if(name.isEmpty() || description.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
@@ -66,7 +101,7 @@ public class CreateEventController {
             errorLabel.setText("Please fill all fields!");
             allOK = 0;
         } else {
-            if(sDate.isAfter(eDate)) {
+            if(sd.isAfter(ed)) {
                 errorLabel.setTextFill(Color.RED);
                 errorLabel.setText("Please enter a valid time period!");
                 allOK = 0;
@@ -78,12 +113,15 @@ public class CreateEventController {
         int creatorId = DatabaseComm.getUserId(creator);
 
         if(allOK == 1) {
+            sDate = LocalDateTime.parse(sd + " " + twoDigits(startH.getValue()) + ":" + twoDigits(startM.getValue()) + ":00", formatter);
+            eDate = LocalDateTime.parse(ed + " " + twoDigits(endH.getValue()) + ":" + twoDigits(endM.getValue()) + ":00", formatter);
+
             Event newEvent = new Event(name, description, sDate, eDate, numberp);
             int code = DatabaseComm.add_event(newEvent, creatorId);
 
             if (code == 0) {
                 Event event = DatabaseComm.getLatestEvent();
-              //  System.out.println("latest: " + event);
+                //  System.out.println("latest: " + event);
 
                 // add the filters
                 if(daytimeCheck.isSelected())
