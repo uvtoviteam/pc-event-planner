@@ -25,7 +25,7 @@ public class LoginController {
     private Button RegisterButton,LoginButton;
 
     public void setButtonClass(){
-        Button buttonsarr[]={RegisterButton,LoginButton};
+        Button[] buttonsarr ={RegisterButton,LoginButton};
         List<Button> buttons;
         buttons= Arrays.asList(buttonsarr);
         Session.ButtonConfig(buttons);
@@ -41,9 +41,10 @@ public class LoginController {
         {
             FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
             Scene scene = null;
+            MainMenu controller = null;
             try {
                 scene = new Scene(fxmlLoader.load());
-                MainMenu controller=  fxmlLoader.getController();
+                controller=  fxmlLoader.getController();
                 controller.setButtonClass();
                 String css = this.getClass().getResource("Style.css").toExternalForm();
                 scene.getStylesheets().add(css);
@@ -59,10 +60,10 @@ public class LoginController {
                 ex.printStackTrace();
             }
             //move to main menu
-
             User sessionUser = DatabaseComm.getUserInfo(user);
             Session session = Session.getInstance();
             session.setUser(sessionUser);
+            controller.currentUserGlobal=sessionUser;
         }
         else{
             //Error message for wrong name or password
