@@ -135,7 +135,7 @@
       <Label layoutX="168.0" layoutY="230.0" prefHeight="18.0" prefWidth="114.0" text="Password" AnchorPane.leftAnchor="168.0" AnchorPane.rightAnchor="213.0" />
       <Label layoutX="168.0" layoutY="291.0" prefHeight="21.0" prefWidth="129.0" text="Confirm Password" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="198.0" />
       <Label layoutX="168.0" layoutY="119.0" prefHeight="18.0" prefWidth="114.0" text="Username" AnchorPane.leftAnchor="168.0" AnchorPane.rightAnchor="213.0" />
-      <Button layoutX="168.0" layoutY="361.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textFill="#9772fb" AnchorPane.leftAnchor="167.0" />
+      <Button fx:id="CancelButton" layoutX="168.0" layoutY="361.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textFill="#9772fb" AnchorPane.leftAnchor="167.0" />
       <Button fx:id="RegisterButton" layoutX="255.0" layoutY="360.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRegisterButtonMenuClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Register" textFill="WHITE" AnchorPane.rightAnchor="169.60000000000002" />
    </children>
 </AnchorPane>
