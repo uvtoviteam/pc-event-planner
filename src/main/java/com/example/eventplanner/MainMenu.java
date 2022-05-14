@@ -221,7 +221,7 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    private Text descEvent,end,start,idEvent,nameEvent,participants;
+    private Text descEvent,end,start,idEvent,nameEvent,participants, tag1;
 
 
     public void fillEventPane(EventModel eventval){
@@ -232,6 +232,7 @@ public class MainMenu implements Initializable {
         start.setText(eventval.getStartdate());
         end.setText(eventval.getEnddate());
         participants.setText(eventval.getUserlist().size() +"/"+ eventval.getLimit());
+        tag1.setText(DatabaseComm.getTags(eventval.getID()));
     }
 
     @FXML

@@ -478,6 +478,62 @@ public class DatabaseComm {
         return events;
     }
 
+    // get all events
+    public static String getTags(int event){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String result = "";
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        int OK = 0;
+
+        try {
+            String query = "SELECT DISTINCT FILTER_ID FROM EVENT_FILTER  WHERE EVENT_ID = " + event;
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                int filter = rs.getInt("filter_id");
+                String filterName = "";
+
+                if(filter == 1)
+                    filterName = "Daytime";
+                else if(filter == 2)
+                    filterName = "Nighttime";
+                else if(filter == 3)
+                    filterName = "Weekend";
+                else if(filter == 4)
+                    filterName = "Formal";
+                else if(filter == 5)
+                    filterName = "Casual";
+                else if(filter == 6)
+                    filterName = "Sport";
+                else if(filter == 7)
+                    filterName = "Charity";
+
+                if(OK == 1)
+                    result = result + " | " + filterName;
+                else
+                    result = result + filterName;
+                OK = 1;
+            }
+            return result;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return result;
+    }
+
     // get filtered events
     public static ArrayList<Event> getFilteredEvents(int filter){
         MysqlDataSource dataSource=SQLOnLaunch();
