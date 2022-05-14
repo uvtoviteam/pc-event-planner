@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.example.eventplanner.EventModel;
 import com.mysql.cj.jdbc.MysqlDataSource;
@@ -361,7 +364,7 @@ public class DatabaseComm {
         try {
             String query;
             if(onlyCreator==false){
-                 query = "SELECT * FROM events"; //WHERE end_date >= Sysdate() ";
+                 query = "SELECT * FROM events WHERE end_date >= Sysdate() ";
                  stmnt = conn.prepareStatement(query);}
             else{
                  query = "SELECT * FROM events WHERE creator=?";
@@ -377,9 +380,6 @@ public class DatabaseComm {
             String name , description;
             LocalDateTime sdate , edate ;
             ArrayList<User> Luser = new ArrayList<>();
-
-
-
 
             while(rs.next()){
 
@@ -431,6 +431,38 @@ public class DatabaseComm {
 
         try {
             String query = "SELECT * FROM EVENTS  WHERE END_DATE > Sysdate()";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+            }
+            return events;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return events;
+    }
+
+    // get all events
+    public static ArrayList<Event> getMyEvents(int creator){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM EVENTS  WHERE CREATOR = " + creator;
             stmnt = conn.prepareStatement(query);
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {

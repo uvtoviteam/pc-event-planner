@@ -22,9 +22,11 @@ import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,7 +35,7 @@ public class MainMenu implements Initializable {
     Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
     @FXML
-    TextField SearchField;
+    TextField SearchField, SearchField1;
 
     @FXML
     Text NotifText;
@@ -101,29 +103,32 @@ public class MainMenu implements Initializable {
     @FXML
     ImageView logo,homeButton;
 
-        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane;
+        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane;
 
     @FXML
     protected void onCreateEventButtonClick(){
-        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-            CreateEventController controller=  fxmlLoader.getController();
-            controller.setButtonClass();
-            String css = this.getClass().getResource("Style.css").toExternalForm();
-            scene.getStylesheets().add(css);
-            Stage stage= new Stage();
-            stage.setMinWidth(304);
-            stage.setMinHeight(262);
-            stage.setTitle("Create Event");
-            stage.setScene(scene);
-            stage.show();
-            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
-            stagelogin.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
+//        Scene scene = null;
+//        try {
+//            scene = new Scene(fxmlLoader.load());
+//            CreateEventController controller=  fxmlLoader.getController();
+//            controller.setButtonClass();
+//            String css = this.getClass().getResource("Style.css").toExternalForm();
+//            scene.getStylesheets().add(css);
+//            Stage stage= new Stage();
+//            stage.setMinWidth(304);
+//            stage.setMinHeight(262);
+//            stage.setTitle("Create Event");
+//            stage.setScene(scene);
+//            stage.show();
+//            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
+//            stagelogin.close();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+
+        eventmanagerpane.setVisible(false);
+        createPane.setVisible(true);
     }
 
     @FXML
@@ -137,11 +142,25 @@ public class MainMenu implements Initializable {
         eventModels = DatabaseComm.refreshlist(currentUser,false);
         eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
         eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
-        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Usersize"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
         startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
         endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
         eventTableView.setItems(eventModels);
     }
+
+    @FXML
+    protected void onCreatorRefreshButtonClick(){
+        int currentUser = Session.getInstance().getUser().getId();
+        eventManagerTableView.getItems().clear();
+        eventManagerModels = DatabaseComm.refreshlist(currentUser,true);
+        eventID1.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        eventName1.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum1.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate1.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate1.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView.setItems(eventManagerModels);
+    }
+
     @FXML
     protected void onViewEventButtonClick(){
 
@@ -354,7 +373,7 @@ public class MainMenu implements Initializable {
 
 
 
-    public void onEventManagementButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onEventManagementButtonPress() {
         eventManagerTableView.getItems().clear();
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
@@ -386,13 +405,13 @@ public class MainMenu implements Initializable {
         //eventManagerTableView.refresh();
         System.out.println("Complete.");
     }
-    public void onHomeButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onHomeButtonPress() {
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
         mainmenu.setVisible(true);
     }
-    public void onCalendarButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onCalendarButtonPress() {
         mainmenu.setVisible(false);
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
@@ -417,7 +436,7 @@ public class MainMenu implements Initializable {
 
         ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
         for(Event e : results)
-            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit()));
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId()));
 
         eventTableView.getItems().clear();
         eventModels = resultsTable;
@@ -427,6 +446,35 @@ public class MainMenu implements Initializable {
         startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
         endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
         eventTableView.setItems(eventModels);
+
+    }
+
+    @FXML
+    protected void onSearchMy(){
+        String[] keys = SearchField1.getText().split(" ");
+        ArrayList<Event> events = DatabaseComm.getMyEvents(Session.getInstance().getUser().getId());
+
+        ArrayList<Event> results = new ArrayList<>();
+
+        for(Event e : events)
+            for(String k : keys)
+                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                    results.add(e);
+                    continue;
+                }
+
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId()));
+
+        eventManagerTableView.getItems().clear();
+        eventManagerModels = resultsTable;
+        eventID1.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName1.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum1.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate1.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate1.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView.setItems(eventManagerModels);
 
     }
 
@@ -475,5 +523,156 @@ public class MainMenu implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         filters.setItems(filtersName);
         filters.setValue("All Events");
+
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        startH.setValueFactory(valueFactoryHs);
+        endH.setValueFactory(valueFactoryHe);
+        startM.setValueFactory(valueFactoryMs);
+        endM.setValueFactory(valueFactoryMe);
+
+        startH.getValueFactory().setValue(12);
+        endH.getValueFactory().setValue(12);
+        startM.getValueFactory().setValue(0);
+        endM.getValueFactory().setValue(0);
+
+       // NotifButton.getStyleClass().add("icon-button");
+      //  NotifButton.setPickOnBounds(true);
+    }
+
+    @FXML
+    private TextField nameField, participantNumber;
+
+    @FXML
+    private TextArea descriptionField;
+
+    @FXML
+    private DatePicker startDate2, endDate2;
+
+    @FXML
+    private Button cancelButton, createButton;
+
+    @FXML
+    private Label errorLabel;
+
+    @FXML
+    private CheckBox daytimeCheck, nighttimeCheck, weekendCheck, formalCheck, casualCheck, sportsCheck, charityCheck;
+
+    @FXML
+    private Spinner<Integer> startH = new Spinner<>();
+
+    @FXML
+    private Spinner<Integer> startM = new Spinner<>();
+
+    @FXML
+    private Spinner<Integer> endH = new Spinner<>();;
+
+    @FXML
+    private Spinner<Integer> endM = new Spinner<>();
+
+
+
+    public String twoDigits(int x) {
+        if(x < 10)
+            return "0" + x;
+        else
+            return "" + x;
+    }
+
+    @FXML
+    protected void onCreateButtonClick() {
+        String name = nameField.getText();
+        String description = descriptionField.getText();
+        int numberp = 0;
+        LocalDate sd = startDate2.getValue(), ed = endDate2.getValue();
+        LocalDateTime sDate, eDate;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        if(!participantNumber.getText().isEmpty())
+            numberp = Integer.parseInt(participantNumber.getText());
+
+        int allOK = 1;
+        if(name.isEmpty() || description.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setText("Please fill all fields!");
+            allOK = 0;
+        } else {
+            if(sd.isAfter(ed)) {
+                errorLabel.setTextFill(Color.RED);
+                errorLabel.setText("Please enter a valid time period!");
+                allOK = 0;
+            }
+        }
+
+        // get the creator id
+        User creator = Session.getInstance().getUser();
+        int creatorId = Session.getInstance().getUser().getId();
+
+        if(allOK == 1) {
+            sDate = LocalDateTime.parse(sd + " " + twoDigits(startH.getValue()) + ":" + twoDigits(startM.getValue()) + ":00", formatter);
+            eDate = LocalDateTime.parse(ed + " " + twoDigits(endH.getValue()) + ":" + twoDigits(endM.getValue()) + ":00", formatter);
+
+            Event newEvent = new Event(name, description, sDate, eDate, numberp);
+            int code = DatabaseComm.add_event(newEvent, creatorId);
+
+            if (code == 0) {
+                Event event = DatabaseComm.getLatestEvent();
+                //  System.out.println("latest: " + event);
+
+                // add the filters
+                if(daytimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 1);
+                if(nighttimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 2);
+                if(weekendCheck.isSelected())
+                    DatabaseComm.add_filter(event, 3);
+                if(formalCheck.isSelected())
+                    DatabaseComm.add_filter(event, 4);
+                if(casualCheck.isSelected())
+                    DatabaseComm.add_filter(event, 5);
+                if(sportsCheck.isSelected())
+                    DatabaseComm.add_filter(event, 6);
+                if(charityCheck.isSelected())
+                    DatabaseComm.add_filter(event, 7);
+
+                createPane.setVisible(false);
+                eventmanagerpane.setVisible(true);
+                //move to main menu
+            } else {
+                //Error message
+                System.out.println("Couldn't create event");
+            }
+        }
+    }
+
+    @FXML
+    protected void onCancelButtonClick() {
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
+//        Scene scene = null;
+//        try {
+//            scene = new Scene(fxmlLoader.load());
+//            MainMenu controller=  fxmlLoader.getController();
+//            controller.setButtonClass();
+//            String css = this.getClass().getResource("Style.css").toExternalForm();
+//            scene.getStylesheets().add(css);
+//            Stage stage= new Stage();
+//            stage.setMinWidth(640);
+//            stage.setMinHeight(480);
+//            stage.setTitle("Main Menu");
+//            stage.setScene(scene);
+//            stage.show();
+//            Stage stageN = (Stage) cancelButton.getScene().getWindow();
+//            stageN.close();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+        //move to main menu
+
+        createPane.setVisible(false);
+        eventmanagerpane.setVisible(true);
     }
 }
