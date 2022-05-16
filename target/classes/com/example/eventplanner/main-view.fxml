@@ -78,6 +78,9 @@
             <Spinner fx:id="Min1" layoutX="501.0" layoutY="115.0" prefHeight="26.0" prefWidth="70.0" />
             <Spinner fx:id="Hour2" layoutX="431.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
             <Spinner fx:id="Min2" layoutX="501.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
+            <Line endX="70.0" layoutX="408.0" layoutY="128.0" rotate="90.0" startX="-45.0" stroke="#9772fb" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="185.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="66.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="eventViewPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">

@@ -52,18 +52,18 @@ public class MainMenu implements Initializable {
     TableView<EventModel> eventManagerTableView2 = new TableView<>();
 
     @FXML
-    public TableColumn<Event, Integer> eventID,eventID1;
+    public TableColumn<Event, Integer> eventID,eventID1, eventID11;
     @FXML
-    public TableColumn<Event,String> eventName,eventName1;
+    public TableColumn<Event,String> eventName,eventName1,eventName11;
 
     @FXML
-    public TableColumn<Event, Integer> participantsNum,participantsNum1;
+    public TableColumn<Event, Integer> participantsNum,participantsNum1,participantsNum11;
 
     @FXML
-    public TableColumn<Event, LocalDateTime> startDate,startDate1;
+    public TableColumn<Event, LocalDateTime> startDate,startDate1,startDate11;
 
     @FXML
-    public TableColumn<Event, LocalDateTime> endDate,endDate1;
+    public TableColumn<Event, LocalDateTime> endDate,endDate1,endDate11;
 
 
 
@@ -87,6 +87,7 @@ public class MainMenu implements Initializable {
             new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
             );
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
+    private ObservableList<EventModel> eventManagerModels2 = FXCollections.observableArrayList();
 
     @FXML
     protected void onTestEvent(){
@@ -162,9 +163,8 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    protected void onViewEventButtonClick(){
+    protected void onViewEventButtonClick(){}
 
-    }
     @FXML
     protected void onLogoutButtonClick(){
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
@@ -263,9 +263,24 @@ public class MainMenu implements Initializable {
             eventViewPane.setVisible(true);
 
         }
-
-
     }
+
+//    @FXML
+//    protected void onManagerMouseClickTable2(){
+//        //eventTableView.getSelectionModel().getSelectedItem();
+//        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
+//        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+//        Scene scene = null;
+//        if (eventSelected == null) System.out.println("couldn't find event");
+//        else {
+//            eventmanagerpane.setVisible(false);
+//            System.out.println(eventSelected.getID());
+//            System.out.println(eventSelected.getNume());
+//            fillEventPane(eventSelected);
+//            eventViewPane.setVisible(true);
+//
+//        }
+//    }
 
     @FXML
     void onManagerMouseClickTable(javafx.scene.input.MouseEvent event) {
@@ -405,6 +420,15 @@ public class MainMenu implements Initializable {
         eventManagerTableView.setItems(eventManagerModels);
         //eventManagerTableView.refresh();
         System.out.println("Complete.");
+
+        eventManagerTableView2.getItems().clear();
+        eventManagerModels2 = DatabaseComm.attendingEvents(currentUserGlobal.getId());
+        eventID11.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        eventName11.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum11.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate11.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate11.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView2.setItems(eventManagerModels2);
     }
     public void onHomeButtonPress() {
         eventViewPane.setVisible(false);
@@ -538,6 +562,8 @@ public class MainMenu implements Initializable {
         endH.getValueFactory().setValue(12);
         startM.getValueFactory().setValue(0);
         endM.getValueFactory().setValue(0);
+
+
 
        // NotifButton.getStyleClass().add("icon-button");
       //  NotifButton.setPickOnBounds(true);

@@ -78,6 +78,9 @@
             <Spinner fx:id="Min1" layoutX="501.0" layoutY="115.0" prefHeight="26.0" prefWidth="70.0" />
             <Spinner fx:id="Hour2" layoutX="431.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
             <Spinner fx:id="Min2" layoutX="501.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
+            <Line endX="70.0" layoutX="408.0" layoutY="128.0" rotate="90.0" startX="-45.0" stroke="#9772fb" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="185.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="66.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="eventViewPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
@@ -237,7 +240,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="LogoutButton" layoutX="21.0" layoutY="499.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" opacity="0.5" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #ffffff; -fx-border-radius: 6;" text="Log out" textFill="#764af1" />
+            <Button fx:id="LogoutButton" layoutX="21.0" layoutY="499.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" opacity="0.8" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #ffffff; -fx-border-radius: 6;" text="Log out" textFill="#764af1" />
             <Button fx:id="SettingsButton" layoutX="21.0" layoutY="459.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text=" Settings" textFill="WHITE">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
@@ -306,7 +309,7 @@
             <TextArea fx:id="descriptionField" layoutX="20.0" layoutY="240.0" prefHeight="130.0" prefWidth="194.0" promptText="Let people know more about your event" />
             <Label layoutX="20.0" layoutY="160.0" text="Name" />
             <Label layoutX="20.0" layoutY="220.0" text="Description" />
-            <Button fx:id="cancelButton" layoutX="521.0" layoutY="491.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textAlignment="CENTER" />
+            <Button fx:id="cancelButton" layoutX="521.0" layoutY="491.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textAlignment="CENTER" textFill="#9772fb" />
             <Button fx:id="createButton" layoutX="598.0" layoutY="491.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Create" textAlignment="CENTER" textFill="WHITE" />
             <DatePicker fx:id="endDate2" layoutX="284.0" layoutY="350.0" prefHeight="26.0" prefWidth="140.0" promptText="Ending day" />
             <DatePicker fx:id="startDate2" layoutX="284.0" layoutY="180.0" prefHeight="26.0" prefWidth="140.0" promptText="Starting day" />

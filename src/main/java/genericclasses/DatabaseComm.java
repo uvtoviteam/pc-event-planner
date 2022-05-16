@@ -446,7 +446,6 @@ public class DatabaseComm {
         return events;
     }
 
-    // get all events
     public static ArrayList<Event> getMyEvents(int creator){
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
@@ -476,6 +475,57 @@ public class DatabaseComm {
         }
 
         return events;
+    }
+
+    public static ObservableList<EventModel> attendingEvents(int userId){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query;
+
+            query = "SELECT * FROM events JOIN enrolments WHERE events.event_id = enrolments.event_id AND enrolments.user_id = " + userId + " AND events.end_date >= Sysdate() ";
+            stmnt = conn.prepareStatement(query);
+
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, limit ;
+            int creator, status;
+            String name , description;
+            LocalDateTime sdate , edate ;
+            ArrayList<User> Luser = new ArrayList<>();
+
+            while(rs.next()){
+
+                id = rs.getInt("event_id");
+                creator = rs.getInt("creator");
+                name = rs.getString("name");
+                description = rs.getString("description");
+                sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
+                edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
+                limit = rs.getInt("limit");
+
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return Rflist ;
+
     }
 
     // get all events
