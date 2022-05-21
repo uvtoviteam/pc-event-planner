@@ -17,18 +17,19 @@ import java.util.ArrayList;
 
 public class EventModel {
     public SimpleIntegerProperty ID;
-    public SimpleStringProperty EventName,description;
+    public SimpleStringProperty EventName,description, location;
     public SimpleStringProperty StartDate;
     public SimpleStringProperty EndDate;
     public SimpleListProperty<User> userlist;
     public SimpleIntegerProperty Participants;
     public SimpleIntegerProperty creator;
     protected LocalDateTime startDatePrivate,endDatePrivate;
-    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, Integer creator){
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, Integer creator, String location){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ID=new SimpleIntegerProperty(id);
         this.EventName=new SimpleStringProperty(nume);
         this.description=new SimpleStringProperty(description);
+        this.location=new SimpleStringProperty(location);
         this.StartDate=new SimpleStringProperty(startdate.format(formatter).toString());
         this.EndDate=new SimpleStringProperty(enddate.format(formatter).toString());
         this.userlist=new SimpleListProperty<User>(FXCollections.observableList(userlist));
@@ -39,7 +40,7 @@ public class EventModel {
         System.out.println(startDatePrivate);
     }
 
-    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit){
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, String location){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ID=new SimpleIntegerProperty(id);
         this.EventName=new SimpleStringProperty(nume);
@@ -50,6 +51,7 @@ public class EventModel {
         this.Participants=new SimpleIntegerProperty(limit);
         this.startDatePrivate=startdate;
         this.endDatePrivate=enddate;
+        this.location=new SimpleStringProperty(location);
         System.out.println(startDatePrivate);
     }
 
@@ -188,5 +190,13 @@ public class EventModel {
     }
     public void setCreator(int creator){
         this.creator=new SimpleIntegerProperty(creator);
+    }
+
+    public String getLocation() {
+        return location.get();
+    }
+
+    public SimpleStringProperty locationProperty() {
+        return location;
     }
 }

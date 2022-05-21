@@ -16,6 +16,7 @@ public class Event {
     LocalDateTime enddate;
     ArrayList<User> userlist;
     User creator;
+    String location;
     int limit;
     public Event(){
         id=1;
@@ -27,16 +28,17 @@ public class Event {
         ArrayList<User> userlist= new ArrayList<>();
     }
 
-    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit) {
+    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit, String location) {
         this.nume = name;
         this.description = description;
         this.startdate = startDate;
         this.enddate = endDate;
         this.limit = limit;
         this.userlist= new ArrayList<>();
+        this.location = location;
     }
 
-    public Event(int id, String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit) {
+    public Event(int id, String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit, String location) {
         this.id = id;
         this.nume = name;
         this.description = description;
@@ -44,6 +46,7 @@ public class Event {
         this.enddate = endDate;
         this.limit = limit;
         this.userlist= new ArrayList<>();
+        this.location = location;
     }
 
     public String getNume() {
@@ -95,5 +98,17 @@ public class Event {
                 ", userlist=" + userlist +
                 ", limit=" + limit +
                 '}';
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

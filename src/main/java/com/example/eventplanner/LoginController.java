@@ -62,8 +62,9 @@ public class LoginController {
             //move to main menu
             User sessionUser = DatabaseComm.getUserInfo(user);
             Session session = Session.getInstance();
+            System.out.println(sessionUser.getUsername());
             session.setUser(sessionUser);
-            controller.currentUserGlobal=sessionUser;
+            controller.currentUserGlobal = sessionUser;
         }
         else{
             //Error message for wrong name or password

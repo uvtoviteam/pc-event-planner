@@ -11,11 +11,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
@@ -32,7 +34,7 @@ import java.util.ResourceBundle;
 
 public class MainMenu implements Initializable {
     @FXML
-    Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
+    Button TestEventButton, interestedButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
     @FXML
     TextField SearchField, SearchField1;
@@ -84,7 +86,7 @@ public class MainMenu implements Initializable {
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
+            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,"Bega River")
             );
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
     private ObservableList<EventModel> eventManagerModels2 = FXCollections.observableArrayList();
@@ -92,7 +94,7 @@ public class MainMenu implements Initializable {
     @FXML
     protected void onTestEvent(){
         addUser();
-        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,1));
+        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,"Some location"));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -104,7 +106,7 @@ public class MainMenu implements Initializable {
     @FXML
     ImageView logo,homeButton;
 
-        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane;
+        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2;
 
     @FXML
     protected void onCreateEventButtonClick(){
@@ -133,8 +135,15 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    protected void onNotifButtonClick(){
+    Label notificationCount;
 
+    @FXML
+    Circle notificationBubble;
+
+    @FXML
+    protected void onNotifButtonClick(){
+        notificationCount.setVisible(false);
+        notificationBubble.setVisible(false);
     }
     @FXML
     protected void onRefreshButtonClick(){
@@ -226,7 +235,7 @@ public class MainMenu implements Initializable {
 
     public void fillEventPane(EventModel eventval){
         //idevent isn't selected
-        idEvent.setText(String.valueOf(eventval.getID()));
+        idEvent.setText(String.valueOf(eventval.getLocation()));
         nameEvent.setText(eventval.getNume());
         descEvent.setText(eventval.getDescription());
         start.setText(eventval.getStartdate());
@@ -242,10 +251,40 @@ public class MainMenu implements Initializable {
     protected void onBackEventPressed(){
         eventViewPane.setVisible(false);
         mainmenu.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
     }
     @FXML
     protected void onJoinEventPressed(){
+        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        joinEventButton.setDisable(true);
+        joinEventButton.setText("Joined");
+        interestedButton.setVisible(false);
+    }
 
+    @FXML
+    protected void onJoinEventPressedOut(EventModel event){
+        EventModel eventSelected = event;
+        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        joinEventButton.setDisable(true);
+        joinEventButton.setText("Joined");
+        interestedButton.setVisible(false);
+    }
+
+    @FXML
+    protected void onInterestedEventPressed(){
+        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+        DatabaseComm.add_interest(eventSelected.getID(), Session.getInstance().getUser().getId());
+        interestedButton.setVisible(false);
+    }
+
+    @FXML
+    protected void onInterestedEventPressedOut(EventModel event){
+        EventModel eventSelected = event;
+        DatabaseComm.add_interest(eventSelected.getID(), Session.getInstance().getUser().getId());
+        interestedButton.setVisible(false);
     }
 
     @FXML
@@ -260,9 +299,68 @@ public class MainMenu implements Initializable {
             System.out.println(eventSelected.getID());
             System.out.println(eventSelected.getNume());
             fillEventPane(eventSelected);
-            eventViewPane.setVisible(true);
 
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Joined");
+                interestedButton.setVisible(false);
+            }
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                interestedButton.setVisible(false);
+
+            eventViewPane.setVisible(true);
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressed();
+            });
         }
+    }
+
+    @FXML
+    protected void onMouseClickTable2(){
+        //eventTableView.getSelectionModel().getSelectedItem();
+        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+        Scene scene = null;
+        if (eventSelected == null) System.out.println("couldn't find event");
+        else {
+            eventmanagerpane.setVisible(false);
+            System.out.println(eventSelected.getID());
+            System.out.println(eventSelected.getNume());
+            fillEventPane(eventSelected);
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Joined");
+                interestedButton.setVisible(false);
+            }
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                interestedButton.setVisible(false);
+
+            eventViewPane.setVisible(true);
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressed2();
+            });
+        }
+    }
+
+    @FXML
+    protected void onBackEventPressed2(){
+        eventViewPane.setVisible(false);
+        eventmanagerpane.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
+    }
+
+    @FXML
+    protected void onBackEventPressed3(){
+        eventViewPane.setVisible(false);
+        mainmenu2.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
     }
 
 //    @FXML
@@ -387,13 +485,12 @@ public class MainMenu implements Initializable {
 
     public User currentUserGlobal=Session.getInstance().getUser();
 
-
-
     public void onEventManagementButtonPress() {
         eventManagerTableView.getItems().clear();
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         mainmenu.setVisible(false);
+        mainmenu2.setVisible(false);
         eventmanagerpane.setVisible(true);
         System.out.println(eventmanagerpane.getChildren());
         eventManagerTableView.setRowFactory(tv -> {
@@ -430,17 +527,29 @@ public class MainMenu implements Initializable {
         endDate11.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
         eventManagerTableView2.setItems(eventManagerModels2);
     }
+
     public void onHomeButtonPress() {
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
+        mainmenu2.setVisible(false);
         mainmenu.setVisible(true);
     }
+
+    public void onHomeButtonClick() {
+        eventViewPane.setVisible(false);
+        eventEditPane.setVisible(false);
+        eventmanagerpane.setVisible(false);
+        mainmenu.setVisible(false);
+        mainmenu2.setVisible(true);
+    }
+
     public void onCalendarButtonPress() {
         mainmenu.setVisible(false);
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
+        mainmenu2.setVisible(false);
         // NOT DONE YET, ONLY HAS THE EVENTMANAGER SETVISIBLE
         //eventmanagerpane.getChildren();
     }
@@ -461,7 +570,7 @@ public class MainMenu implements Initializable {
 
         ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
         for(Event e : results)
-            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId()));
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId(), e.getLocation()));
 
         eventTableView.getItems().clear();
         eventModels = resultsTable;
@@ -490,7 +599,7 @@ public class MainMenu implements Initializable {
 
         ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
         for(Event e : results)
-            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId()));
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId(), e.getLocation()));
 
         eventManagerTableView.getItems().clear();
         eventManagerModels = resultsTable;
@@ -531,7 +640,7 @@ public class MainMenu implements Initializable {
 
         ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
         for(Event e : results)
-            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit()));
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), e.getLocation()));
 
         eventTableView.getItems().clear();
         eventModels = resultsTable;
@@ -543,6 +652,11 @@ public class MainMenu implements Initializable {
         eventTableView.setItems(eventModels);
 
     }
+
+    @FXML Label welcome, title1, title2, title3, title4, title5, title6, title7, title8, title9, desc1, desc2, desc3, desc4, desc5, desc6, desc7, desc8, desc9;
+
+    ObservableList<EventModel> popular = DatabaseComm.popularEvents();
+    ObservableList<EventModel> interest = DatabaseComm.interestEvents();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -563,14 +677,95 @@ public class MainMenu implements Initializable {
         startM.getValueFactory().setValue(0);
         endM.getValueFactory().setValue(0);
 
+        ArrayList<Event> events = DatabaseComm.getPopularEvents();
+        title1.setText(events.get(0).getNume());
+        desc1.setText(events.get(0).getDescription());
 
+        title2.setText(events.get(1).getNume());
+        desc2.setText(events.get(1).getDescription());
+
+        title3.setText(events.get(2).getNume());
+        desc3.setText(events.get(2).getDescription());
+
+        title4.setText(events.get(3).getNume());
+        desc4.setText(events.get(3).getDescription());
+
+        title5.setText(events.get(4).getNume());
+        desc5.setText(events.get(4).getDescription());
+
+        title6.setText(events.get(5).getNume());
+        desc6.setText(events.get(5).getDescription());
+
+        ArrayList<Event> interest = DatabaseComm.getInterestEvents();
+        title7.setText(interest.get(0).getNume());
+        desc7.setText(events.get(0).getDescription());
+
+        title8.setText(events.get(1).getNume());
+        desc8.setText(events.get(1).getDescription());
+
+        title9.setText(events.get(2).getNume());
+        desc9.setText(events.get(2).getDescription());
+
+       // welcome.setText("Welcome " + Session.getInstance().getUser().getEmail() + "!");
 
        // NotifButton.getStyleClass().add("icon-button");
       //  NotifButton.setPickOnBounds(true);
     }
 
+    protected void viewEv(EventModel eventG) {
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+        Scene scene = null;
+        mainmenu2.setVisible(false);
+        fillEventPane(eventG);
+        if(DatabaseComm.checkEnrolment(eventG.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+            joinEventButton.setDisable(true);
+            joinEventButton.setText("Joined");
+            interestedButton.setVisible(false);
+        }
+        if(DatabaseComm.checkEnrolment(eventG.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+            interestedButton.setVisible(false);
+        eventViewPane.setVisible(true);
+        backEventButton.setOnAction((event) -> {
+            onBackEventPressed3();
+        });
+        joinEventButton.setOnAction((event) -> {
+            onJoinEventPressedOut(eventG);
+        });
+        interestedButton.setOnAction((event) -> {
+            onInterestedEventPressedOut(eventG);
+        });
+
+    }
+
     @FXML
-    private TextField nameField, participantNumber;
+    protected void view1() { viewEv(popular.get(0)); }
+
+    @FXML
+    protected void view2() { viewEv(popular.get(1)); }
+
+    @FXML
+    protected void view3() { viewEv(popular.get(2)); }
+
+    @FXML
+    protected void view4() { viewEv(popular.get(3)); }
+
+    @FXML
+    protected void view5() { viewEv(popular.get(4)); }
+
+    @FXML
+    protected void view6() { viewEv(popular.get(5)); }
+
+    @FXML
+    protected void view7() { viewEv(interest.get(0)); }
+
+    @FXML
+    protected void view8() { viewEv(interest.get(1)); }
+
+    @FXML
+    protected void view9() { viewEv(interest.get(2)); }
+
+    @FXML
+    private TextField nameField, participantNumber, locationField;
 
     @FXML
     private TextArea descriptionField;
@@ -611,6 +806,7 @@ public class MainMenu implements Initializable {
     @FXML
     protected void onCreateButtonClick() {
         String name = nameField.getText();
+        String location = locationField.getText();
         String description = descriptionField.getText();
         int numberp = 0;
         LocalDate sd = startDate2.getValue(), ed = endDate2.getValue();
@@ -622,7 +818,7 @@ public class MainMenu implements Initializable {
             numberp = Integer.parseInt(participantNumber.getText());
 
         int allOK = 1;
-        if(name.isEmpty() || description.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
+        if(name.isEmpty() || description.isEmpty() || location.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
             errorLabel.setTextFill(Color.RED);
             errorLabel.setText("Please fill all fields!");
             allOK = 0;
@@ -642,7 +838,7 @@ public class MainMenu implements Initializable {
             sDate = LocalDateTime.parse(sd + " " + twoDigits(startH.getValue()) + ":" + twoDigits(startM.getValue()) + ":00", formatter);
             eDate = LocalDateTime.parse(ed + " " + twoDigits(endH.getValue()) + ":" + twoDigits(endM.getValue()) + ":00", formatter);
 
-            Event newEvent = new Event(name, description, sDate, eDate, numberp);
+            Event newEvent = new Event(name, description, sDate, eDate, numberp, location);
             int code = DatabaseComm.add_event(newEvent, creatorId);
 
             if (code == 0) {

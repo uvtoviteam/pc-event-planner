@@ -101,7 +101,7 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String queryEvent = "INSERT INTO EVENTS (`NAME`, `DESCRIPTION`, `START_DATE`, `END_DATE`, `CREATOR`, `LIMIT`) VALUES (?, ?, ?, ?, ?, ?)";
+            String queryEvent = "INSERT INTO EVENTS (`NAME`, `DESCRIPTION`, `START_DATE`, `END_DATE`, `CREATOR`, `LIMIT`, `LOCATION`) VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmnt = conn.prepareStatement(queryEvent);
             stmnt.setString(1, event.getNume());
             stmnt.setString(2, event.getDescription());
@@ -110,6 +110,7 @@ public class DatabaseComm {
             //creator here
             stmnt.setInt(5, creator);
             stmnt.setInt(6, event.getLimit());
+            stmnt.setString(7, event.getLocation());
             stmnt.executeUpdate();
 
         }catch(SQLException var11){
@@ -167,7 +168,7 @@ public class DatabaseComm {
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
                 return new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
-                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8));
+                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8), rs.getString(9));
             }
             return new Event();
 
@@ -197,7 +198,7 @@ public class DatabaseComm {
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
                 return new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
-                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8));
+                        rs.getDate(3).toLocalDate().atStartOfDay(), rs.getDate(4).toLocalDate().atStartOfDay(), rs.getInt(8), rs.getString(9));
             }
             return new Event();
 
@@ -227,7 +228,7 @@ public class DatabaseComm {
             stmnt.setString(1, user);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
-                User newuser=new User(rs.getInt(1),rs.getString(2),rs.getString(4));
+                User newuser=new User(rs.getInt(1),rs.getString(4),rs.getString(2));
                 return newuser;
             }
             return null;
@@ -377,7 +378,7 @@ public class DatabaseComm {
             ResultSet rs2;
             int id, limit ;
             int creator, status;
-            String name , description;
+            String name , description, location;
             LocalDateTime sdate , edate ;
             ArrayList<User> Luser = new ArrayList<>();
 
@@ -390,6 +391,7 @@ public class DatabaseComm {
                 sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
                 edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
                 limit = rs.getInt("limit");
+                location = rs.getString("location");
 
                 query = "SELECT user_id FROM enrolments WHERE event_id =?";
 
@@ -402,7 +404,7 @@ public class DatabaseComm {
 
                 };
                 System.out.println("Event:"+name);
-                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator));
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
             }
 
 
@@ -435,7 +437,87 @@ public class DatabaseComm {
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
-                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8), rs.getString(9)));
+            }
+            return events;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return events;
+    }
+
+    public static ArrayList<Event> getPopularEvents(){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        Event dummy = new Event();
+        dummy.setNume("Event not found");
+        dummy.setDescription("");
+        for(int i=0; i<6; i++)
+            events.add(dummy);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT events.* , count(enrolments.event_id) as participants FROM EVENTS left JOIN enrolments on events.event_id = enrolments.event_id group by events.event_id\n" +
+                    "/*where END_DATE > Sysdate()*/\n" +
+                    "ORDER BY participants DESC LIMIT 6;";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            int p = 0;
+            while (rs.next()) {
+                events.add(p, new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8), rs.getString(9)));
+                p++;
+            }
+            return events;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return events;
+    }
+
+    public static ArrayList<Event> getInterestEvents(){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Event> events = new ArrayList<>();
+        Event dummy = new Event();
+        dummy.setNume("Event not found");
+        dummy.setDescription("");
+        for(int i=0; i<6; i++)
+            events.add(dummy);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT events.* , count(enrolments.event_id) as participants FROM EVENTS left JOIN enrolments on events.event_id = enrolments.event_id group by events.event_id\n" +
+                    "/*where END_DATE > Sysdate()*/\n" +
+                    "ORDER BY participants DESC LIMIT 6;";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            int p = 0;
+            while (rs.next()) {
+                events.add(p, new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8), rs.getString(9)));
+                p++;
             }
             return events;
 
@@ -466,7 +548,7 @@ public class DatabaseComm {
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
-                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8), rs.getString(9)));
             }
             return events;
 
@@ -494,7 +576,7 @@ public class DatabaseComm {
         try {
             String query;
 
-            query = "SELECT * FROM events JOIN enrolments WHERE events.event_id = enrolments.event_id AND enrolments.user_id = " + userId + " AND events.end_date >= Sysdate() ";
+            query = "SELECT * FROM events JOIN enrolments WHERE events.event_id = enrolments.event_id AND enrolments.user_id = " + userId + " AND events.end_date >= Sysdate() AND enrolments.type = 1 ";
             stmnt = conn.prepareStatement(query);
 
             //stmnt.setString(2, pass);
@@ -502,7 +584,7 @@ public class DatabaseComm {
             ResultSet rs2;
             int id, limit ;
             int creator, status;
-            String name , description;
+            String name , description, location;
             LocalDateTime sdate , edate ;
             ArrayList<User> Luser = new ArrayList<>();
 
@@ -515,8 +597,113 @@ public class DatabaseComm {
                 sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
                 edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
                 limit = rs.getInt("limit");
+                location = rs.getString("location");
 
-                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator));
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return Rflist ;
+
+    }
+
+    public static ObservableList<EventModel> popularEvents(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT events.* , count(enrolments.event_id) as participants FROM EVENTS left JOIN enrolments on events.event_id = enrolments.event_id group by events.event_id\n" +
+                    "/*where END_DATE > Sysdate()*/\n" +
+                    "ORDER BY participants DESC LIMIT 6;";
+            stmnt = conn.prepareStatement(query);
+
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, limit ;
+            int creator, status;
+            String name , description, location;
+            LocalDateTime sdate , edate ;
+            ArrayList<User> Luser = new ArrayList<>();
+
+            while(rs.next()){
+
+                id = rs.getInt("event_id");
+                creator = rs.getInt("creator");
+                name = rs.getString("name");
+                description = rs.getString("description");
+                sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
+                edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
+                limit = rs.getInt("limit");
+                location = rs.getString("location");
+
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return Rflist ;
+
+    }
+
+    public static ObservableList<EventModel> interestEvents(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT events.* , count(enrolments.event_id) as participants FROM EVENTS left JOIN enrolments on events.event_id = enrolments.event_id group by events.event_id\n" +
+                    "/*where END_DATE > Sysdate()*/\n" +
+                    "ORDER BY participants DESC LIMIT 6;";
+            stmnt = conn.prepareStatement(query);
+
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, limit ;
+            int creator, status;
+            String name , description, location;
+            LocalDateTime sdate , edate ;
+            ArrayList<User> Luser = new ArrayList<>();
+
+            while(rs.next()){
+
+                id = rs.getInt("event_id");
+                creator = rs.getInt("creator");
+                name = rs.getString("name");
+                description = rs.getString("description");
+                sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
+                edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
+                limit = rs.getInt("limit");
+                location = rs.getString("location");
+
+                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
             }
 
 
@@ -605,7 +792,7 @@ public class DatabaseComm {
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(5),
-                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8)));
+                        LocalDateTime.parse(rs.getString(3), formatter),  LocalDateTime.parse(rs.getString(4), formatter), rs.getInt(8), rs.getString(9)));
             }
             return events;
 
@@ -614,5 +801,90 @@ public class DatabaseComm {
         }
 
         return events;
+    }
+
+    public static int add_participant(int event, int user){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "INSERT INTO ENROLMENTS (`EVENT_ID`, `USER_ID`, `TYPE`) VALUES (?, ?, 1)";
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, event);
+            stmnt.setInt(2, user);
+
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public static int add_interest(int event, int user){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "INSERT INTO ENROLMENTS (`EVENT_ID`, `USER_ID`, `TYPE`) VALUES (?, ?, 2)";
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, event);
+            stmnt.setInt(2, user);
+
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public static int checkEnrolment(int event, int user, int type){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "SELECT * FROM ENROLMENTS WHERE user_id = ? AND event_id = ? AND type = ?";
+            stmnt = conn.prepareStatement(query);
+            stmnt.setInt(1, user);
+            stmnt.setInt(2, event);
+            stmnt.setInt(3, type);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
     }
 }

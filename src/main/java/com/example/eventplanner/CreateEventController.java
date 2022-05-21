@@ -116,7 +116,7 @@ public class CreateEventController implements Initializable{
             sDate = LocalDateTime.parse(sd + " " + twoDigits(startH.getValue()) + ":" + twoDigits(startM.getValue()) + ":00", formatter);
             eDate = LocalDateTime.parse(ed + " " + twoDigits(endH.getValue()) + ":" + twoDigits(endM.getValue()) + ":00", formatter);
 
-            Event newEvent = new Event(name, description, sDate, eDate, numberp);
+            Event newEvent = new Event(name, description, sDate, eDate, numberp, "location");
             int code = DatabaseComm.add_event(newEvent, creatorId);
 
             if (code == 0) {

@@ -16,6 +16,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
@@ -28,7 +29,7 @@
 <AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
 
     <children>
-      <AnchorPane fx:id="mainmenu" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;">
+      <AnchorPane fx:id="mainmenu" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <ChoiceBox fx:id="filters" layoutX="364.0" layoutY="32.0" onAction="#onFilter" prefHeight="26.0" prefWidth="136.0" />
             <TextField fx:id="SearchField" layoutX="517.0" layoutY="33.0" onAction="#onSearch" onKeyReleased="#onSearch" promptText="Search" />
@@ -157,7 +158,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text fx:id="idEvent" layoutX="139.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="idEvent" layoutX="139.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="323.81488037109375" />
             <Text fx:id="nameEvent" layoutX="203.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="283.01483154296875">
                <font>
                   <Font size="25.0" />
@@ -166,7 +167,10 @@
             <Text fx:id="start" layoutX="140.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
             <Text fx:id="end" layoutX="140.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
             <Text fx:id="participants" layoutX="139.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="38.93670654296875" />
-            <Button fx:id="backEventButton" layoutX="415.0" layoutY="460.0" mnemonicParsing="false" onAction="#onBackEventPressed" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Back" textFill="#9772fb" />
+            <Button fx:id="backEventButton" layoutX="546.0" layoutY="56.0" mnemonicParsing="false" onAction="#onBackEventPressed" prefHeight="26.0" prefWidth="32.0" style="-fx-background-color: #f2f2f2;" text="x" textFill="#848484">
+               <font>
+                  <Font name="Yu Gothic Regular" size="16.0" />
+               </font></Button>
             <Button fx:id="joinEventButton" layoutX="498.0" layoutY="460.0" mnemonicParsing="false" onAction="#onJoinEventPressed" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772fb;" text="Join" textFill="WHITE" />
             <Line endX="25.0" layoutX="140.0" layoutY="256.0" rotate="90.0" startX="-45.0" stroke="#9772fb" strokeWidth="2.0" />
             <Ellipse fill="#e3e3e3" layoutX="130.0" layoutY="292.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
@@ -181,6 +185,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
+            <Button fx:id="interestedButton" layoutX="415.0" layoutY="460.0" mnemonicParsing="false" onAction="#onInterestedEventPressed" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Interested" textFill="#9772fb" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="eventmanagerpane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
@@ -207,7 +212,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <TableView fx:id="eventManagerTableView2" layoutX="22.0" layoutY="353.0" onMouseClicked="#onManagerMouseClickTable2" prefHeight="170.0" prefWidth="650.0">
+            <TableView fx:id="eventManagerTableView2" layoutX="22.0" layoutY="353.0" onMouseClicked="#onMouseClickTable2" prefHeight="170.0" prefWidth="650.0">
                <columns>
                   <TableColumn fx:id="eventID11" editable="false" prefWidth="31.0" text="ID" />
                   <TableColumn fx:id="eventName11" editable="false" prefWidth="200.0" text="Event " />
@@ -255,16 +260,7 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <Button fx:id="homeButton2" centerShape="false" layoutX="21.0" layoutY="140.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Home" textAlignment="CENTER" textFill="WHITE">
-               <graphic>
-                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../house-solid.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="eventManagementButton" centerShape="false" layoutX="21.0" layoutY="180.0" mnemonicParsing="false" onAction="#onEventManagementButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="My Events" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="homeButton2" centerShape="false" layoutX="21.0" layoutY="179.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -273,7 +269,16 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="calendarButton" layoutX="21.0" layoutY="220.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+            <Button fx:id="eventManagementButton" centerShape="false" layoutX="21.0" layoutY="219.0" mnemonicParsing="false" onAction="#onEventManagementButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="My Events" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../star-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="calendarButton" layoutX="21.0" layoutY="259.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -287,6 +292,17 @@
                   <Image url="@../../../people-group-solid.png" />
                </image>
             </ImageView>
+            <Button fx:id="homePaneButton" centerShape="false" layoutX="21.0" layoutY="139.0" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Home" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../house-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Circle fx:id="notificationBubble" fill="#ff1f1f" layoutX="143.0" layoutY="419.0" radius="9.0" stroke="WHITE" strokeType="INSIDE" />
+            <Label fx:id="notificationCount" alignment="CENTER" contentDisplay="CENTER" layoutX="134.0" layoutY="410.0" prefHeight="18.0" prefWidth="18.0" text="4" textAlignment="CENTER" textFill="WHITE" />
          </children>
          <effect>
             <Bloom threshold="0.98" />
@@ -344,7 +360,7 @@
             <Line endX="80.0" layoutX="272.0" layoutY="254.0" rotate="90.0" startX="-80.0" stroke="#9772fb" strokeWidth="2.0" />
             <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="339.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
             <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="171.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
-            <TextField fx:id="location" layoutX="476.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Location address" />
+            <TextField fx:id="locationField" layoutX="476.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Location address" />
             <Circle fill="#1f93ff00" layoutX="120.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
             <Label layoutX="65.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="1" textAlignment="CENTER" textFill="#9772fb">
                <font>
@@ -371,6 +387,323 @@
                <padding>
                   <Insets left="50.0" right="50.0" />
                </padding>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0">
+         <children>
+            <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome user!" textFill="#9772fb">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="82.0" prefHeight="26.0" prefWidth="157.0" text="Popular Events">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="14.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label layoutX="14.0" layoutY="370.0" prefHeight="26.0" prefWidth="255.0" text="Events That May Interest You">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
+            <Label fx:id="title1" layoutX="21.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc1" alignment="TOP_LEFT" layoutX="21.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view1" layoutX="185.0" layoutY="192.0" onMouseClicked="#view1" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="241.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title2" layoutX="248.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc2" alignment="TOP_LEFT" layoutX="248.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view2" layoutX="412.0" layoutY="192.0" onMouseClicked="#view2" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="468.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endY="1.0" startX="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title3" layoutX="475.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc3" alignment="TOP_LEFT" layoutX="475.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view3" layoutX="639.0" layoutY="192.0" onMouseClicked="#view3" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="14.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title4" layoutX="21.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc4" alignment="TOP_LEFT" layoutX="21.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view4" layoutX="185.0" layoutY="314.0" onMouseClicked="#view4" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="title5" layoutX="248.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc5" alignment="TOP_LEFT" layoutX="248.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view5" layoutX="412.0" layoutY="314.0" onMouseClicked="#view5" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="468.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title6" layoutX="475.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc6" alignment="TOP_LEFT" layoutX="475.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view6" layoutX="639.0" layoutY="314.0" onMouseClicked="#view6" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="17.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="0.7727272727272727" startX="0.4810606214133176">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title7" layoutX="24.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc7" alignment="TOP_LEFT" layoutX="24.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view7" layoutX="188.0" layoutY="480.0" onMouseClicked="#view7" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="title8" layoutX="251.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc8" alignment="TOP_LEFT" layoutX="251.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view8" layoutX="415.0" layoutY="480.0" onMouseClicked="#view8" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="471.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="0.7727272727272727" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title9" layoutX="478.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc9" alignment="TOP_LEFT" layoutX="478.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view9" layoutX="642.0" layoutY="480.0" onMouseClicked="#view9" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
          </children>
       </AnchorPane>
