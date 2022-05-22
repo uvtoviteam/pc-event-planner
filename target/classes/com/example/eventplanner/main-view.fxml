@@ -432,12 +432,12 @@
             </Label>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
-            <Label fx:id="title1" layoutX="21.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title1" layoutX="27.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc1" alignment="TOP_LEFT" layoutX="21.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc1" alignment="TOP_LEFT" layoutX="27.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -470,12 +470,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title2" layoutX="248.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title2" layoutX="254.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc2" alignment="TOP_LEFT" layoutX="248.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc2" alignment="TOP_LEFT" layoutX="254.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -508,12 +508,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title3" layoutX="475.0" layoutY="117.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title3" layoutX="481.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc3" alignment="TOP_LEFT" layoutX="475.0" layoutY="141.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc3" alignment="TOP_LEFT" layoutX="481.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -546,12 +546,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title4" layoutX="21.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title4" layoutX="27.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc4" alignment="TOP_LEFT" layoutX="21.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc4" alignment="TOP_LEFT" layoutX="27.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -561,12 +561,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="title5" layoutX="248.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title5" layoutX="254.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc5" alignment="TOP_LEFT" layoutX="248.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc5" alignment="TOP_LEFT" layoutX="254.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -599,12 +599,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title6" layoutX="475.0" layoutY="239.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title6" layoutX="481.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc6" alignment="TOP_LEFT" layoutX="475.0" layoutY="263.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc6" alignment="TOP_LEFT" layoutX="481.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -637,12 +637,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title7" layoutX="24.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title7" layoutX="30.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc7" alignment="TOP_LEFT" layoutX="24.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc7" alignment="TOP_LEFT" layoutX="30.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -652,12 +652,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="title8" layoutX="251.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title8" layoutX="257.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc8" alignment="TOP_LEFT" layoutX="251.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc8" alignment="TOP_LEFT" layoutX="257.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -690,12 +690,12 @@
                   </LinearGradient>
                </fill>
             </Rectangle>
-            <Label fx:id="title9" layoutX="478.0" layoutY="405.0" prefHeight="26.0" prefWidth="194.0" text="Event" textFill="WHITE">
+            <Label fx:id="title9" layoutX="484.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="desc9" alignment="TOP_LEFT" layoutX="478.0" layoutY="429.0" prefHeight="51.0" prefWidth="194.0" text="Description" textFill="WHITE">
+            <Label fx:id="desc9" alignment="TOP_LEFT" layoutX="484.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -706,6 +706,51 @@
                </font>
             </Label>
          </children>
+      </AnchorPane>
+      <AnchorPane fx:id="sidebar1" prefHeight="550.0" prefWidth="164.0" style="-fx-background-color: #764af1;" visible="false">
+         <children>
+            <Button fx:id="LogoutButton1" layoutX="21.0" layoutY="499.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" opacity="0.8" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #ffffff; -fx-border-radius: 6;" text="Log out" textFill="#764af1" />
+            <Button fx:id="SettingsButton1" layoutX="21.0" layoutY="459.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text=" Settings" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../gear-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Text fill="WHITE" layoutX="40.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Button fx:id="homeButton21" centerShape="false" layoutX="21.0" layoutY="148.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../bars-staggered-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="calendarButton1" layoutX="21.0" layoutY="189.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../calendar-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ImageView fitHeight="69.0" fitWidth="84.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../people-group-solid.png" />
+               </image>
+            </ImageView>
+         </children>
+         <effect>
+            <Bloom threshold="0.98" />
+         </effect>
       </AnchorPane>
    </children>
 </AnchorPane>

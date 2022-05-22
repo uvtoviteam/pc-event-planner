@@ -81,7 +81,7 @@ public class MainMenu implements Initializable {
     }
 
     private void addUser(){
-        userList.add(new User(2, "Ion", "ion.gmail.com"));
+        userList.add(new User(2, "Ion", "ion.gmail.com", 1));
     }
 
 
@@ -104,32 +104,10 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    ImageView logo,homeButton;
-
-        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2;
+    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1;
 
     @FXML
     protected void onCreateEventButtonClick(){
-//        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
-//        Scene scene = null;
-//        try {
-//            scene = new Scene(fxmlLoader.load());
-//            CreateEventController controller=  fxmlLoader.getController();
-//            controller.setButtonClass();
-//            String css = this.getClass().getResource("Style.css").toExternalForm();
-//            scene.getStylesheets().add(css);
-//            Stage stage= new Stage();
-//            stage.setMinWidth(304);
-//            stage.setMinHeight(262);
-//            stage.setTitle("Create Event");
-//            stage.setScene(scene);
-//            stage.show();
-//            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
-//            stagelogin.close();
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-
         eventmanagerpane.setVisible(false);
         createPane.setVisible(true);
     }
@@ -309,6 +287,9 @@ public class MainMenu implements Initializable {
             if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
                 interestedButton.setVisible(false);
 
+            if(Session.getInstance().getUser().getType() == 2)
+                interestedButton.setVisible(false);
+
             eventViewPane.setVisible(true);
             backEventButton.setOnAction((event) -> {
                 onBackEventPressed();
@@ -352,6 +333,14 @@ public class MainMenu implements Initializable {
         joinEventButton.setDisable(false);
         joinEventButton.setText("Join");
         interestedButton.setVisible(true);
+    }
+
+    @FXML
+    protected void onBackEventPressedMan(){
+        eventViewPane.setVisible(false);
+        mainmenu.setVisible(true);
+        joinEventButton.setVisible(false);
+        interestedButton.setVisible(false);
     }
 
     @FXML
@@ -660,6 +649,18 @@ public class MainMenu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(Session.getInstance().getUser().getType() == 2) {
+            mainmenu.setVisible(true);
+            mainmenu2.setVisible(false);
+            sidebar.setVisible(false);
+            sidebar1.setVisible(true);
+            joinEventButton.setVisible(false);
+            interestedButton.setVisible(false);
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressedMan();
+            });
+        }
+
         filters.setItems(filtersName);
         filters.setValue("All Events");
 

@@ -1,13 +1,20 @@
 package genericclasses;
 
 public class User {
-    int id;
+    int id, type;
     String username,email;
 
-    public User(int id, String usernamein, String emailin){
+    public User(int id, String usernamein, String emailin, int type){
         this.id=id;
         this.username=usernamein;
         this.email=emailin;
+        this.type = type;
+    }
+    public User(String email, String name, int type){
+
+        this.username=name;
+        this.email=email;
+        this.type = type;
     }
 
     public User(String username){
@@ -36,5 +43,9 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getType() {
+        return type;
     }
 }

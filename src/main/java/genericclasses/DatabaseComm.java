@@ -44,7 +44,7 @@ public class DatabaseComm {
             if (rs.next()) {
                 return 3;
             }
-            String query2 = "INSERT INTO USERACCOUNT (`NAME`,`PASSWORD`,`EMAIL`) VALUES (?,?,?)";
+            String query2 = "INSERT INTO USERACCOUNT (`NAME`,`PASSWORD`,`EMAIL`, `TYPE`) VALUES (?,?,?, 1)";
             stmnt = conn.prepareStatement(query2);
             stmnt.setString(1,name);
             stmnt.setString(2,pass);
@@ -75,9 +75,13 @@ public class DatabaseComm {
             stmnt.setString(1, name);
             stmnt.setString(2, pass);
             ResultSet rs = stmnt.executeQuery();
+
             if (!rs.next()) {
                 return 1;
             }
+
+            Session.getInstance().setUser(new User(rs.getString(2), rs.getString(4), rs.getInt(5)));
+
             return 0;
 
         }catch(SQLException var11){
@@ -228,7 +232,7 @@ public class DatabaseComm {
             stmnt.setString(1, user);
             ResultSet rs = stmnt.executeQuery();
             if (rs.next()) {
-                User newuser=new User(rs.getInt(1),rs.getString(4),rs.getString(2));
+                User newuser=new User(rs.getInt(1),rs.getString(4),rs.getString(2), rs.getInt(5));
                 return newuser;
             }
             return null;
