@@ -1,196 +1,756 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="610.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
+<AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
 
     <children>
-      <AnchorPane fx:id="mainmenu" layoutX="137.0" prefHeight="612.0" prefWidth="685.0" visible="false">
+      <AnchorPane fx:id="mainmenu" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <Button fx:id="CreateEventButton" layoutX="34.0" layoutY="317.0" mnemonicParsing="false" onAction="#onCreateEventButtonClick" prefHeight="26.0" prefWidth="111.0" text="Create Event" />
-            <Button fx:id="RefreshButton" layoutX="185.0" layoutY="317.0" mnemonicParsing="false" onAction="#onRefreshButtonClick" prefHeight="26.0" prefWidth="111.0" text="Refresh list" />
-            <TextField fx:id="SearchField" layoutX="343.0" layoutY="30.0" />
-            <Text layoutX="384.0" layoutY="8.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search event" />
-            <Button fx:id="TestEventButton" layoutX="58.0" layoutY="372.0" mnemonicParsing="false" onAction="#onTestEvent" text="Test Events" />
-            <TableView fx:id="eventTableView" layoutX="9.0" layoutY="65.0" onMouseClicked="#onMouseClickTable" prefHeight="229.0" prefWidth="666.0">
+            <ChoiceBox fx:id="filters" layoutX="364.0" layoutY="32.0" onAction="#onFilter" prefHeight="26.0" prefWidth="136.0" />
+            <TextField fx:id="SearchField" layoutX="517.0" layoutY="33.0" onAction="#onSearch" onKeyReleased="#onSearch" promptText="Search" />
+            <Button fx:id="TestEventButton" layoutX="72.0" layoutY="33.0" mnemonicParsing="false" onAction="#onTestEvent" style="-fx-background-color: #8AFF8A;" text="Test Event" />
+            <TableView fx:id="eventTableView" layoutX="21.0" layoutY="86.0" onMouseClicked="#onMouseClickTable" prefHeight="442.0" prefWidth="645.0">
               <columns>
-                <TableColumn fx:id="eventID" prefWidth="31.199951171875" text="ID" />
-                  <TableColumn fx:id="eventName" prefWidth="100.0" text="Event Name" />
-                <TableColumn fx:id="participantsNum" minWidth="0.0" prefWidth="76.79998779296875" text="Participants" />
-                  <TableColumn fx:id="startDate" minWidth="0.0" prefWidth="135.20001220703125" text="Start Date" />
-                  <TableColumn fx:id="endDate" minWidth="0.0" prefWidth="140.79989624023438" text="End Date" />
+                <TableColumn fx:id="eventID" editable="false" prefWidth="31.0" resizable="false" text="ID" />
+                  <TableColumn fx:id="eventName" editable="false" prefWidth="210.0" resizable="false" text="Event " />
+                <TableColumn fx:id="participantsNum" editable="false" minWidth="0.0" prefWidth="100.0" resizable="false" text="Participants" />
+                  <TableColumn fx:id="startDate" editable="false" minWidth="0.0" prefWidth="150.0" resizable="false" text="Starting Date" />
+                  <TableColumn fx:id="endDate" editable="false" minWidth="0.0" prefWidth="150.0" resizable="false" text="Ending Date" />
               </columns>
             </TableView>
+            <Button fx:id="RefreshButton" centerShape="false" layoutX="21.0" layoutY="32.0" mnemonicParsing="false" onAction="#onRefreshButtonClick" prefHeight="26.0" prefWidth="26.0" style="-fx-background-color: #f2f2f2; -fx-border-radius: 5; -fx-border-color: #c4c4c4;" textAlignment="CENTER" textFill="#c4c4c4">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../arrow-rotate-right-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="sidebar" layoutX="-2.0" layoutY="-1.0" prefHeight="612.0" prefWidth="142.0">
+      <AnchorPane fx:id="eventEditPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <Button fx:id="NotifButton" layoutX="16.0" layoutY="439.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="34.0" prefWidth="111.0" text="Notifications">
-               <effect>
-                  <InnerShadow height="15.04" radius="3.51" width="1.0" />
-               </effect>
+            <TableView fx:id="UserTable" layoutX="117.0" layoutY="321.0" prefHeight="130.0" prefWidth="455.0">
+               <columns>
+                  <TableColumn prefWidth="29.5999755859375" text="ID" />
+                  <TableColumn prefWidth="251.99998474121094" text="User" />
+                  <TableColumn prefWidth="60.0" text="Edit" />
+                  <TableColumn minWidth="9.5999755859375" prefWidth="60.0" text="Delete" />
+               </columns>
+            </TableView>
+            <DatePicker fx:id="EndDateField" layoutX="431.0" layoutY="197.0" maxWidth="140.0" />
+            <DatePicker fx:id="StartDateField" layoutX="431.0" layoutY="75.0" maxHeight="26.0" maxWidth="140.0" />
+            <TextArea fx:id="DescArea" layoutX="117.0" layoutY="154.0" prefHeight="110.0" prefWidth="230.0" />
+            <TextField fx:id="EventNameField" layoutX="117.0" layoutY="75.0" prefHeight="26.0" prefWidth="230.0" />
+            <Button fx:id="BackButton" layoutX="411.0" layoutY="469.0" mnemonicParsing="false" onAction="#onBackButtonPress" prefWidth="70.0" style="-fx-background-color: f2f2f2;" text="Back" textFill="#9772fb" />
+            <Button fx:id="SaveButton" layoutX="501.0" layoutY="469.0" mnemonicParsing="false" onAction="#onSaveButtonPress" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Save" textFill="WHITE" />
+            <Text layoutX="117.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+            <Text layoutX="431.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Starting Date" />
+            <Text layoutX="431.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ending Date" />
+            <Text layoutX="117.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Details" />
+            <Text layoutX="117.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants Management" />
+            <Spinner fx:id="Hour1" layoutX="431.0" layoutY="115.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="Min1" layoutX="501.0" layoutY="115.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="Hour2" layoutX="431.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="Min2" layoutX="501.0" layoutY="232.0" prefHeight="26.0" prefWidth="70.0" />
+            <Line endX="70.0" layoutX="408.0" layoutY="128.0" rotate="90.0" startX="-45.0" stroke="#9772fb" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="185.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="421.0" layoutY="66.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="eventViewPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
+         <children>
+            <Circle layoutX="125.0" layoutY="127.0" radius="196.0" stroke="TRANSPARENT" strokeType="INSIDE">
+               <fill>
+                  <RadialGradient centerX="0.5616740340178233" centerY="0.5303030194658223" focusDistance="-0.055045906556855595" radius="0.3715596242782173">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4627451002597809" green="0.29019609093666077" blue="0.9450980424880981" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006729475100942127">
+                           <color>
+                              <Color red="0.4535500109195709" green="0.2913999855518341" blue="0.9399999976158142" opacity="0.5197568535804749" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color opacity="0.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Circle>
+            <Circle layoutX="533.0" layoutY="387.0" radius="156.0" stroke="TRANSPARENT" strokeType="INSIDE">
+               <fill>
+                  <RadialGradient centerX="0.5176211705817" centerY="0.5757575215715351" focusDistance="0.05504581906379924" radius="0.4357798340123728">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4535500109195709" green="0.2913999855518341" blue="0.9399999976158142" opacity="0.5197568535804749" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006729475100942127">
+                           <color>
+                              <Color red="0.4535500109195709" green="0.2913999855518341" blue="0.9399999976158142" opacity="0.5197568535804749" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color opacity="0.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Circle>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f2f2" height="442.0" layoutX="113.0" layoutY="54.0" stroke="TRANSPARENT" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="INSIDE" style="-fx-border-radius: 50;" width="465.0" />
+            <Text fx:id="TextId" layoutX="139.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" wrappingWidth="57.41486358642584">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="TextId11" layoutX="140.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Details" wrappingWidth="103.01490020751953">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="TextId111" layoutX="140.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ending" wrappingWidth="57.41486358642584">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="TextId112" layoutX="140.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Starting" wrappingWidth="63.8148193359375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="TextId113" layoutX="139.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of participants expected" wrappingWidth="202.4000000000001">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="idEvent" layoutX="139.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="323.81488037109375" />
+            <Text fx:id="nameEvent" layoutX="203.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="283.01483154296875">
+               <font>
+                  <Font size="25.0" />
+               </font></Text>
+            <Text fx:id="descEvent" layoutX="140.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="411.01480865478516" />
+            <Text fx:id="start" layoutX="140.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="end" layoutX="140.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
+            <Text fx:id="participants" layoutX="139.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="38.93670654296875" />
+            <Button fx:id="backEventButton" layoutX="546.0" layoutY="56.0" mnemonicParsing="false" onAction="#onBackEventPressed" prefHeight="26.0" prefWidth="32.0" style="-fx-background-color: #f2f2f2;" text="x" textFill="#848484">
+               <font>
+                  <Font name="Yu Gothic Regular" size="16.0" />
+               </font></Button>
+            <Button fx:id="joinEventButton" layoutX="498.0" layoutY="460.0" mnemonicParsing="false" onAction="#onJoinEventPressed" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #9772fb;" text="Join" textFill="WHITE" />
+            <Line endX="25.0" layoutX="140.0" layoutY="256.0" rotate="90.0" startX="-45.0" stroke="#9772fb" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="130.0" layoutY="292.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="130.0" layoutY="223.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Text fx:id="TextId1131" layoutX="139.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Tags" wrappingWidth="202.4000000000001">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="tag1" fill="#9772fb" layoutX="139.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="208.79996337890634">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Button fx:id="interestedButton" layoutX="415.0" layoutY="460.0" mnemonicParsing="false" onAction="#onInterestedEventPressed" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Interested" textFill="#9772fb" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="eventmanagerpane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e5e5e5" height="235.0" layoutX="-12.0" layoutY="315.0" stroke="#e5e5e5" strokeType="INSIDE" width="702.0" />
+            <TableView fx:id="eventManagerTableView" layoutX="22.0" layoutY="86.0" onMouseClicked="#onManagerMouseClickTable" prefHeight="170.0" prefWidth="650.0">
+               <columns>
+                  <TableColumn fx:id="eventID1" editable="false" prefWidth="31.0" text="ID" />
+                  <TableColumn fx:id="eventName1" editable="false" prefWidth="200.0" text="Event " />
+                  <TableColumn fx:id="participantsNum1" editable="false" minWidth="0.0" prefWidth="100.0" text="Participants" />
+                  <TableColumn fx:id="startDate1" editable="false" minWidth="0.0" prefWidth="150.0" text="Start Date" />
+                  <TableColumn fx:id="endDate1" editable="false" minWidth="0.0" prefWidth="150.0" text="End Date" />
+               </columns>
+            </TableView>
+            <TextField fx:id="SearchField1" layoutX="517.0" layoutY="33.0" onAction="#onSearchMy" onKeyReleased="#onSearchMy" promptText="Search" />
+            <Button fx:id="CreateEventButton" layoutX="371.0" layoutY="32.0" mnemonicParsing="false" onAction="#onCreateEventButtonClick" prefHeight="26.0" prefWidth="130.0" style="-fx-background-color: #9772fb;" text="Create a New Event" textFill="WHITE" />
+            <Button fx:id="DeleteButton" layoutX="597.0" layoutY="268.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: F32424;" text="Delete" textFill="WHITE" />
+            <Button fx:id="RefreshButton1" centerShape="false" layoutX="548.0" layoutY="267.0" mnemonicParsing="false" onAction="#onCreatorRefreshButtonClick" prefHeight="26.0" prefWidth="26.0" style="-fx-background-color: #f2f2f2; -fx-border-radius: 5; -fx-border-color: #c4c4c4;" textAlignment="CENTER" textFill="#c4c4c4">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../arrow-rotate-right-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Text fx:id="NotifText" layoutX="14.0" layoutY="428.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current notifications:" />
-            <Button fx:id="LogoutButton" layoutX="16.0" layoutY="564.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="34.0" prefWidth="111.0" text="Log out">
-               <effect>
-                  <InnerShadow height="15.0" radius="3.5" width="1.0" />
-               </effect>
+            <TableView fx:id="eventManagerTableView2" layoutX="22.0" layoutY="353.0" onMouseClicked="#onMouseClickTable2" prefHeight="170.0" prefWidth="650.0">
+               <columns>
+                  <TableColumn fx:id="eventID11" editable="false" prefWidth="31.0" text="ID" />
+                  <TableColumn fx:id="eventName11" editable="false" prefWidth="200.0" text="Event " />
+                  <TableColumn fx:id="participantsNum11" editable="false" minWidth="0.0" prefWidth="100.0" text="Participants" />
+                  <TableColumn fx:id="startDate11" editable="false" minWidth="0.0" prefWidth="150.0" text="Start Date" />
+                  <TableColumn fx:id="endDate11" editable="false" minWidth="0.0" prefWidth="150.0" text="End Date" />
+               </columns>
+            </TableView>
+            <Label layoutX="22.0" layoutY="259.0" text="Double Click the event to edit it. Select the event and Press Delete to remove the it." textFill="#868686" />
+            <Label layoutX="22.0" layoutY="60.0" text="My Events" textFill="#9772fb">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="327.0" text="Events I am attending" textFill="#9772fb">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="sidebar" prefHeight="550.0" prefWidth="164.0" style="-fx-background-color: #764af1;">
+         <children>
+            <Button fx:id="NotifButton" centerShape="false" layoutX="21.0" layoutY="419.0" mnemonicParsing="false" onAction="#onNotifButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Notifications" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../bell-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Button fx:id="SettingsButton" layoutX="16.0" layoutY="522.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="34.0" prefWidth="111.0" text="Account Settings">
-               <effect>
-                  <InnerShadow height="8.0" radius="1.75" width="1.0" />
-               </effect>
+            <Button fx:id="LogoutButton" layoutX="21.0" layoutY="499.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" opacity="0.8" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #ffffff; -fx-border-radius: 6;" text="Log out" textFill="#764af1" />
+            <Button fx:id="SettingsButton" layoutX="21.0" layoutY="459.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text=" Settings" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../gear-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Button fx:id="CalendarButton" layoutX="16.0" layoutY="480.0" mnemonicParsing="false" onAction="#onCalendarButtonClick" prefHeight="34.0" prefWidth="111.0" text="Calendar">
-               <effect>
-                  <InnerShadow height="8.0" radius="1.75" width="1.0" />
-               </effect>
+            <Text fill="WHITE" layoutX="40.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Button fx:id="homeButton2" centerShape="false" layoutX="21.0" layoutY="179.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../bars-staggered-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Text layoutX="33.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner" />
-            <ImageView fx:id="logo" fitHeight="137.0" fitWidth="136.0" layoutX="1.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="eventManagementButton" fitHeight="45.0" fitWidth="47.0" layoutX="49.0" layoutY="251.0" onMouseClicked="#onEventManagementButtonPress" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="eventManagementButton" centerShape="false" layoutX="21.0" layoutY="219.0" mnemonicParsing="false" onAction="#onEventManagementButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="My Events" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../star-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="calendarButton" layoutX="21.0" layoutY="259.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../calendar-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ImageView fitHeight="69.0" fitWidth="84.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../icons/list-check.png" />
+                  <Image url="@../../../people-group-solid.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="homeButton" fitHeight="45.0" fitWidth="45.0" layoutX="49.0" layoutY="193.0" onMouseClicked="#onHomeButtonPress" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../icons/home.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="calendarButton" fitHeight="45.0" fitWidth="47.0" layoutX="49.0" layoutY="306.0" onMouseClicked="#onCalendarButtonPress" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../icons/calendar.png" />
-               </image>
-            </ImageView>
-            <Separator layoutX="132.0" layoutY="1.0" orientation="VERTICAL" prefHeight="612.0" prefWidth="11.0">
-               <effect>
-                  <Shadow blurType="TWO_PASS_BOX" height="18.7" radius="4.175" width="0.0">
-                     <color>
-                        <Color opacity="0.2500000298023224" />
-                     </color>
-                  </Shadow>
-               </effect>
-            </Separator>
+            <Button fx:id="homePaneButton" centerShape="false" layoutX="21.0" layoutY="139.0" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Home" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../house-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Circle fx:id="notificationBubble" fill="#ff1f1f" layoutX="143.0" layoutY="419.0" radius="9.0" stroke="WHITE" strokeType="INSIDE" />
+            <Label fx:id="notificationCount" alignment="CENTER" contentDisplay="CENTER" layoutX="134.0" layoutY="410.0" prefHeight="18.0" prefWidth="18.0" text="4" textAlignment="CENTER" textFill="WHITE" />
          </children>
          <effect>
             <Bloom threshold="0.98" />
          </effect>
       </AnchorPane>
-      <AnchorPane fx:id="eventmanagerpane" layoutX="137.0" layoutY="2.0" prefHeight="610.0" prefWidth="685.0" visible="false">
+      <AnchorPane fx:id="createPane" layoutX="164.0" prefHeight="550.0" prefWidth="692.0" visible="false">
          <children>
-            <TableView fx:id="eventManagerTableView" layoutX="38.0" layoutY="124.0" onMouseClicked="#onManagerMouseClickTable" prefHeight="229.0" prefWidth="627.0">
-               <columns>
-                  <TableColumn fx:id="eventID1" prefWidth="31.199951171875" text="ID" />
-                  <TableColumn fx:id="eventName1" prefWidth="100.0" text="Event Name" />
-                  <TableColumn fx:id="participantsNum1" minWidth="0.0" prefWidth="76.79998779296875" text="Participants" />
-                  <TableColumn fx:id="startDate1" minWidth="0.0" prefWidth="135.20001220703125" text="Start Date" />
-                  <TableColumn fx:id="endDate1" minWidth="0.0" prefWidth="140.79989624023438" text="End Date" />
-               </columns>
-            </TableView>
-            <TextField fx:id="SearchField1" layoutX="499.0" layoutY="91.0" />
-            <Text layoutX="540.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search event" />
-            <Button fx:id="DeleteButton" layoutX="38.0" layoutY="91.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Delete" />
-            <TableView fx:id="eventManagerTableView2" layoutX="38.0" layoutY="367.0" onMouseClicked="#onManagerMouseClickTable2" prefHeight="229.0" prefWidth="627.0">
-               <columns>
-                  <TableColumn fx:id="eventID11" prefWidth="31.199951171875" text="ID" />
-                  <TableColumn fx:id="eventName11" prefWidth="100.0" text="Event Name" />
-                  <TableColumn fx:id="participantsNum11" minWidth="0.0" prefWidth="76.79998779296875" text="Participants" />
-                  <TableColumn fx:id="startDate11" minWidth="0.0" prefWidth="135.20001220703125" text="Start Date" />
-                  <TableColumn fx:id="endDate11" minWidth="0.0" prefWidth="140.79989624023438" text="End Date" />
-               </columns>
-            </TableView>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f2f2" height="550.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e5e5e5" height="550.0" layoutX="230.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d8d8d8" height="550.0" layoutX="460.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
+            <Label layoutX="46.0" layoutY="122.0" text="Details" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" right="50.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="nameField" layoutX="20.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Give your event a name" />
+            <TextArea fx:id="descriptionField" layoutX="20.0" layoutY="240.0" prefHeight="130.0" prefWidth="194.0" promptText="Let people know more about your event" />
+            <Label layoutX="20.0" layoutY="160.0" text="Name" />
+            <Label layoutX="20.0" layoutY="220.0" text="Description" />
+            <Button fx:id="cancelButton" layoutX="521.0" layoutY="491.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="70.0" style="-fx-background-color: #f2f2f2;" text="Cancel" textAlignment="CENTER" textFill="#9772fb" />
+            <Button fx:id="createButton" layoutX="598.0" layoutY="491.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Create" textAlignment="CENTER" textFill="WHITE" />
+            <DatePicker fx:id="endDate2" layoutX="284.0" layoutY="350.0" prefHeight="26.0" prefWidth="140.0" promptText="Ending day" />
+            <DatePicker fx:id="startDate2" layoutX="284.0" layoutY="180.0" prefHeight="26.0" prefWidth="140.0" promptText="Starting day" />
+            <Label layoutX="284.0" layoutY="160.0" text="Starting Date" />
+            <TextField fx:id="participantNumber" layoutX="20.0" layoutY="400.0" prefHeight="26.0" prefWidth="194.0" promptText="Number of people expected" />
+            <Label layoutX="284.0" layoutY="330.0" text="Ending Date" />
+            <Label fx:id="errorLabel" layoutX="23.0" layoutY="485.0" prefHeight="31.0" prefWidth="413.0" />
+            <CheckBox fx:id="daytimeCheck" layoutX="476.0" layoutY="276.0" mnemonicParsing="false" text="Daytime " />
+            <Label layoutX="476.0" layoutY="250.0" text="Type of Event" />
+            <CheckBox fx:id="casualCheck" layoutX="570.0" layoutY="306.0" mnemonicParsing="false" text="Casual " />
+            <CheckBox fx:id="weekendCheck" layoutX="476.0" layoutY="366.0" mnemonicParsing="false" text="Weekend " />
+            <CheckBox fx:id="nighttimeCheck" layoutX="570.0" layoutY="276.0" mnemonicParsing="false" text="Nighttime " />
+            <CheckBox fx:id="formalCheck" layoutX="476.0" layoutY="306.0" mnemonicParsing="false" text="Formal " />
+            <CheckBox fx:id="sportsCheck" layoutX="476.0" layoutY="336.0" mnemonicParsing="false" text="Sports" />
+            <CheckBox fx:id="charityCheck" layoutX="570.0" layoutY="336.0" mnemonicParsing="false" text="Charity " />
+            <Label layoutX="19.0" layoutY="380.0" text="Number of Participants" />
+            <Spinner fx:id="startH" layoutX="284.0" layoutY="210.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="startM" layoutX="354.0" layoutY="210.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="endH" layoutX="284.0" layoutY="380.0" prefHeight="26.0" prefWidth="70.0" />
+            <Spinner fx:id="endM" layoutX="354.0" layoutY="380.0" prefHeight="26.0" prefWidth="70.0" />
+            <Label layoutX="478.0" layoutY="160.0" text="Location" />
+            <Label layoutX="323.0" layoutY="122.0" text=" Time" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="537.0" layoutY="122.0" text="Other Info" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Line endX="80.0" layoutX="272.0" layoutY="254.0" rotate="90.0" startX="-80.0" stroke="#9772fb" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="339.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Ellipse fill="#e3e3e3" layoutX="272.0" layoutY="171.0" radiusX="5.0" radiusY="5.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <TextField fx:id="locationField" layoutX="476.0" layoutY="180.0" prefHeight="26.0" prefWidth="194.0" promptText="Location address" />
+            <Circle fill="#1f93ff00" layoutX="120.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label layoutX="65.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="1" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" right="50.0" />
+               </padding>
+            </Label>
+            <Circle fill="#1f93ff00" layoutX="346.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label layoutX="291.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="2" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" right="50.0" />
+               </padding>
+            </Label>
+            <Circle fill="#1f93ff00" layoutX="575.0" layoutY="95.0" radius="20.0" stroke="#9772fb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label layoutX="520.0" layoutY="82.0" prefHeight="26.0" prefWidth="99.0" text="3" textAlignment="CENTER" textFill="#9772fb">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" right="50.0" />
+               </padding>
+            </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="eventEditPane" layoutX="145.0" layoutY="1.0" prefHeight="610.0" prefWidth="675.0" visible="false">
+      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0">
          <children>
-            <TableView fx:id="UserTable" layoutX="118.0" layoutY="375.0" prefHeight="135.0" prefWidth="382.0">
-               <columns>
-                  <TableColumn prefWidth="29.5999755859375" text="ID" />
-                  <TableColumn prefWidth="251.99998474121094" text="User" />
-                  <TableColumn prefWidth="43.199951171875" text="Edit" />
-                  <TableColumn minWidth="9.5999755859375" prefWidth="57.60009765625" text="Delete" />
-               </columns>
-            </TableView>
-            <DatePicker fx:id="EndDateField" layoutX="118.0" layoutY="198.0" />
-            <DatePicker fx:id="StartDateField" layoutX="118.0" layoutY="141.0" />
-            <TextArea fx:id="DescArea" layoutX="118.0" layoutY="258.0" prefHeight="95.0" prefWidth="202.0" />
-            <TextField fx:id="EventNameField" layoutX="118.0" layoutY="93.0" />
-            <Button fx:id="BackButton" layoutX="77.0" layoutY="539.0" mnemonicParsing="false" onAction="#onBackButtonPress" text="Back" />
-            <Button fx:id="SaveButton" layoutX="532.0" layoutY="539.0" mnemonicParsing="false" onAction="#onSaveButtonPress" text="Save" />
-            <Text layoutX="161.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name" />
-            <Text layoutX="166.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date" />
-            <Text layoutX="168.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Date" />
-            <Text layoutX="162.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
-            <Text layoutX="144.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Management" />
-            <Spinner fx:id="Hour1" layoutX="320.0" layoutY="141.0" prefHeight="26.0" prefWidth="60.0" />
-            <Spinner fx:id="Min1" layoutX="408.0" layoutY="141.0" prefHeight="26.0" prefWidth="60.0" />
-            <Spinner fx:id="Hour2" layoutX="320.0" layoutY="198.0" prefHeight="26.0" prefWidth="60.0" />
-            <Spinner fx:id="Min2" layoutX="408.0" layoutY="198.0" prefHeight="26.0" prefWidth="60.0" />
+            <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome user!" textFill="#9772fb">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="82.0" prefHeight="26.0" prefWidth="157.0" text="Popular Events">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="14.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label layoutX="14.0" layoutY="370.0" prefHeight="26.0" prefWidth="255.0" text="Events That May Interest You">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#9772fb" height="99.0" layoutX="241.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0" />
+            <Label fx:id="title1" layoutX="27.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc1" alignment="TOP_LEFT" layoutX="27.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view1" layoutX="185.0" layoutY="192.0" onMouseClicked="#view1" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="241.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title2" layoutX="254.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc2" alignment="TOP_LEFT" layoutX="254.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view2" layoutX="412.0" layoutY="192.0" onMouseClicked="#view2" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="468.0" layoutY="117.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endY="1.0" startX="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title3" layoutX="481.0" layoutY="126.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc3" alignment="TOP_LEFT" layoutX="481.0" layoutY="150.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view3" layoutX="639.0" layoutY="192.0" onMouseClicked="#view3" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="14.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title4" layoutX="27.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc4" alignment="TOP_LEFT" layoutX="27.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view4" layoutX="185.0" layoutY="314.0" onMouseClicked="#view4" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="title5" layoutX="254.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc5" alignment="TOP_LEFT" layoutX="254.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view5" layoutX="412.0" layoutY="314.0" onMouseClicked="#view5" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="468.0" layoutY="239.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title6" layoutX="481.0" layoutY="248.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc6" alignment="TOP_LEFT" layoutX="481.0" layoutY="272.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view6" layoutX="639.0" layoutY="314.0" onMouseClicked="#view6" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="17.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="0.7727272727272727" startX="0.4810606214133176">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title7" layoutX="30.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc7" alignment="TOP_LEFT" layoutX="30.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view7" layoutX="188.0" layoutY="480.0" onMouseClicked="#view7" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="title8" layoutX="257.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc8" alignment="TOP_LEFT" layoutX="257.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view8" layoutX="415.0" layoutY="480.0" onMouseClicked="#view8" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="99.0" layoutX="471.0" layoutY="405.0" stroke="#00000002" strokeLineCap="ROUND" strokeMiterLimit="20.0" strokeType="INSIDE" width="209.0">
+               <fill>
+                  <LinearGradient endX="1.0" endY="0.7727272727272727" startY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.4812345802783966" green="0.2925925850868225" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.47463808554640036">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.591920018196106" green="0.45080000162124634" blue="0.9800000190734863" opacity="0.5744680762290955" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Rectangle>
+            <Label fx:id="title9" layoutX="484.0" layoutY="414.0" prefHeight="26.0" prefWidth="180.0" text="Event" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="desc9" alignment="TOP_LEFT" layoutX="484.0" layoutY="438.0" opacity="0.8" prefHeight="51.0" prefWidth="180.0" text="Description" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="view9" layoutX="642.0" layoutY="480.0" onMouseClicked="#view9" prefHeight="19.0" prefWidth="32.0" text="View" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="eventViewPane" layoutX="139.0" prefHeight="615.0" prefWidth="685.0" visible="false">
+      <AnchorPane fx:id="sidebar1" prefHeight="550.0" prefWidth="164.0" style="-fx-background-color: #764af1;" visible="false">
          <children>
-            <Text fx:id="TextId" layoutX="21.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event ID: " wrappingWidth="57.41486358642584">
+            <Button fx:id="LogoutButton1" layoutX="21.0" layoutY="499.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" opacity="0.8" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #ffffff; -fx-border-radius: 6;" text="Log out" textFill="#764af1" />
+            <Button fx:id="SettingsButton1" layoutX="21.0" layoutY="459.0" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text=" Settings" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../gear-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Text fill="WHITE" layoutX="40.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Planner">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font size="14.0" />
                </font>
             </Text>
-            <Text fx:id="TextId1" layoutX="21.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name:" wrappingWidth="77.41485595703125">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-            <Text fx:id="TextId11" layoutX="21.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Description:" wrappingWidth="103.01490020751953">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-            <Text fx:id="TextId111" layoutX="21.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Date:" wrappingWidth="57.41486358642584">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-            <Text fx:id="TextId112" layoutX="22.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date:" wrappingWidth="63.8148193359375">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-            <Text fx:id="TextId113" layoutX="18.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants: " wrappingWidth="70.21484375">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-            <Text fx:id="idEvent" layoutX="102.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
-            <Text fx:id="nameEvent" layoutX="114.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="283.01483154296875" />
-            <Text fx:id="descEvent" layoutX="144.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="403.01480865478516" />
-            <Text fx:id="start" layoutX="102.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
-            <Text fx:id="end" layoutX="101.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="70.21484375" />
-            <Text fx:id="participants" layoutX="117.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="38.93670654296875" />
-            <Text fontSmoothingType="LCD" layoutX="261.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View Event" textAlignment="CENTER">
-               <font>
-                  <Font name="Baskerville Old Face" size="27.0" />
-               </font>
-            </Text>
-            <Button fx:id="backEventButton" layoutX="24.0" layoutY="422.0" mnemonicParsing="false" onAction="#onBackEventPressed" text="Back" />
-            <Button fx:id="joinEventButton" layoutX="118.0" layoutY="422.0" mnemonicParsing="false" onAction="#onJoinEventPressed" text="Join" />
+            <Button fx:id="homeButton21" centerShape="false" layoutX="21.0" layoutY="148.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../bars-staggered-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="calendarButton1" layoutX="21.0" layoutY="189.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../calendar-solid.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ImageView fitHeight="69.0" fitWidth="84.0" layoutX="40.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../people-group-solid.png" />
+               </image>
+            </ImageView>
          </children>
+         <effect>
+            <Bloom threshold="0.98" />
+         </effect>
       </AnchorPane>
       <AnchorPane fx:id="notificationsPane" layoutX="149.0" layoutY="10.0" prefHeight="615.0" prefWidth="685.0">
          <children>

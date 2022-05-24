@@ -4,43 +4,47 @@ import genericclasses.DatabaseComm;
 import genericclasses.Event;
 import genericclasses.Session;
 import genericclasses.User;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class MainMenu implements Runnable {
+public class MainMenu implements Initializable {
     @FXML
-    Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
+    Button TestEventButton, interestedButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
     @FXML
-    TextField SearchField;
+    TextField SearchField, SearchField1;
 
     @FXML
     Text NotifText;
+
+    ObservableList<String> filtersName = FXCollections.observableArrayList("All Events", "Daytime Events", "Nighttime Events", "Weekend Events", "Formal Events", "Casual Events", "Sport Events", "Charity Events");
+    @FXML
+    ChoiceBox filters;
 
     @FXML
     TableView<EventModel> eventTableView = new TableView<>();
@@ -48,22 +52,20 @@ public class MainMenu implements Runnable {
     TableView<EventModel> eventManagerTableView = new TableView<>();
     @FXML
     TableView<EventModel> eventManagerTableView2 = new TableView<>();
-    @FXML
-    TableView<NotificationModel> notificationsTableView = new TableView<>();
 
     @FXML
-    public TableColumn<Event, Integer> eventID,eventID1;
+    public TableColumn<Event, Integer> eventID,eventID1, eventID11;
     @FXML
-    public TableColumn<Event,String> eventName,eventName1;
+    public TableColumn<Event,String> eventName,eventName1,eventName11;
 
     @FXML
-    public TableColumn<Event, Integer> participantsNum,participantsNum1;
+    public TableColumn<Event, Integer> participantsNum,participantsNum1,participantsNum11;
 
     @FXML
-    public TableColumn<Event, LocalDateTime> startDate,startDate1;
+    public TableColumn<Event, LocalDateTime> startDate,startDate1,startDate11;
 
     @FXML
-    public TableColumn<Event, LocalDateTime> endDate,endDate1;
+    public TableColumn<Event, LocalDateTime> endDate,endDate1,endDate11;
 
 
 
@@ -79,20 +81,20 @@ public class MainMenu implements Runnable {
     }
 
     private void addUser(){
-        userList.add(new User(2, "Ion", "ion.gmail.com"));
+        userList.add(new User(2, "Ion", "ion.gmail.com", 1));
     }
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            //new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
+            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,"Bega River")
             );
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
-    private ObservableList<NotificationModel> notificationModels = FXCollections.observableArrayList();
+    private ObservableList<EventModel> eventManagerModels2 = FXCollections.observableArrayList();
 
     @FXML
     protected void onTestEvent(){
         addUser();
-        //eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,1));
+        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,"Some location"));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -102,37 +104,24 @@ public class MainMenu implements Runnable {
     }
 
     @FXML
-    ImageView logo,homeButton;
-
-        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane,notificationsPane;
+    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1;
 
     @FXML
     protected void onCreateEventButtonClick(){
-        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("create-view.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-            CreateEventController controller=  fxmlLoader.getController();
-            controller.setButtonClass();
-            String css = this.getClass().getResource("Style.css").toExternalForm();
-            scene.getStylesheets().add(css);
-            Stage stage= new Stage();
-            stage.setMinWidth(304);
-            stage.setMinHeight(262);
-            stage.setTitle("Create Event");
-            stage.setScene(scene);
-            stage.show();
-            Stage stagelogin= (Stage) CreateEventButton.getScene().getWindow();
-            stagelogin.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        eventmanagerpane.setVisible(false);
+        createPane.setVisible(true);
     }
 
     @FXML
-    protected void onNotifButtonClick(){
+    Label notificationCount;
 
-        notificationsPane.setVisible(true);
+    @FXML
+    Circle notificationBubble;
+
+    @FXML
+    protected void onNotifButtonClick(){
+        notificationCount.setVisible(false);
+        notificationBubble.setVisible(false);
     }
     @FXML
     protected void onRefreshButtonClick(){
@@ -141,15 +130,28 @@ public class MainMenu implements Runnable {
         eventModels = DatabaseComm.refreshlist(currentUser,false);
         eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
         eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
-        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Usersize"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
         startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
         endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
         eventTableView.setItems(eventModels);
     }
-    @FXML
-    protected void onViewEventButtonClick(){
 
+    @FXML
+    protected void onCreatorRefreshButtonClick(){
+        int currentUser = Session.getInstance().getUser().getId();
+        eventManagerTableView.getItems().clear();
+        eventManagerModels = DatabaseComm.refreshlist(currentUser,true);
+        eventID1.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        eventName1.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum1.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate1.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate1.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView.setItems(eventManagerModels);
     }
+
+    @FXML
+    protected void onViewEventButtonClick(){}
+
     @FXML
     protected void onLogoutButtonClick(){
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
@@ -168,7 +170,6 @@ public class MainMenu implements Runnable {
             stage.show();
             Stage stagelogin= (Stage) LogoutButton.getScene().getWindow();
             stagelogin.close();
-            ser.cancel();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -207,17 +208,18 @@ public class MainMenu implements Runnable {
     }
 
     @FXML
-    private Text descEvent,end,start,idEvent,nameEvent,participants;
+    private Text descEvent,end,start,idEvent,nameEvent,participants, tag1;
 
 
     public void fillEventPane(EventModel eventval){
         //idevent isn't selected
-        idEvent.setText(String.valueOf(eventval.getID()));
+        idEvent.setText(String.valueOf(eventval.getLocation()));
         nameEvent.setText(eventval.getNume());
         descEvent.setText(eventval.getDescription());
         start.setText(eventval.getStartdate());
         end.setText(eventval.getEnddate());
         participants.setText(eventval.getUserlist().size() +"/"+ eventval.getLimit());
+        tag1.setText(DatabaseComm.getTags(eventval.getID()));
     }
 
     @FXML
@@ -227,10 +229,40 @@ public class MainMenu implements Runnable {
     protected void onBackEventPressed(){
         eventViewPane.setVisible(false);
         mainmenu.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
     }
     @FXML
     protected void onJoinEventPressed(){
+        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        joinEventButton.setDisable(true);
+        joinEventButton.setText("Joined");
+        interestedButton.setVisible(false);
+    }
 
+    @FXML
+    protected void onJoinEventPressedOut(EventModel event){
+        EventModel eventSelected = event;
+        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        joinEventButton.setDisable(true);
+        joinEventButton.setText("Joined");
+        interestedButton.setVisible(false);
+    }
+
+    @FXML
+    protected void onInterestedEventPressed(){
+        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+        DatabaseComm.add_interest(eventSelected.getID(), Session.getInstance().getUser().getId());
+        interestedButton.setVisible(false);
+    }
+
+    @FXML
+    protected void onInterestedEventPressedOut(EventModel event){
+        EventModel eventSelected = event;
+        DatabaseComm.add_interest(eventSelected.getID(), Session.getInstance().getUser().getId());
+        interestedButton.setVisible(false);
     }
 
     @FXML
@@ -245,12 +277,97 @@ public class MainMenu implements Runnable {
             System.out.println(eventSelected.getID());
             System.out.println(eventSelected.getNume());
             fillEventPane(eventSelected);
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Joined");
+                interestedButton.setVisible(false);
+            }
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                interestedButton.setVisible(false);
+
+            if(Session.getInstance().getUser().getType() == 2)
+                interestedButton.setVisible(false);
+
             eventViewPane.setVisible(true);
-
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressed();
+            });
         }
-
-
     }
+
+    @FXML
+    protected void onMouseClickTable2(){
+        //eventTableView.getSelectionModel().getSelectedItem();
+        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+        Scene scene = null;
+        if (eventSelected == null) System.out.println("couldn't find event");
+        else {
+            eventmanagerpane.setVisible(false);
+            System.out.println(eventSelected.getID());
+            System.out.println(eventSelected.getNume());
+            fillEventPane(eventSelected);
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Joined");
+                interestedButton.setVisible(false);
+            }
+
+            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                interestedButton.setVisible(false);
+
+            eventViewPane.setVisible(true);
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressed2();
+            });
+        }
+    }
+
+    @FXML
+    protected void onBackEventPressed2(){
+        eventViewPane.setVisible(false);
+        eventmanagerpane.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
+    }
+
+    @FXML
+    protected void onBackEventPressedMan(){
+        eventViewPane.setVisible(false);
+        mainmenu.setVisible(true);
+        joinEventButton.setVisible(false);
+        interestedButton.setVisible(false);
+    }
+
+    @FXML
+    protected void onBackEventPressed3(){
+        eventViewPane.setVisible(false);
+        mainmenu2.setVisible(true);
+        joinEventButton.setDisable(false);
+        joinEventButton.setText("Join");
+        interestedButton.setVisible(true);
+    }
+
+//    @FXML
+//    protected void onManagerMouseClickTable2(){
+//        //eventTableView.getSelectionModel().getSelectedItem();
+//        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
+//        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+//        Scene scene = null;
+//        if (eventSelected == null) System.out.println("couldn't find event");
+//        else {
+//            eventmanagerpane.setVisible(false);
+//            System.out.println(eventSelected.getID());
+//            System.out.println(eventSelected.getNume());
+//            fillEventPane(eventSelected);
+//            eventViewPane.setVisible(true);
+//
+//        }
+//    }
 
     @FXML
     void onManagerMouseClickTable(javafx.scene.input.MouseEvent event) {
@@ -357,13 +474,12 @@ public class MainMenu implements Runnable {
 
     public User currentUserGlobal=Session.getInstance().getUser();
 
-
-
-    public void onEventManagementButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onEventManagementButtonPress() {
         eventManagerTableView.getItems().clear();
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         mainmenu.setVisible(false);
+        mainmenu2.setVisible(false);
         eventmanagerpane.setVisible(true);
         System.out.println(eventmanagerpane.getChildren());
         eventManagerTableView.setRowFactory(tv -> {
@@ -390,171 +506,397 @@ public class MainMenu implements Runnable {
         eventManagerTableView.setItems(eventManagerModels);
         //eventManagerTableView.refresh();
         System.out.println("Complete.");
+
+        eventManagerTableView2.getItems().clear();
+        eventManagerModels2 = DatabaseComm.attendingEvents(currentUserGlobal.getId());
+        eventID11.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        eventName11.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum11.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate11.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate11.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView2.setItems(eventManagerModels2);
     }
-    public void onHomeButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+
+    public void onHomeButtonPress() {
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
-        notificationsPane.setVisible(false);
+        mainmenu2.setVisible(false);
         mainmenu.setVisible(true);
     }
-    public void onCalendarButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
+
+    public void onHomeButtonClick() {
+        eventViewPane.setVisible(false);
+        eventEditPane.setVisible(false);
+        eventmanagerpane.setVisible(false);
+        mainmenu.setVisible(false);
+        mainmenu2.setVisible(true);
+    }
+
+    public void onCalendarButtonPress() {
         mainmenu.setVisible(false);
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
-        notificationsPane.setVisible(false);
         eventmanagerpane.setVisible(false);
+        mainmenu2.setVisible(false);
         // NOT DONE YET, ONLY HAS THE EVENTMANAGER SETVISIBLE
         //eventmanagerpane.getChildren();
     }
 
     @FXML
-    public TableColumn<NotificationModel, Integer> idCell;
-    @FXML
-    public TableColumn<NotificationModel,String> messageCell;
+    protected void onSearch(){
+        String[] keys = SearchField.getText().split(" ");
+        ArrayList<Event> events = DatabaseComm.getAllEvents();
 
-    @FXML
-    public TableColumn<NotificationModel, String> fromCell;
+        ArrayList<Event> results = new ArrayList<>();
 
-    @FXML
-    public TableColumn<NotificationModel, NotificationModel> buttonCell;
-
-    Service<Void> ser = new Service<Void>() {
-        @Override protected Task createTask() {
-            return new Task<Void>() {
-                @Override protected Void call() throws InterruptedException {
-                    idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
-                    messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
-                    fromCell.setCellValueFactory(new PropertyValueFactory<>("User_from"));
-                   buttonCell.setCellValueFactory(
-                            param -> new ReadOnlyObjectWrapper<>(param.getValue())
-                    );
-                    buttonCell.setCellFactory(param -> new TableCell<NotificationModel, NotificationModel>() {
-                        private final Button acceptButton = new Button("A");
-                        private final Button deleteButton = new Button("D");
-                        private final Button markButton = new Button("M");
-                        final HBox pane = new HBox(acceptButton, deleteButton,markButton);
-                        @Override
-                        protected void updateItem(NotificationModel model, boolean empty) {
-                            super.updateItem(model, empty);
-
-                            if (model == null) {
-                                setGraphic(null);
-                                return;
-                            }
-
-                            setGraphic(pane);
-                            deleteButton.setOnMouseClicked(
-                                    event -> {if(
-                                            DatabaseComm.deleteNotification(model)==0) getTableView().getItems().remove(model); else {// error
-                                                 }
-                                    }
-                            );
-                            acceptButton.setOnMouseClicked(
-                                    event -> {if(DatabaseComm.acceptNotification(model)==0) {
-                                        DatabaseComm.deleteNotification(model);
-                                        getTableView().getItems().remove(model);
-                                        System.out.println("Accepted.");
-                                    }
-                                    }
-                            );
-                            markButton.setOnMouseClicked(
-                                    event -> { System.out.println("Marked.");
-                                        if(DatabaseComm.markNotification(model)==0){
-                                            if(model.getStatus()==1){
-                                                model.setStatus(2);
-                                            }
-                                            else model.setStatus(1);
-                                        }
-                                        // Change look of row based on status (1 as invite/not read, 2 as invite/read)
-                                    }
-                            );
-                        }
-                    });
-                    while(true){
-                        synchronized(this){
-                            try {
-                                wait(5000);
-                                if(isCancelled()){
-                                    break;
-                                }
-                                else{
-                                    notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
-                                    System.out.println(notificationModels);
-                                    notificationsTableView.getItems().clear();
-                                    notificationsTableView.setItems(notificationModels);
-                                }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        System.out.println("Refreshed after 5 seconds");
-                    }
-                    return null;
+        for(Event e : events)
+            for(String k : keys)
+                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                    results.add(e);
+                    continue;
                 }
-            };
-        }
-    };
-    Service<Void> serNotif = new Service<Void>() {
-        @Override protected Task createTask() {
-            return new Task<Void>() {
-                @Override protected Void call() throws InterruptedException {
-                    while(true){
-                        synchronized(this){
-                            try {
-                                wait(5000);
-                                if(isCancelled()){
-                                    break;
-                                }
-                                else{
-                                    long tempmin;
-                                    LocalDateTime tempatm;
-                                    for(EventModel i : eventManagerModels){
-                                        if(i.getStatus()==0){
-                                            //gotta think how I'm gonna create notifications here
-                                        }
-                                    }
-                                }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
 
-                        System.out.println("Refreshed after 5 seconds");
-                    }
-                    // You code you want to execute in service backgroundgoes here
-                    //return null;
-                    return null;
-                }
-            };
-        }
-    };
-    public Service startBackgroundService(){
-//        ser.setOnSucceeded((WorkerStateEvent event) -> {
-//            // Anything which you want to update on javafx thread (GUI) after completion of background process.
-//        });
-        ser.start();
-        return ser;
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId(), e.getLocation()));
+
+        eventTableView.getItems().clear();
+        eventModels = resultsTable;
+        eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventTableView.setItems(eventModels);
+
     }
 
+    @FXML
+    protected void onSearchMy(){
+        String[] keys = SearchField1.getText().split(" ");
+        ArrayList<Event> events = DatabaseComm.getMyEvents(Session.getInstance().getUser().getId());
+
+        ArrayList<Event> results = new ArrayList<>();
+
+        for(Event e : events)
+            for(String k : keys)
+                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                    results.add(e);
+                    continue;
+                }
+
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), Session.getInstance().getUser().getId(), e.getLocation()));
+
+        eventManagerTableView.getItems().clear();
+        eventManagerModels = resultsTable;
+        eventID1.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName1.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum1.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate1.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate1.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventManagerTableView.setItems(eventManagerModels);
+
+    }
+
+    @FXML
+    protected void onFilter(){
+        String key = filters.getValue().toString();
+
+        int filter = 0;
+        if(key.equals("Daytime Events"))
+            filter = 1;
+        else if(key.equals("Nighttime Events"))
+            filter = 2;
+        else if(key.equals("Weekend Events"))
+            filter = 3;
+        else if(key.equals("Formal Events"))
+            filter = 4;
+        else if(key.equals("Casual Events"))
+            filter = 5;
+        else if(key.equals("Sport Events"))
+            filter = 6;
+        else if(key.equals("Charity Events"))
+            filter = 7;
+
+        ArrayList<Event> results = new ArrayList<>();
+        if(filter != 0)
+            results = DatabaseComm.getFilteredEvents(filter);
+        else
+            results = DatabaseComm.getAllEvents();
+
+        ObservableList<EventModel> resultsTable = FXCollections.observableArrayList();
+        for(Event e : results)
+            resultsTable.add(new EventModel(e.getId(), e.getNume(), e.getDescription(), e.getStartdate().toLocalDateTime(), e.getEnddate().toLocalDateTime(), e.getUserlist(), e.getLimit(), e.getLocation()));
+
+        eventTableView.getItems().clear();
+        eventModels = resultsTable;
+        eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+        participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("Startdate"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("Enddate"));
+        eventTableView.setItems(eventModels);
+
+    }
+
+    @FXML Label welcome, title1, title2, title3, title4, title5, title6, title7, title8, title9, desc1, desc2, desc3, desc4, desc5, desc6, desc7, desc8, desc9;
+
+    ObservableList<EventModel> popular = DatabaseComm.popularEvents();
+    ObservableList<EventModel> interest = DatabaseComm.interestEvents();
+
     @Override
-    public void run() {
-        idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
-        messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
-        fromCell.setCellValueFactory(new PropertyValueFactory<>("Limit"));
-        while(true){
-            synchronized(this){
-            try {
-                wait(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            }
-            notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
-            notificationsTableView.getItems().clear();
-            notificationsTableView.setItems(notificationModels);
-            System.out.println("Refreshed after 5 seconds");
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(Session.getInstance().getUser().getType() == 2) {
+            mainmenu.setVisible(true);
+            mainmenu2.setVisible(false);
+            sidebar.setVisible(false);
+            sidebar1.setVisible(true);
+            joinEventButton.setVisible(false);
+            interestedButton.setVisible(false);
+            backEventButton.setOnAction((event) -> {
+                onBackEventPressedMan();
+            });
         }
+
+        filters.setItems(filtersName);
+        filters.setValue("All Events");
+
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMs = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryHe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactoryMe = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        startH.setValueFactory(valueFactoryHs);
+        endH.setValueFactory(valueFactoryHe);
+        startM.setValueFactory(valueFactoryMs);
+        endM.setValueFactory(valueFactoryMe);
+
+        startH.getValueFactory().setValue(12);
+        endH.getValueFactory().setValue(12);
+        startM.getValueFactory().setValue(0);
+        endM.getValueFactory().setValue(0);
+
+        ArrayList<Event> events = DatabaseComm.getPopularEvents();
+        title1.setText(events.get(0).getNume());
+        desc1.setText(events.get(0).getDescription());
+
+        title2.setText(events.get(1).getNume());
+        desc2.setText(events.get(1).getDescription());
+
+        title3.setText(events.get(2).getNume());
+        desc3.setText(events.get(2).getDescription());
+
+        title4.setText(events.get(3).getNume());
+        desc4.setText(events.get(3).getDescription());
+
+        title5.setText(events.get(4).getNume());
+        desc5.setText(events.get(4).getDescription());
+
+        title6.setText(events.get(5).getNume());
+        desc6.setText(events.get(5).getDescription());
+
+        ArrayList<Event> interest = DatabaseComm.getInterestEvents();
+        title7.setText(interest.get(0).getNume());
+        desc7.setText(events.get(0).getDescription());
+
+        title8.setText(events.get(1).getNume());
+        desc8.setText(events.get(1).getDescription());
+
+        title9.setText(events.get(2).getNume());
+        desc9.setText(events.get(2).getDescription());
+
+       // welcome.setText("Welcome " + Session.getInstance().getUser().getEmail() + "!");
+
+       // NotifButton.getStyleClass().add("icon-button");
+      //  NotifButton.setPickOnBounds(true);
+    }
+
+    protected void viewEv(EventModel eventG) {
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
+        Scene scene = null;
+        mainmenu2.setVisible(false);
+        fillEventPane(eventG);
+        if(DatabaseComm.checkEnrolment(eventG.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+            joinEventButton.setDisable(true);
+            joinEventButton.setText("Joined");
+            interestedButton.setVisible(false);
+        }
+        if(DatabaseComm.checkEnrolment(eventG.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+            interestedButton.setVisible(false);
+        eventViewPane.setVisible(true);
+        backEventButton.setOnAction((event) -> {
+            onBackEventPressed3();
+        });
+        joinEventButton.setOnAction((event) -> {
+            onJoinEventPressedOut(eventG);
+        });
+        interestedButton.setOnAction((event) -> {
+            onInterestedEventPressedOut(eventG);
+        });
+
+    }
+
+    @FXML
+    protected void view1() { viewEv(popular.get(0)); }
+
+    @FXML
+    protected void view2() { viewEv(popular.get(1)); }
+
+    @FXML
+    protected void view3() { viewEv(popular.get(2)); }
+
+    @FXML
+    protected void view4() { viewEv(popular.get(3)); }
+
+    @FXML
+    protected void view5() { viewEv(popular.get(4)); }
+
+    @FXML
+    protected void view6() { viewEv(popular.get(5)); }
+
+    @FXML
+    protected void view7() { viewEv(interest.get(0)); }
+
+    @FXML
+    protected void view8() { viewEv(interest.get(1)); }
+
+    @FXML
+    protected void view9() { viewEv(interest.get(2)); }
+
+    @FXML
+    private TextField nameField, participantNumber, locationField;
+
+    @FXML
+    private TextArea descriptionField;
+
+    @FXML
+    private DatePicker startDate2, endDate2;
+
+    @FXML
+    private Button cancelButton, createButton;
+
+    @FXML
+    private Label errorLabel;
+
+    @FXML
+    private CheckBox daytimeCheck, nighttimeCheck, weekendCheck, formalCheck, casualCheck, sportsCheck, charityCheck;
+
+    @FXML
+    private Spinner<Integer> startH = new Spinner<>();
+
+    @FXML
+    private Spinner<Integer> startM = new Spinner<>();
+
+    @FXML
+    private Spinner<Integer> endH = new Spinner<>();;
+
+    @FXML
+    private Spinner<Integer> endM = new Spinner<>();
+
+
+
+    public String twoDigits(int x) {
+        if(x < 10)
+            return "0" + x;
+        else
+            return "" + x;
+    }
+
+    @FXML
+    protected void onCreateButtonClick() {
+        String name = nameField.getText();
+        String location = locationField.getText();
+        String description = descriptionField.getText();
+        int numberp = 0;
+        LocalDate sd = startDate2.getValue(), ed = endDate2.getValue();
+        LocalDateTime sDate, eDate;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        if(!participantNumber.getText().isEmpty())
+            numberp = Integer.parseInt(participantNumber.getText());
+
+        int allOK = 1;
+        if(name.isEmpty() || description.isEmpty() || location.isEmpty() || participantNumber.getText().isEmpty() || sd == null || ed == null) {
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setText("Please fill all fields!");
+            allOK = 0;
+        } else {
+            if(sd.isAfter(ed)) {
+                errorLabel.setTextFill(Color.RED);
+                errorLabel.setText("Please enter a valid time period!");
+                allOK = 0;
+            }
+        }
+
+        // get the creator id
+        User creator = Session.getInstance().getUser();
+        int creatorId = Session.getInstance().getUser().getId();
+
+        if(allOK == 1) {
+            sDate = LocalDateTime.parse(sd + " " + twoDigits(startH.getValue()) + ":" + twoDigits(startM.getValue()) + ":00", formatter);
+            eDate = LocalDateTime.parse(ed + " " + twoDigits(endH.getValue()) + ":" + twoDigits(endM.getValue()) + ":00", formatter);
+
+            Event newEvent = new Event(name, description, sDate, eDate, numberp, location);
+            int code = DatabaseComm.add_event(newEvent, creatorId);
+
+            if (code == 0) {
+                Event event = DatabaseComm.getLatestEvent();
+                //  System.out.println("latest: " + event);
+
+                // add the filters
+                if(daytimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 1);
+                if(nighttimeCheck.isSelected())
+                    DatabaseComm.add_filter(event, 2);
+                if(weekendCheck.isSelected())
+                    DatabaseComm.add_filter(event, 3);
+                if(formalCheck.isSelected())
+                    DatabaseComm.add_filter(event, 4);
+                if(casualCheck.isSelected())
+                    DatabaseComm.add_filter(event, 5);
+                if(sportsCheck.isSelected())
+                    DatabaseComm.add_filter(event, 6);
+                if(charityCheck.isSelected())
+                    DatabaseComm.add_filter(event, 7);
+
+                createPane.setVisible(false);
+                eventmanagerpane.setVisible(true);
+                //move to main menu
+            } else {
+                //Error message
+                System.out.println("Couldn't create event");
+            }
+        }
+    }
+
+    @FXML
+    protected void onCancelButtonClick() {
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
+//        Scene scene = null;
+//        try {
+//            scene = new Scene(fxmlLoader.load());
+//            MainMenu controller=  fxmlLoader.getController();
+//            controller.setButtonClass();
+//            String css = this.getClass().getResource("Style.css").toExternalForm();
+//            scene.getStylesheets().add(css);
+//            Stage stage= new Stage();
+//            stage.setMinWidth(640);
+//            stage.setMinHeight(480);
+//            stage.setTitle("Main Menu");
+//            stage.setScene(scene);
+//            stage.show();
+//            Stage stageN = (Stage) cancelButton.getScene().getWindow();
+//            stageN.close();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+        //move to main menu
+
+        createPane.setVisible(false);
+        eventmanagerpane.setVisible(true);
     }
 }

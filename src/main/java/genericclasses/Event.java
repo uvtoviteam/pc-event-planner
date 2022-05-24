@@ -2,8 +2,11 @@ package genericclasses;
 
 
 import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Event {
@@ -13,6 +16,7 @@ public class Event {
     LocalDateTime enddate;
     ArrayList<User> userlist;
     User creator;
+    String location;
     int limit;
     public Event(){
         id=1;
@@ -24,16 +28,17 @@ public class Event {
         ArrayList<User> userlist= new ArrayList<>();
     }
 
-    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit) {
+    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit, String location) {
         this.nume = name;
         this.description = description;
         this.startdate = startDate;
         this.enddate = endDate;
         this.limit = limit;
         this.userlist= new ArrayList<>();
+        this.location = location;
     }
 
-    public Event(int id, String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit) {
+    public Event(int id, String name, String description, LocalDateTime startDate, LocalDateTime endDate, int limit, String location) {
         this.id = id;
         this.nume = name;
         this.description = description;
@@ -41,6 +46,7 @@ public class Event {
         this.enddate = endDate;
         this.limit = limit;
         this.userlist= new ArrayList<>();
+        this.location = location;
     }
 
     public String getNume() {
@@ -51,14 +57,14 @@ public class Event {
         return description;
     }
 
-    public Date getStartdate() {
-        java.sql.Date sqlDate = java.sql.Date.valueOf(startdate.toLocalDate());
-        return sqlDate;
+    public Timestamp getStartdate() {
+        java.sql.Timestamp sqlTime = java.sql.Timestamp.valueOf(startdate);
+        return sqlTime;
     }
 
-    public Date getEnddate() {
-        java.sql.Date sqlDate = java.sql.Date.valueOf(enddate.toLocalDate());
-        return sqlDate;
+    public Timestamp getEnddate() {
+        java.sql.Timestamp sqlTime = java.sql.Timestamp.valueOf(enddate);
+        return sqlTime;
     }
 
     public LocalDateTime getStartdateLocal() {
@@ -77,6 +83,10 @@ public class Event {
         return id;
     }
 
+    public ArrayList<User> getUserlist() {
+        return userlist;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -88,5 +98,17 @@ public class Event {
                 ", userlist=" + userlist +
                 ", limit=" + limit +
                 '}';
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

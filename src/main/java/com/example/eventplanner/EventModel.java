@@ -17,27 +17,41 @@ import java.util.ArrayList;
 
 public class EventModel {
     public SimpleIntegerProperty ID;
-    public SimpleStringProperty EventName,description;
+    public SimpleStringProperty EventName,description, location;
     public SimpleStringProperty StartDate;
     public SimpleStringProperty EndDate;
     public SimpleListProperty<User> userlist;
     public SimpleIntegerProperty Participants;
     public SimpleIntegerProperty creator;
-    public SimpleIntegerProperty status;
     protected LocalDateTime startDatePrivate,endDatePrivate;
-    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit,Integer status, Integer creator){
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, Integer creator, String location){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ID=new SimpleIntegerProperty(id);
         this.EventName=new SimpleStringProperty(nume);
         this.description=new SimpleStringProperty(description);
-        this.StartDate=new SimpleStringProperty(startdate.format(formatter));
-        this.EndDate=new SimpleStringProperty(enddate.format(formatter));
+        this.location=new SimpleStringProperty(location);
+        this.StartDate=new SimpleStringProperty(startdate.format(formatter).toString());
+        this.EndDate=new SimpleStringProperty(enddate.format(formatter).toString());
         this.userlist=new SimpleListProperty<User>(FXCollections.observableList(userlist));
         this.Participants=new SimpleIntegerProperty(limit);
-        this.status=new SimpleIntegerProperty(status);
         this.startDatePrivate=startdate;
         this.endDatePrivate=enddate;
         this.creator=new SimpleIntegerProperty(creator);
+        System.out.println(startDatePrivate);
+    }
+
+    public EventModel(Integer id, String nume,String description, LocalDateTime startdate,LocalDateTime enddate, ArrayList<User> userlist, Integer limit, String location){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.ID=new SimpleIntegerProperty(id);
+        this.EventName=new SimpleStringProperty(nume);
+        this.description=new SimpleStringProperty(description);
+        this.StartDate=new SimpleStringProperty(startdate.format(formatter).toString());
+        this.EndDate=new SimpleStringProperty(enddate.format(formatter).toString());
+        this.userlist=new SimpleListProperty<User>(FXCollections.observableList(userlist));
+        this.Participants=new SimpleIntegerProperty(limit);
+        this.startDatePrivate=startdate;
+        this.endDatePrivate=enddate;
+        this.location=new SimpleStringProperty(location);
         System.out.println(startDatePrivate);
     }
 
@@ -132,8 +146,7 @@ public class EventModel {
             return startDatePrivate.toLocalDate();
         else
             return endDatePrivate.toLocalDate();
-    }
-
+    };
     public LocalTime getTime(boolean which){
         if(which)
             return startDatePrivate.toLocalTime();
@@ -154,13 +167,13 @@ public class EventModel {
     }
     public Timestamp getStartDatePrivate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(startDatePrivate.format(formatter));
+        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(startDatePrivate.format(formatter).toString());
         return sqlDate;
     }
 
     public Timestamp getEndDatePrivate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(endDatePrivate.format(formatter));
+        java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(endDatePrivate.format(formatter).toString());
         return sqlDate;
     }
     public void setStartDatePrivate(LocalDateTime date){
@@ -179,15 +192,11 @@ public class EventModel {
         this.creator=new SimpleIntegerProperty(creator);
     }
 
-    public int getStatus() {
-        return status.get();
+    public String getLocation() {
+        return location.get();
     }
 
-    public SimpleIntegerProperty statusProperty() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status.set(status);
+    public SimpleStringProperty locationProperty() {
+        return location;
     }
 }
