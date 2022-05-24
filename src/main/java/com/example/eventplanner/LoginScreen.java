@@ -21,6 +21,7 @@ public class LoginScreen extends Application {
         stage.setTitle("Login Screen");
         stage.setScene(scene);
         stage.show();
+        // run thread
     }
 
     public static void main(String[] args) {

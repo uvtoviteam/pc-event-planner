@@ -4,16 +4,22 @@ import genericclasses.DatabaseComm;
 import genericclasses.Event;
 import genericclasses.Session;
 import genericclasses.User;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
@@ -21,11 +27,12 @@ import org.w3c.dom.events.MouseEvent;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainMenu{
+public class MainMenu implements Runnable {
     @FXML
     Button TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton;
 
@@ -41,6 +48,8 @@ public class MainMenu{
     TableView<EventModel> eventManagerTableView = new TableView<>();
     @FXML
     TableView<EventModel> eventManagerTableView2 = new TableView<>();
+    @FXML
+    TableView<NotificationModel> notificationsTableView = new TableView<>();
 
     @FXML
     public TableColumn<Event, Integer> eventID,eventID1;
@@ -75,14 +84,15 @@ public class MainMenu{
 
 
     private ObservableList<EventModel> eventModels = FXCollections.observableArrayList(
-            new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
+            //new EventModel( 1," SLjazzing","Este vorba despre o plimbare muzicala cu Tramvaiul Turistic ce strabate orasul de pe Bega, totul pe acorduri Jazzy, așa cum v-am obișnuit.",LocalDateTime.now(),LocalDateTime.now(),new ArrayList<User>(), 50,1)
             );
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
+    private ObservableList<NotificationModel> notificationModels = FXCollections.observableArrayList();
 
     @FXML
     protected void onTestEvent(){
         addUser();
-        eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,1));
+        //eventModels.add(new EventModel( 2,"Street Food Festival","Dacă îți dorești un prânz/ o cină în aer liber, sau doar vrei să ieși la o băutură rece alături de prieteni, la Iulius Town vei putea face asta, iar noi te așteptăm cu brațele deschise!",LocalDateTime.now(),LocalDateTime.now(),userList,50,1));
       eventID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
       eventName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
       participantsNum.setCellValueFactory(new PropertyValueFactory<>("Limit"));
@@ -94,7 +104,7 @@ public class MainMenu{
     @FXML
     ImageView logo,homeButton;
 
-        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane;
+        @FXML private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane,notificationsPane;
 
     @FXML
     protected void onCreateEventButtonClick(){
@@ -122,6 +132,7 @@ public class MainMenu{
     @FXML
     protected void onNotifButtonClick(){
 
+        notificationsPane.setVisible(true);
     }
     @FXML
     protected void onRefreshButtonClick(){
@@ -157,6 +168,7 @@ public class MainMenu{
             stage.show();
             Stage stagelogin= (Stage) LogoutButton.getScene().getWindow();
             stagelogin.close();
+            ser.cancel();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -383,14 +395,166 @@ public class MainMenu{
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
+        notificationsPane.setVisible(false);
         mainmenu.setVisible(true);
     }
     public void onCalendarButtonPress(javafx.scene.input.MouseEvent mouseEvent) {
         mainmenu.setVisible(false);
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
+        notificationsPane.setVisible(false);
         eventmanagerpane.setVisible(false);
         // NOT DONE YET, ONLY HAS THE EVENTMANAGER SETVISIBLE
         //eventmanagerpane.getChildren();
+    }
+
+    @FXML
+    public TableColumn<NotificationModel, Integer> idCell;
+    @FXML
+    public TableColumn<NotificationModel,String> messageCell;
+
+    @FXML
+    public TableColumn<NotificationModel, String> fromCell;
+
+    @FXML
+    public TableColumn<NotificationModel, NotificationModel> buttonCell;
+
+    Service<Void> ser = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+                    messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
+                    fromCell.setCellValueFactory(new PropertyValueFactory<>("User_from"));
+                   buttonCell.setCellValueFactory(
+                            param -> new ReadOnlyObjectWrapper<>(param.getValue())
+                    );
+                    buttonCell.setCellFactory(param -> new TableCell<NotificationModel, NotificationModel>() {
+                        private final Button acceptButton = new Button("A");
+                        private final Button deleteButton = new Button("D");
+                        private final Button markButton = new Button("M");
+                        final HBox pane = new HBox(acceptButton, deleteButton,markButton);
+                        @Override
+                        protected void updateItem(NotificationModel model, boolean empty) {
+                            super.updateItem(model, empty);
+
+                            if (model == null) {
+                                setGraphic(null);
+                                return;
+                            }
+
+                            setGraphic(pane);
+                            deleteButton.setOnMouseClicked(
+                                    event -> {if(
+                                            DatabaseComm.deleteNotification(model)==0) getTableView().getItems().remove(model); else {// error
+                                                 }
+                                    }
+                            );
+                            acceptButton.setOnMouseClicked(
+                                    event -> {if(DatabaseComm.acceptNotification(model)==0) {
+                                        DatabaseComm.deleteNotification(model);
+                                        getTableView().getItems().remove(model);
+                                        System.out.println("Accepted.");
+                                    }
+                                    }
+                            );
+                            markButton.setOnMouseClicked(
+                                    event -> { System.out.println("Marked.");
+                                        if(DatabaseComm.markNotification(model)==0){
+                                            if(model.getStatus()==1){
+                                                model.setStatus(2);
+                                            }
+                                            else model.setStatus(1);
+                                        }
+                                        // Change look of row based on status (1 as invite/not read, 2 as invite/read)
+                                    }
+                            );
+                        }
+                    });
+                    while(true){
+                        synchronized(this){
+                            try {
+                                wait(5000);
+                                if(isCancelled()){
+                                    break;
+                                }
+                                else{
+                                    notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
+                                    System.out.println(notificationModels);
+                                    notificationsTableView.getItems().clear();
+                                    notificationsTableView.setItems(notificationModels);
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        System.out.println("Refreshed after 5 seconds");
+                    }
+                    return null;
+                }
+            };
+        }
+    };
+    Service<Void> serNotif = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    while(true){
+                        synchronized(this){
+                            try {
+                                wait(5000);
+                                if(isCancelled()){
+                                    break;
+                                }
+                                else{
+                                    long tempmin;
+                                    LocalDateTime tempatm;
+                                    for(EventModel i : eventManagerModels){
+                                        if(i.getStatus()==0){
+                                            //gotta think how I'm gonna create notifications here
+                                        }
+                                    }
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        System.out.println("Refreshed after 5 seconds");
+                    }
+                    // You code you want to execute in service backgroundgoes here
+                    //return null;
+                    return null;
+                }
+            };
+        }
+    };
+    public Service startBackgroundService(){
+//        ser.setOnSucceeded((WorkerStateEvent event) -> {
+//            // Anything which you want to update on javafx thread (GUI) after completion of background process.
+//        });
+        ser.start();
+        return ser;
+    }
+
+    @Override
+    public void run() {
+        idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+        messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
+        fromCell.setCellValueFactory(new PropertyValueFactory<>("Limit"));
+        while(true){
+            synchronized(this){
+            try {
+                wait(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            }
+            notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
+            notificationsTableView.getItems().clear();
+            notificationsTableView.setItems(notificationModels);
+            System.out.println("Refreshed after 5 seconds");
+        }
     }
 }

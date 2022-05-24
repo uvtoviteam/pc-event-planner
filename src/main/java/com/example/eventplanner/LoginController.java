@@ -3,6 +3,8 @@ package com.example.eventplanner;
 import genericclasses.DatabaseComm;
 import genericclasses.Session;
 import genericclasses.User;
+import javafx.concurrent.Service;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -56,6 +59,17 @@ public class LoginController {
                 stage.show();
                 Stage stagelogin= (Stage) LoginButton.getScene().getWindow();
                 stagelogin.close();
+                //MainMenu obj= new MainMenu();
+                //Thread thread = new Thread(controller);
+                //thread.start();
+                Service ser = controller.startBackgroundService();
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                       ser.cancel();
+                       System.exit(0);
+                    }
+                });
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

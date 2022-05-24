@@ -192,5 +192,18 @@
             <Button fx:id="joinEventButton" layoutX="118.0" layoutY="422.0" mnemonicParsing="false" onAction="#onJoinEventPressed" text="Join" />
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="notificationsPane" layoutX="149.0" layoutY="10.0" prefHeight="615.0" prefWidth="685.0">
+         <children>
+            <TableView fx:id="notificationsTableView" layoutY="58.0" prefHeight="215.0" prefWidth="666.0">
+              <columns>
+                <TableColumn fx:id="idCell" prefWidth="36.0" text="ID" />
+                <TableColumn fx:id="fromCell" minWidth="0.0" prefWidth="81.0" text="From" />
+                  <TableColumn fx:id="messageCell" prefWidth="439.0" text="Message" />
+                  <TableColumn fx:id="buttonCell" prefWidth="109.0" text="Buttons" />
+              </columns>
+            </TableView>
+            <Button layoutX="6.0" layoutY="295.0" mnemonicParsing="false" text="Clear all" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
