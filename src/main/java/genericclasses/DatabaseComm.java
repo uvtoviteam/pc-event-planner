@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.example.eventplanner.EventModel;
+import com.example.eventplanner.NotificationModel;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -375,7 +376,7 @@ public class DatabaseComm {
                  query = "SELECT * FROM events WHERE creator=?";
                 stmnt = conn.prepareStatement(query);
                 stmnt.setInt(1, userId);
-            };
+            }
 
             //stmnt.setString(2, pass);
             ResultSet rs = stmnt.executeQuery();
@@ -406,7 +407,7 @@ public class DatabaseComm {
                     //Aici se aduga idurile;
 
 
-                };
+                }
                 System.out.println("Event:"+name);
                 Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
             }
@@ -890,5 +891,154 @@ public class DatabaseComm {
         }
 
         return 0;
+    }
+
+    public static ObservableList<NotificationModel> refreshNotiflist(int userId, boolean onlyCreator){
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<NotificationModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query;
+            if(onlyCreator==false){
+                query = "SELECT * FROM notifications_join"; //WHERE end_date >= Sysdate() ";
+                stmnt = conn.prepareStatement(query);}
+            else{
+                query = "SELECT * FROM notifications_join WHERE to_notifications=?";
+                stmnt = conn.prepareStatement(query);
+                stmnt.setInt(1, userId);
+            }
+
+            //stmnt.setString(2, pass);
+            ResultSet rs = stmnt.executeQuery();
+            ResultSet rs2;
+            int id, status, eventid;
+            int from,to;
+            String from_name,to_name;
+            String name , description;
+            User tempfrom;
+
+            while(rs.next()){
+
+                id = rs.getInt("id_notifications");
+                status = rs.getInt("status_notifications");
+                name = rs.getString("title_notifications");
+                description = rs.getString("description_notifications");
+                from=rs.getInt("user_notifications");
+                to=rs.getInt("to_notifications");
+                from_name=rs.getString("user_notif_name");
+                to_name=rs.getString("to_notif_name");
+                eventid=rs.getInt("id_event");
+                //System.out.println("Event:"+name);
+                tempfrom=new User(from,from_name,null,1);
+                Rflist.add(new NotificationModel(id,name,description,tempfrom,status,eventid));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+        System.out.println(Rflist.size());
+        return Rflist ;
+
+    }
+
+    public static int deleteNotification(NotificationModel model){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "DELETE FROM notifications WHERE id_notifications=?";
+            //System.out.println(event.getEndDatePrivate());
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, model.getID());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
+    }
+    public static int acceptNotification(NotificationModel model){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "INSERT INTO enrolments (user_id,event_id) values (?,?)";
+            //System.out.println(event.getEndDatePrivate());
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, Session.getInstance().getUser().getId());
+            stmnt.setInt(2,model.getIdEvent());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
+    }
+    public static int markNotification(NotificationModel model){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent;
+            if(model.getStatus()==1){
+                queryEvent = "UPDATE notifications SET status_notifications=2 WHERE id_notifications=?";
+            }
+            else queryEvent = "UPDATE notifications SET status_notifications=1 WHERE id_notifications=?";
+            //System.out.println(event.getEndDatePrivate());
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, model.getIdEvent());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
     }
 }

@@ -4,8 +4,11 @@ import genericclasses.DatabaseComm;
 import genericclasses.Event;
 import genericclasses.Session;
 import genericclasses.User;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -52,6 +56,8 @@ public class MainMenu implements Initializable {
     TableView<EventModel> eventManagerTableView = new TableView<>();
     @FXML
     TableView<EventModel> eventManagerTableView2 = new TableView<>();
+    @FXML
+    TableView<NotificationModel> notificationsTableView= new TableView<>();
 
     @FXML
     public TableColumn<Event, Integer> eventID,eventID1, eventID11;
@@ -90,6 +96,7 @@ public class MainMenu implements Initializable {
             );
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
     private ObservableList<EventModel> eventManagerModels2 = FXCollections.observableArrayList();
+    private ObservableList<NotificationModel> notificationModels = FXCollections.observableArrayList();
 
     @FXML
     protected void onTestEvent(){
@@ -790,7 +797,7 @@ public class MainMenu implements Initializable {
     private Spinner<Integer> startM = new Spinner<>();
 
     @FXML
-    private Spinner<Integer> endH = new Spinner<>();;
+    private Spinner<Integer> endH = new Spinner<>();
 
     @FXML
     private Spinner<Integer> endM = new Spinner<>();
@@ -899,4 +906,134 @@ public class MainMenu implements Initializable {
         createPane.setVisible(false);
         eventmanagerpane.setVisible(true);
     }
+    @FXML
+    public TableColumn<NotificationModel, Integer> idCell;
+    @FXML
+    public TableColumn<NotificationModel,String> messageCell;
+
+    @FXML
+    public TableColumn<NotificationModel, String> fromCell;
+
+    @FXML
+    public TableColumn<NotificationModel, NotificationModel> buttonCell;
+
+    Service<Void> ser = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+                    messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
+                    fromCell.setCellValueFactory(new PropertyValueFactory<>("User_from"));
+                    buttonCell.setCellValueFactory(
+                            param -> new ReadOnlyObjectWrapper<>(param.getValue())
+                    );
+                    buttonCell.setCellFactory(param -> new TableCell<NotificationModel, NotificationModel>() {
+                        private final Button acceptButton = new Button("A");
+                        private final Button deleteButton = new Button("D");
+                        private final Button markButton = new Button("M");
+                        final HBox pane = new HBox(acceptButton, deleteButton,markButton);
+                        @Override
+                        protected void updateItem(NotificationModel model, boolean empty) {
+                            super.updateItem(model, empty);
+
+                            if (model == null) {
+                                setGraphic(null);
+                                return;
+                            }
+
+                            setGraphic(pane);
+                            deleteButton.setOnMouseClicked(
+                                    event -> {if(
+                                            DatabaseComm.deleteNotification(model)==0) getTableView().getItems().remove(model); else {// error
+                                    }
+                                    }
+                            );
+                            acceptButton.setOnMouseClicked(
+                                    event -> {if(DatabaseComm.acceptNotification(model)==0) {
+                                        DatabaseComm.deleteNotification(model);
+                                        getTableView().getItems().remove(model);
+                                        System.out.println("Accepted.");
+                                    }
+                                    }
+                            );
+                            markButton.setOnMouseClicked(
+                                    event -> { System.out.println("Marked.");
+                                        if(DatabaseComm.markNotification(model)==0){
+                                            if(model.getStatus()==1){
+                                                model.setStatus(2);
+                                            }
+                                            else model.setStatus(1);
+                                        }
+                                        // Change look of row based on status (1 as invite/not read, 2 as invite/read)
+                                    }
+                            );
+                        }
+                    });
+                    while(true){
+                        synchronized(this){
+                            try {
+                                wait(5000);
+                                if(isCancelled()){
+                                    break;
+                                }
+                                else{
+                                    notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
+                                    System.out.println(notificationModels);
+                                    notificationsTableView.getItems().clear();
+                                    notificationsTableView.setItems(notificationModels);
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        System.out.println("Refreshed after 5 seconds");
+                    }
+                    return null;
+                }
+            };
+        }
+    };
+    Service<Void> serNotif = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    while(true){
+                        synchronized(this){
+                            try {
+                                wait(5000);
+                                if(isCancelled()){
+                                    break;
+                                }
+                                else{
+                                    long tempmin;
+                                    LocalDateTime tempatm;
+                                    for(EventModel i : eventManagerModels){
+                                        if(i.getStatus()==0){
+                                            //gotta think how I'm gonna create notifications here
+                                        }
+                                    }
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        System.out.println("Refreshed after 5 seconds");
+                    }
+                    // You code you want to execute in service backgroundgoes here
+                    //return null;
+                    return null;
+                }
+            };
+        }
+    };
+    public Service startBackgroundService(){
+//        ser.setOnSucceeded((WorkerStateEvent event) -> {
+//            // Anything which you want to update on javafx thread (GUI) after completion of background process.
+//        });
+        ser.start();
+        return ser;
+    }
+
 }
