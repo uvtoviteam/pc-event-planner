@@ -26,7 +26,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
+<AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
 
     <children>
       <AnchorPane fx:id="mainmenu" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
@@ -390,7 +390,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0">
+      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" visible="false">
          <children>
             <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome user!" textFill="#9772fb">
                <font>
@@ -752,7 +752,7 @@
             <Bloom threshold="0.98" />
          </effect>
       </AnchorPane>
-      <AnchorPane fx:id="notificationsPane" layoutX="149.0" layoutY="10.0" prefHeight="615.0" prefWidth="685.0">
+      <AnchorPane fx:id="notificationsPane" layoutX="149.0" layoutY="10.0" prefHeight="615.0" prefWidth="685.0" visible="false">
          <children>
             <TableView fx:id="notificationsTableView" layoutY="58.0" prefHeight="215.0" prefWidth="666.0">
               <columns>
@@ -763,6 +763,21 @@
               </columns>
             </TableView>
             <Button layoutX="6.0" layoutY="295.0" mnemonicParsing="false" text="Clear all" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="settingsPane" layoutX="164.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="690.0">
+         <children>
+            <TextField fx:id="User_name" editable="false" layoutX="50.0" layoutY="129.0" prefHeight="40.0" prefWidth="300.0" />
+            <TextField fx:id="Email" editable="false" layoutX="50.0" layoutY="189.0" prefHeight="40.0" prefWidth="300.0" />
+            <TextField fx:id="Password" editable="false" layoutX="50.0" layoutY="258.0" prefHeight="40.0" prefWidth="300.0" />
+            <TextField fx:id="Confirm_password" editable="false" layoutX="50.0" layoutY="319.0" prefHeight="40.0" prefWidth="300.0" />
+            <Button fx:id="editar" layoutX="174.0" layoutY="374.0" mnemonicParsing="false" onAction="#editar" prefHeight="33.0" prefWidth="82.0" text="Edit" />
+            <Button fx:id="salvar" layoutX="328.0" layoutY="374.0" mnemonicParsing="false" onAction="#salvar" prefHeight="33.0" prefWidth="82.0" text="Save" />
+            <Label layoutX="189.0" layoutY="42.0" prefHeight="50.0" prefWidth="200.0" text="User Settings">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

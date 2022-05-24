@@ -1041,4 +1041,37 @@ public class DatabaseComm {
         return 0;
 
     }
+
+    public static  int updateSetting( User updUser){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "UPDATE useraccount SET `name`=?, `password`=?, `email`=?, WHERE id=?";
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setString(1,updUser.getUsername());
+            stmnt.setString(2,updUser.getPassword());
+            stmnt.setString(3, updUser.getEmail());
+            stmnt.setInt(4,updUser.getId());
+            //System.out.println(queryEvent);
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
+    }
+
+
 }

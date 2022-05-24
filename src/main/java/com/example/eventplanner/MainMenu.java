@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainMenu implements Initializable {
     @FXML
@@ -111,7 +113,7 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1;
+    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1,settingsPane;
 
     @FXML
     protected void onCreateEventButtonClick(){
@@ -207,7 +209,11 @@ public class MainMenu implements Initializable {
     }
     @FXML
     protected void onSettingsButtonClick(){
-
+        eventViewPane.setVisible(false);
+        eventEditPane.setVisible(false);
+        eventmanagerpane.setVisible(false);
+        mainmenu.setVisible(false);
+        settingsPane.setVisible(true);
     }
     @FXML
     protected void onCalendarButtonClick(){
@@ -1035,5 +1041,92 @@ public class MainMenu implements Initializable {
         ser.start();
         return ser;
     }
+
+    //SETTINGS PANE
+    @FXML
+    TextField User_name,Password,Email,Confirm_password;
+
+    Alert alert=null;
+
+    private boolean validateemail(String email){
+
+        Pattern p = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`"
+                + "{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+        Matcher m = p.matcher(email);
+        return m.find() && m.group().equals(email);
+    }
+
+    private boolean validatepassword(String pass){
+        Pattern p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
+        Matcher m = p.matcher(pass);
+        return m.find() && m.group().equals(pass);
+    }
+
+    @FXML
+    void editar(ActionEvent event) {
+        User_name.setEditable(true);
+        Password.setEditable(true);
+        Email.setEditable(true);
+        Confirm_password.setEditable(true);
+
+    }
+
+    @FXML
+    protected void salvar(ActionEvent event) {
+
+        String userName= User_name.getText();
+        String email= Email.getText();
+        String password= Password.getText();
+        String password1= Confirm_password.getText();
+
+        if (userName.trim().equals(""))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("Please fill the username field!");
+            alert.showAndWait();
+        }
+
+        else if(email.trim().equals(""))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("Please fill the email field!");
+            alert.showAndWait();
+        }
+        else if(!validateemail(email))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("Please enter a valid email");
+            alert.showAndWait();
+        }
+        else if(!validatepassword(password))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("Please enter a valid password");
+            alert.showAndWait();
+        }
+        else if(!password.equals(password1))
+        {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("Your password don't match");
+            alert.showAndWait();
+        }
+        User tempUser = new User(Session.getInstance().getUser().getId(),userName, email,Session.getInstance().getUser().getType(), password);
+        if(DatabaseComm.updateSetting(tempUser)==0){
+            Session.getInstance().getUser().setUsername(userName);
+            Session.getInstance().getUser().setEmail(email);
+        }else{
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setContentText("An error has occurred during the update!");
+            alert.showAndWait();
+        }
+    }
+
+
 
 }
