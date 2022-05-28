@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import com.example.eventplanner.EventModel;
 import com.example.eventplanner.NotificationModel;
+import com.example.eventplanner.UserModel;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -720,7 +721,44 @@ public class DatabaseComm {
 
     }
 
-    // get all events
+    public static ObservableList<UserModel> getParticipants(int event){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ObservableList<UserModel> Rflist = FXCollections.observableArrayList();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "select useraccount.* from enrolments join useraccount on user_id = id where event_id = ? and enrolments.type = 1 ";
+            stmnt = conn.prepareStatement(query);
+            stmnt.setInt(1, event);
+
+            ResultSet rs = stmnt.executeQuery();
+            int id;
+            String name;
+
+            while(rs.next()){
+                id = rs.getInt("id");
+                name = rs.getString("name");
+
+                Rflist.add(new UserModel(id, name));
+            }
+
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return Rflist ;
+
+    }
+
     public static String getTags(int event){
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
@@ -776,7 +814,6 @@ public class DatabaseComm {
         return result;
     }
 
-    // get filtered events
     public static ArrayList<Event> getFilteredEvents(int filter){
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
@@ -860,6 +897,62 @@ public class DatabaseComm {
         }
 
         return 0;
+    }
+
+    public static int checkParticipants(int event){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "select count(event_id) from enrolments where event_id = ? and type = 1 group by event_id";
+            stmnt = conn.prepareStatement(query);
+            stmnt.setInt(1, event);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public static int deleteEnrolment(UserModel model){
+        MysqlDataSource dataSource = SQLOnLaunch();
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String queryEvent = "DELETE FROM enrolments WHERE user_id = ?";
+            stmnt = conn.prepareStatement(queryEvent);
+            stmnt.setInt(1, model.getID());
+            stmnt.executeUpdate();
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+            return 1;
+        }
+
+        return 0;
+
     }
 
     public static int checkEnrolment(int event, int user, int type){
@@ -994,7 +1087,7 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String queryEvent = "INSERT INTO enrolments (user_id,event_id) values (?,?)";
+            String queryEvent = "INSERT INTO enrolments (user_id,event_id, type) values (?,?, 1)";
             //System.out.println(event.getEndDatePrivate());
             stmnt = conn.prepareStatement(queryEvent);
             stmnt.setInt(1, Session.getInstance().getUser().getId());

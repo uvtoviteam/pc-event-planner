@@ -66,6 +66,9 @@ public class MainMenu implements Initializable {
     TableView<NotificationModel> notificationsTableView= new TableView<>();
 
     @FXML
+    TableView<UserModel> UserTable = new TableView<>();
+
+    @FXML
     public TableColumn<Event, Integer> eventID,eventID1, eventID11;
     @FXML
     public TableColumn<Event,String> eventName,eventName1,eventName11;
@@ -79,7 +82,10 @@ public class MainMenu implements Initializable {
     @FXML
     public TableColumn<Event, LocalDateTime> endDate,endDate1,endDate11;
 
-
+    @FXML
+    public TableColumn<User, Integer> userID;
+    @FXML
+    public TableColumn<User,String> userName;
 
     List<Event> eventList=new ArrayList<>();
 
@@ -103,6 +109,7 @@ public class MainMenu implements Initializable {
     private ObservableList<EventModel> eventManagerModels = FXCollections.observableArrayList();
     private ObservableList<EventModel> eventManagerModels2 = FXCollections.observableArrayList();
     private ObservableList<NotificationModel> notificationModels = FXCollections.observableArrayList();
+    private ObservableList<UserModel> userModels = FXCollections.observableArrayList();
 
     @FXML
     protected void onTestEvent(){
@@ -133,8 +140,6 @@ public class MainMenu implements Initializable {
 
     @FXML
     protected void onNotifButtonClick(){
-
-
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
@@ -219,7 +224,7 @@ public class MainMenu implements Initializable {
         descEvent.setText(eventval.getDescription());
         start.setText(eventval.getStartdate());
         end.setText(eventval.getEnddate());
-        participants.setText(eventval.getUserlist().size() +"/"+ eventval.getLimit());
+        participants.setText(DatabaseComm.checkParticipants(eventval.getID()) +" / "+ eventval.getLimit());
         tag1.setText(DatabaseComm.getTags(eventval.getID()));
     }
 
@@ -288,6 +293,13 @@ public class MainMenu implements Initializable {
             if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
                 interestedButton.setVisible(false);
 
+            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit() && DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) == 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Full event");
+                System.out.println("limit " + eventSelected.getLimit());
+                interestedButton.setVisible(false);
+            }
+
             if(Session.getInstance().getUser().getType() == 2) {
                 interestedButton.setVisible(false);
 
@@ -336,6 +348,12 @@ public class MainMenu implements Initializable {
 
             if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
                 interestedButton.setVisible(false);
+
+            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit() && DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) == 0) {
+                joinEventButton.setDisable(true);
+                joinEventButton.setText("Full event");
+                interestedButton.setVisible(false);
+            }
 
             eventViewPane.setVisible(true);
             backEventButton.setOnAction((event) -> {
@@ -476,6 +494,21 @@ public class MainMenu implements Initializable {
 
     public User currentUserGlobal=Session.getInstance().getUser();
 
+    @FXML
+    void onDeleteButtonClickUser(ActionEvent event) {
+        UserModel selectedUser = UserTable.getSelectionModel().getSelectedItem();
+        if(selectedUser!=null){
+            if(DatabaseComm.deleteEnrolment(selectedUser) == 0)
+            {
+                UserTable.getItems().clear();
+                userModels = DatabaseComm.getParticipants(eventManagerTableView.getSelectionModel().getSelectedItem().getID());
+                UserTable.setItems(userModels);
+            }
+            else { //error
+            }
+        }
+    }
+
     public void onEventManagementButtonPress() {
         eventManagerTableView.getItems().clear();
         eventViewPane.setVisible(false);
@@ -495,6 +528,12 @@ public class MainMenu implements Initializable {
                     eventEditPane.setVisible(true);
                     setEventData(rowData);
                     System.out.println("Double click on: "+rowData.getNume());
+//--------------------------------------------------------------------------------------------------------------------------
+                    userModels = DatabaseComm.getParticipants(rowData.getID());
+                    userID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+                    userName.setCellValueFactory(new PropertyValueFactory<>("Nume"));;
+                    UserTable.setItems(userModels);
+
                 }
             });
             return row ;
