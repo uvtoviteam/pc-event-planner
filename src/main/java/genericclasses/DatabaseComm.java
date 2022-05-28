@@ -81,7 +81,7 @@ public class DatabaseComm {
                 return 1;
             }
 
-            Session.getInstance().setUser(new User(rs.getString(2), rs.getString(4), rs.getInt(5)));
+            Session.getInstance().setUser(new User(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getInt(5)));
 
             return 0;
 
@@ -581,7 +581,7 @@ public class DatabaseComm {
         try {
             String query;
 
-            query = "SELECT * FROM events JOIN enrolments WHERE events.event_id = enrolments.event_id AND enrolments.user_id = " + userId + " AND events.end_date >= Sysdate() AND enrolments.type = 1 ";
+            query = "SELECT * FROM events JOIN enrolments WHERE events.event_id = enrolments.event_id AND enrolments.user_id = " + userId + " AND events.end_date >= Sysdate() /*AND enrolments.type = 1*/ GROUP BY events.event_id ";
             stmnt = conn.prepareStatement(query);
 
             //stmnt.setString(2, pass);
@@ -952,6 +952,7 @@ public class DatabaseComm {
 
     }
 
+
     public static int deleteNotification(NotificationModel model){
         MysqlDataSource dataSource = SQLOnLaunch();
         Connection conn= null;
@@ -1055,7 +1056,7 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String queryEvent = "UPDATE useraccount SET `name`=?, `password`=?, `email`=?, WHERE id=?";
+            String queryEvent = "UPDATE useraccount SET `name`=?, `password`=?, `email`=? WHERE id=?";
             stmnt = conn.prepareStatement(queryEvent);
             stmnt.setString(1,updUser.getUsername());
             stmnt.setString(2,updUser.getPassword());

@@ -26,14 +26,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
+<AnchorPane prefHeight="550.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.eventplanner.MainMenu">
 
     <children>
       <AnchorPane fx:id="mainmenu" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <ChoiceBox fx:id="filters" layoutX="364.0" layoutY="32.0" onAction="#onFilter" prefHeight="26.0" prefWidth="136.0" />
             <TextField fx:id="SearchField" layoutX="517.0" layoutY="33.0" onAction="#onSearch" onKeyReleased="#onSearch" promptText="Search" />
-            <Button fx:id="TestEventButton" layoutX="72.0" layoutY="33.0" mnemonicParsing="false" onAction="#onTestEvent" style="-fx-background-color: #8AFF8A;" text="Test Event" />
             <TableView fx:id="eventTableView" layoutX="21.0" layoutY="86.0" onMouseClicked="#onMouseClickTable" prefHeight="442.0" prefWidth="645.0">
               <columns>
                 <TableColumn fx:id="eventID" editable="false" prefWidth="31.0" resizable="false" text="ID" />
@@ -221,7 +220,7 @@
                   <TableColumn fx:id="endDate11" editable="false" minWidth="0.0" prefWidth="150.0" text="End Date" />
                </columns>
             </TableView>
-            <Label layoutX="22.0" layoutY="259.0" text="Double Click the event to edit it. Select the event and Press Delete to remove the it." textFill="#868686" />
+            <Label layoutX="22.0" layoutY="259.0" text="Double Click the event to edit it. Select the event and Press Delete to remove it." textFill="#868686" />
             <Label layoutX="22.0" layoutY="60.0" text="My Events" textFill="#9772fb">
                <font>
                   <Font name="System Bold" size="16.0" />
@@ -278,7 +277,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="calendarButton" layoutX="21.0" layoutY="259.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+            <Button fx:id="calendarButton" layoutX="21.0" layoutY="259.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE" visible="false">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -308,7 +307,7 @@
             <Bloom threshold="0.98" />
          </effect>
       </AnchorPane>
-      <AnchorPane fx:id="createPane" layoutX="164.0" prefHeight="550.0" prefWidth="692.0" visible="false">
+      <AnchorPane fx:id="createPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" visible="false">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f2f2" height="550.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e5e5e5" height="550.0" layoutX="230.0" stroke="TRANSPARENT" strokeType="INSIDE" width="230.0" />
@@ -390,9 +389,9 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" visible="false">
+      <AnchorPane fx:id="mainmenu2" layoutX="164.0" prefHeight="550.0" prefWidth="690.0">
          <children>
-            <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome user!" textFill="#9772fb">
+            <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome!" textFill="#9772fb">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -724,7 +723,7 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <Button fx:id="homeButton21" centerShape="false" layoutX="21.0" layoutY="148.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="homeButton21" centerShape="false" layoutX="21.0" layoutY="148.0" mnemonicParsing="false" onAction="#onHomeButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="All Events" textAlignment="CENTER" textFill="WHITE" visible="false">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -733,7 +732,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="calendarButton1" layoutX="21.0" layoutY="189.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE">
+            <Button fx:id="calendarButton1" layoutX="21.0" layoutY="189.0" mnemonicParsing="false" onAction="#onCalendarButtonPress" prefHeight="32.0" prefWidth="122.0" style="-fx-background-color: #764af1; -fx-border-color: #ffffff; -fx-border-radius: 5;" text="Calendar" textFill="WHITE" visible="false">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -752,32 +751,36 @@
             <Bloom threshold="0.98" />
          </effect>
       </AnchorPane>
-      <AnchorPane fx:id="notificationsPane" layoutX="149.0" layoutY="10.0" prefHeight="615.0" prefWidth="685.0" visible="false">
+      <AnchorPane fx:id="notificationsPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" visible="false">
          <children>
-            <TableView fx:id="notificationsTableView" layoutY="58.0" prefHeight="215.0" prefWidth="666.0">
+            <TableView fx:id="notificationsTableView" layoutX="16.0" layoutY="51.0" prefHeight="312.0" prefWidth="658.0">
               <columns>
                 <TableColumn fx:id="idCell" prefWidth="36.0" text="ID" />
-                <TableColumn fx:id="fromCell" minWidth="0.0" prefWidth="81.0" text="From" />
-                  <TableColumn fx:id="messageCell" prefWidth="439.0" text="Message" />
+                <TableColumn fx:id="fromCell" minWidth="0.0" prefWidth="128.0" text="From" />
+                  <TableColumn fx:id="messageCell" prefWidth="380.0" text="Message" />
                   <TableColumn fx:id="buttonCell" prefWidth="109.0" text="Buttons" />
               </columns>
             </TableView>
-            <Button layoutX="6.0" layoutY="295.0" mnemonicParsing="false" text="Clear all" />
+            <Button layoutX="619.0" layoutY="372.0" mnemonicParsing="false" style="-fx-background-color: f2f2f2;" text="Clear all" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="settingsPane" layoutX="164.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="690.0">
+      <AnchorPane fx:id="settingsPane" layoutX="164.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="690.0" visible="false">
          <children>
-            <TextField fx:id="User_name" editable="false" layoutX="50.0" layoutY="129.0" prefHeight="40.0" prefWidth="300.0" />
-            <TextField fx:id="Email" editable="false" layoutX="50.0" layoutY="189.0" prefHeight="40.0" prefWidth="300.0" />
-            <TextField fx:id="Password" editable="false" layoutX="50.0" layoutY="258.0" prefHeight="40.0" prefWidth="300.0" />
-            <TextField fx:id="Confirm_password" editable="false" layoutX="50.0" layoutY="319.0" prefHeight="40.0" prefWidth="300.0" />
-            <Button fx:id="editar" layoutX="174.0" layoutY="374.0" mnemonicParsing="false" onAction="#editar" prefHeight="33.0" prefWidth="82.0" text="Edit" />
-            <Button fx:id="salvar" layoutX="328.0" layoutY="374.0" mnemonicParsing="false" onAction="#salvar" prefHeight="33.0" prefWidth="82.0" text="Save" />
-            <Label layoutX="189.0" layoutY="42.0" prefHeight="50.0" prefWidth="200.0" text="User Settings">
+            <TextField fx:id="User_name" editable="false" layoutX="230.0" layoutY="168.0" prefHeight="26.0" prefWidth="230.0" />
+            <TextField fx:id="Email" editable="false" layoutX="230.0" layoutY="228.0" prefHeight="26.0" prefWidth="230.0" />
+            <TextField fx:id="Password" editable="false" layoutX="230.0" layoutY="297.0" prefHeight="26.0" prefWidth="230.0" />
+            <TextField fx:id="Confirm_password" editable="false" layoutX="230.0" layoutY="358.0" prefHeight="26.0" prefWidth="230.0" />
+            <Button fx:id="editar" layoutX="389.0" layoutY="402.0" mnemonicParsing="false" onAction="#editar" prefWidth="70.0" style="-fx-background-color: f2f2f2;" text="Edit" textFill="#9772fb" />
+            <Button fx:id="salvar" layoutX="389.0" layoutY="402.0" mnemonicParsing="false" onAction="#salvar" prefWidth="70.0" style="-fx-background-color: #9772FB;" text="Save" textFill="WHITE" visible="false" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="45.0" prefHeight="50.0" prefWidth="200.0" text="Account Settings" textAlignment="CENTER">
                <font>
-                  <Font size="34.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
+            <Text layoutX="230.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+            <Text layoutX="230.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+            <Text layoutX="230.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+            <Text layoutX="230.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password" />
          </children>
       </AnchorPane>
    </children>

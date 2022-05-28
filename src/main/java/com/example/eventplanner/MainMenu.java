@@ -4,7 +4,10 @@ import genericclasses.DatabaseComm;
 import genericclasses.Event;
 import genericclasses.Session;
 import genericclasses.User;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -24,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
@@ -113,7 +117,7 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1,settingsPane;
+    private AnchorPane mainmenu, eventmanagerpane,eventEditPane,eventViewPane, createPane, mainmenu2, sidebar, sidebar1,settingsPane, notificationsPane;
 
     @FXML
     protected void onCreateEventButtonClick(){
@@ -129,8 +133,15 @@ public class MainMenu implements Initializable {
 
     @FXML
     protected void onNotifButtonClick(){
-        notificationCount.setVisible(false);
-        notificationBubble.setVisible(false);
+
+
+        eventViewPane.setVisible(false);
+        eventEditPane.setVisible(false);
+        eventmanagerpane.setVisible(false);
+        mainmenu.setVisible(false);
+        mainmenu2.setVisible(false);
+        settingsPane.setVisible(false);
+        notificationsPane.setVisible(true);
     }
     @FXML
     protected void onRefreshButtonClick(){
@@ -159,9 +170,6 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    protected void onViewEventButtonClick(){}
-
-    @FXML
     protected void onLogoutButtonClick(){
         FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("hello-view.fxml"));
         Scene scene = null;
@@ -183,38 +191,18 @@ public class MainMenu implements Initializable {
             ex.printStackTrace();
         }
     }
-    @FXML
-    void onEventManagementButtonPress(MouseEvent event){
-//        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("event-manager-view.fxml"));
-//        Scene scene = null;
-//        try {
-//            Stage stage= new Stage();
-//            scene = new Scene(fxmlLoader.load());
-//            stage.setMinWidth(304);
-//            stage.setMinHeight(262);
-//            stage.setTitle("Event Management");
-//            stage.setScene(scene);
-//            //stage.setResizable(false);
-//            EventManagerController controller=  fxmlLoader.getController();
-//            controller.start(Session.getInstance().getUser(),stage); // will need an actual user with id
-//            controller.setButtonClass();
-//            String css = this.getClass().getResource("Style.css").toExternalForm();
-//            scene.getStylesheets().add(css);
-//            stage.show();
-//            Stage stagelogin= (Stage) EventManagementButton.getScene().getWindow();
-//            stagelogin.close();
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-    }
+
     @FXML
     protected void onSettingsButtonClick(){
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
         mainmenu.setVisible(false);
+        mainmenu2.setVisible(false);
+        notificationsPane.setVisible(false);
         settingsPane.setVisible(true);
     }
+
     @FXML
     protected void onCalendarButtonClick(){
 
@@ -300,8 +288,25 @@ public class MainMenu implements Initializable {
             if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
                 interestedButton.setVisible(false);
 
-            if(Session.getInstance().getUser().getType() == 2)
+            if(Session.getInstance().getUser().getType() == 2) {
                 interestedButton.setVisible(false);
+
+                joinEventButton.setVisible(true);
+                joinEventButton.setText("Edit");
+                joinEventButton.setOnAction((event) -> {
+                    eventViewPane.setVisible(false);
+                    EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();;
+                    mainmenu.setVisible(false);
+                    eventEditPane.setVisible(true);
+                    setEventData(rowData);
+
+                });
+                BackButton.setOnAction((event) -> {
+                    mainmenu.setVisible(true);
+                    eventEditPane.setVisible(false);
+                });
+
+            }
 
             eventViewPane.setVisible(true);
             backEventButton.setOnAction((event) -> {
@@ -365,22 +370,6 @@ public class MainMenu implements Initializable {
         interestedButton.setVisible(true);
     }
 
-//    @FXML
-//    protected void onManagerMouseClickTable2(){
-//        //eventTableView.getSelectionModel().getSelectedItem();
-//        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
-//        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("View_Event.fxml"));
-//        Scene scene = null;
-//        if (eventSelected == null) System.out.println("couldn't find event");
-//        else {
-//            eventmanagerpane.setVisible(false);
-//            System.out.println(eventSelected.getID());
-//            System.out.println(eventSelected.getNume());
-//            fillEventPane(eventSelected);
-//            eventViewPane.setVisible(true);
-//
-//        }
-//    }
 
     @FXML
     void onManagerMouseClickTable(javafx.scene.input.MouseEvent event) {
@@ -491,6 +480,8 @@ public class MainMenu implements Initializable {
         eventManagerTableView.getItems().clear();
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
+        settingsPane.setVisible(false);
+        notificationsPane.setVisible(false);
         mainmenu.setVisible(false);
         mainmenu2.setVisible(false);
         eventmanagerpane.setVisible(true);
@@ -535,6 +526,8 @@ public class MainMenu implements Initializable {
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
         mainmenu2.setVisible(false);
+        notificationsPane.setVisible(false);
+        settingsPane.setVisible(false);
         mainmenu.setVisible(true);
     }
 
@@ -543,6 +536,8 @@ public class MainMenu implements Initializable {
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
         mainmenu.setVisible(false);
+        notificationsPane.setVisible(false);
+        settingsPane.setVisible(false);
         mainmenu2.setVisible(true);
     }
 
@@ -551,6 +546,8 @@ public class MainMenu implements Initializable {
         eventViewPane.setVisible(false);
         eventEditPane.setVisible(false);
         eventmanagerpane.setVisible(false);
+        notificationsPane.setVisible(false);
+        settingsPane.setVisible(false);
         mainmenu2.setVisible(false);
         // NOT DONE YET, ONLY HAS THE EVENTMANAGER SETVISIBLE
         //eventmanagerpane.getChildren();
@@ -660,18 +657,36 @@ public class MainMenu implements Initializable {
     ObservableList<EventModel> popular = DatabaseComm.popularEvents();
     ObservableList<EventModel> interest = DatabaseComm.interestEvents();
 
+    @FXML
+    Button BackButton;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         if(Session.getInstance().getUser().getType() == 2) {
             mainmenu.setVisible(true);
             mainmenu2.setVisible(false);
             sidebar.setVisible(false);
+            notificationsPane.setVisible(false);
+            settingsPane.setVisible(false);
             sidebar1.setVisible(true);
-            joinEventButton.setVisible(false);
-            interestedButton.setVisible(false);
-            backEventButton.setOnAction((event) -> {
-                onBackEventPressedMan();
+
+            joinEventButton.setVisible(true);
+            joinEventButton.setText("Edit");
+            joinEventButton.setOnAction((event) -> {
+                eventViewPane.setVisible(false);
+                EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();;
+                mainmenu.setVisible(false);
+                eventEditPane.setVisible(true);
+                setEventData(rowData);
+
             });
+            BackButton.setOnAction((event) -> {
+                mainmenu.setVisible(true);
+                eventEditPane.setVisible(false);
+            });
+
+            interestedButton.setVisible(false);
+
         }
 
         filters.setItems(filtersName);
@@ -724,6 +739,18 @@ public class MainMenu implements Initializable {
 
        // NotifButton.getStyleClass().add("icon-button");
       //  NotifButton.setPickOnBounds(true);
+
+        User_name.setText(Session.getInstance().getUser().getUsername());
+        Email.setText(Session.getInstance().getUser().getEmail());
+        User_name.setEditable(false);
+        Password.setEditable(false);
+        Email.setEditable(false);
+        Confirm_password.setEditable(false);
+
+        notificationCount.setVisible(false);
+        notificationCount.setText("0");
+        notificationBubble.setVisible(false);
+
     }
 
     protected void viewEv(EventModel eventG) {
@@ -887,31 +914,10 @@ public class MainMenu implements Initializable {
 
     @FXML
     protected void onCancelButtonClick() {
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(LoginScreen.class.getResource("main-view.fxml"));
-//        Scene scene = null;
-//        try {
-//            scene = new Scene(fxmlLoader.load());
-//            MainMenu controller=  fxmlLoader.getController();
-//            controller.setButtonClass();
-//            String css = this.getClass().getResource("Style.css").toExternalForm();
-//            scene.getStylesheets().add(css);
-//            Stage stage= new Stage();
-//            stage.setMinWidth(640);
-//            stage.setMinHeight(480);
-//            stage.setTitle("Main Menu");
-//            stage.setScene(scene);
-//            stage.show();
-//            Stage stageN = (Stage) cancelButton.getScene().getWindow();
-//            stageN.close();
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-        //move to main menu
-
         createPane.setVisible(false);
         eventmanagerpane.setVisible(true);
     }
+
     @FXML
     public TableColumn<NotificationModel, Integer> idCell;
     @FXML
@@ -923,10 +929,12 @@ public class MainMenu implements Initializable {
     @FXML
     public TableColumn<NotificationModel, NotificationModel> buttonCell;
 
-    Service<Void> ser = new Service<Void>() {
-        @Override protected Task createTask() {
+    SimpleObjectProperty<Service<Void>> ser = new SimpleObjectProperty<>(this, "ser", new Service<Void>() {
+        @Override
+        protected Task createTask() {
             return new Task<Void>() {
-                @Override protected Void call() throws InterruptedException {
+                @Override
+                protected Void call() throws InterruptedException {
                     idCell.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
                     messageCell.setCellValueFactory(new PropertyValueFactory<>("NotifDesc"));
                     fromCell.setCellValueFactory(new PropertyValueFactory<>("User_from"));
@@ -936,8 +944,10 @@ public class MainMenu implements Initializable {
                     buttonCell.setCellFactory(param -> new TableCell<NotificationModel, NotificationModel>() {
                         private final Button acceptButton = new Button("A");
                         private final Button deleteButton = new Button("D");
-                        private final Button markButton = new Button("M");
-                        final HBox pane = new HBox(acceptButton, deleteButton,markButton);
+                        private final Button markButton = new Button("R");
+
+                        final HBox pane = new HBox(acceptButton, markButton, deleteButton);
+
                         @Override
                         protected void updateItem(NotificationModel model, boolean empty) {
                             super.updateItem(model, empty);
@@ -949,44 +959,73 @@ public class MainMenu implements Initializable {
 
                             setGraphic(pane);
                             deleteButton.setOnMouseClicked(
-                                    event -> {if(
-                                            DatabaseComm.deleteNotification(model)==0) getTableView().getItems().remove(model); else {// error
-                                    }
+                                    event -> {
+                                        if (
+                                                DatabaseComm.deleteNotification(model) == 0)
+                                            getTableView().getItems().remove(model);
+                                        else {// error
+                                        }
                                     }
                             );
                             acceptButton.setOnMouseClicked(
-                                    event -> {if(DatabaseComm.acceptNotification(model)==0) {
-                                        DatabaseComm.deleteNotification(model);
-                                        getTableView().getItems().remove(model);
-                                        System.out.println("Accepted.");
-                                    }
+                                    event -> {
+                                        if (DatabaseComm.acceptNotification(model) == 0) {
+                                            DatabaseComm.deleteNotification(model);
+                                            getTableView().getItems().remove(model);
+                                            System.out.println("Accepted.");
+                                        }
                                     }
                             );
                             markButton.setOnMouseClicked(
-                                    event -> { System.out.println("Marked.");
-                                        if(DatabaseComm.markNotification(model)==0){
-                                            if(model.getStatus()==1){
+                                    event -> {
+                                        System.out.println("Marked.");
+                                        if (DatabaseComm.markNotification(model) == 0) {
+                                            if (model.getStatus() == 1) {
                                                 model.setStatus(2);
-                                            }
-                                            else model.setStatus(1);
+                                            } else model.setStatus(1);
                                         }
                                         // Change look of row based on status (1 as invite/not read, 2 as invite/read)
                                     }
                             );
                         }
                     });
-                    while(true){
-                        synchronized(this){
+                    while (true) {
+                        synchronized (this) {
                             try {
                                 wait(5000);
-                                if(isCancelled()){
+                                if (isCancelled()) {
                                     break;
-                                }
-                                else{
-                                    notificationModels=DatabaseComm.refreshNotiflist(currentUserGlobal.getId(),true);
+                                } else {
+                                    notificationModels = DatabaseComm.refreshNotiflist(currentUserGlobal.getId(), true);
                                     System.out.println(notificationModels);
                                     notificationsTableView.getItems().clear();
                                     notificationsTableView.setItems(notificationModels);
+
+                                    int n;
+                                    n = notificationModels.size();
+                                    if (n > 0) {
+
+                                        KeyFrame update = new KeyFrame(Duration.seconds(0.5), event -> {
+                                            notificationCount.setText("" + n);
+                                        });
+                                        Timeline tl = new Timeline(update);
+                                        tl.setCycleCount(Timeline.INDEFINITE);
+                                        tl.play();
+
+                                        notificationCount.setVisible(true);
+                                        notificationBubble.setVisible(true);
+
+                                    } else {
+                                        KeyFrame update = new KeyFrame(Duration.seconds(0.5), event -> {
+                                            notificationCount.setText("0");
+                                        });
+                                        Timeline tl = new Timeline(update);
+                                        tl.setCycleCount(Timeline.INDEFINITE);
+                                        tl.play();
+                                        notificationCount.setVisible(false);
+                                        notificationBubble.setVisible(false);
+                                    }
+
                                 }
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -999,7 +1038,8 @@ public class MainMenu implements Initializable {
                 }
             };
         }
-    };
+    });
+
     Service<Void> serNotif = new Service<Void>() {
         @Override protected Task createTask() {
             return new Task<Void>() {
@@ -1038,8 +1078,8 @@ public class MainMenu implements Initializable {
 //        ser.setOnSucceeded((WorkerStateEvent event) -> {
 //            // Anything which you want to update on javafx thread (GUI) after completion of background process.
 //        });
-        ser.start();
-        return ser;
+        ser.get().start();
+        return ser.get();
     }
 
     //SETTINGS PANE
@@ -1068,11 +1108,18 @@ public class MainMenu implements Initializable {
         Password.setEditable(true);
         Email.setEditable(true);
         Confirm_password.setEditable(true);
+        salvar.setVisible(true);
 
     }
 
     @FXML
+    Button salvar, editar;
+
+    @FXML
     protected void salvar(ActionEvent event) {
+
+        editar.setVisible(true);
+        salvar.setVisible(false);
 
         String userName= User_name.getText();
         String email= Email.getText();
@@ -1115,7 +1162,7 @@ public class MainMenu implements Initializable {
             alert.setContentText("Your password don't match");
             alert.showAndWait();
         }
-        User tempUser = new User(Session.getInstance().getUser().getId(),userName, email,Session.getInstance().getUser().getType(), password);
+        User tempUser = new User(Session.getInstance().getUser().getId(), email,userName,Session.getInstance().getUser().getType(), password);
         if(DatabaseComm.updateSetting(tempUser)==0){
             Session.getInstance().getUser().setUsername(userName);
             Session.getInstance().getUser().setEmail(email);
@@ -1125,6 +1172,11 @@ public class MainMenu implements Initializable {
             alert.setContentText("An error has occurred during the update!");
             alert.showAndWait();
         }
+
+        User_name.setEditable(false);
+        Password.setEditable(false);
+        Email.setEditable(false);
+        Confirm_password.setEditable(false);
     }
 
 
