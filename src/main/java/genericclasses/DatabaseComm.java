@@ -739,6 +739,11 @@ public class DatabaseComm {
             System.out.println(r);
         }
 
+        if(Rflist.size() < 3) {
+            Rflist = popularEvents();
+            Collections.shuffle(Rflist);
+        }
+
         return Rflist ;
 
     }
