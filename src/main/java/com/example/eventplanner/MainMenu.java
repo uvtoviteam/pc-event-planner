@@ -694,7 +694,7 @@ public class MainMenu implements Initializable {
     @FXML Label welcome, title1, title2, title3, title4, title5, title6, title7, title8, title9, desc1, desc2, desc3, desc4, desc5, desc6, desc7, desc8, desc9;
 
     ObservableList<EventModel> popular = DatabaseComm.popularEvents();
-    ObservableList<EventModel> interest = DatabaseComm.interestEvents();
+    ObservableList<EventModel> interest = DatabaseComm.interestEvents(Session.getInstance().getUser().getId());
 
     @FXML
     Button BackButton;
@@ -764,15 +764,14 @@ public class MainMenu implements Initializable {
         title6.setText(events.get(5).getNume());
         desc6.setText(events.get(5).getDescription());
 
-        ArrayList<Event> interest = DatabaseComm.getInterestEvents();
         title7.setText(interest.get(0).getNume());
-        desc7.setText(events.get(0).getDescription());
+        desc7.setText(interest.get(0).getDescription());
 
-        title8.setText(events.get(1).getNume());
-        desc8.setText(events.get(1).getDescription());
+        title8.setText(interest.get(1).getNume());
+        desc8.setText(interest.get(1).getDescription());
 
-        title9.setText(events.get(2).getNume());
-        desc9.setText(events.get(2).getDescription());
+        title9.setText(interest.get(2).getNume());
+        desc9.setText(interest.get(2).getDescription());
 
        // welcome.setText("Welcome " + Session.getInstance().getUser().getEmail() + "!");
 
