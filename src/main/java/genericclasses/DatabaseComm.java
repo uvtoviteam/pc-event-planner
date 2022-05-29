@@ -22,7 +22,7 @@ public class DatabaseComm {
     private static MysqlDataSource SQLOnLaunch() {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUser("root"); // user
-        dataSource.setPassword("Cr157124"); //pass
+        dataSource.setPassword("K@rate2332"); //pass
         dataSource.setURL("jdbc:mysql://localhost:3306/event_planner"); //in loc de event_planner, pui ce database ai
         return dataSource;
     }
@@ -381,12 +381,14 @@ public class DatabaseComm {
 
             //stmnt.setString(2, pass);
             ResultSet rs = stmnt.executeQuery();
-            ResultSet rs2;
+            ResultSet rs2,rs3;
             int id, limit ;
             int creator, status;
             String name , description, location;
             LocalDateTime sdate , edate ;
             ArrayList<User> Luser = new ArrayList<>();
+            int userid,type;
+            String uname,umail;
 
             while(rs.next()){
 
@@ -399,14 +401,18 @@ public class DatabaseComm {
                 limit = rs.getInt("limit");
                 location = rs.getString("location");
 
-                query = "SELECT user_id FROM enrolments WHERE event_id =?";
+                query = "SELECT user_id,name,email,u.type FROM enrolments as e INNER JOIN useraccount as u on user_id=id WHERE event_id = ?";
 
                 stmnt = conn.prepareStatement(query);
                 stmnt.setInt(1,id);
                 rs2 = stmnt.executeQuery();
-                while(rs2.next()){
-                    //Aici se aduga idurile;
 
+                while(rs2.next()){
+                    userid=rs2.getInt("user_id");
+                    type=rs2.getInt("type");
+                    uname=rs2.getString("name");
+                    umail=rs2.getString("email");
+                    Luser.add(new User(userid,umail,uname,type));
 
                 }
                 System.out.println("Event:"+name);
