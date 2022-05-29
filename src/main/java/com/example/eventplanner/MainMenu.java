@@ -91,6 +91,8 @@ public class MainMenu implements Initializable {
 
     ArrayList<User> userList=new ArrayList<>();
 
+    EventModel testEvent;
+
     public void setButtonClass(){
        /* Button buttonsarr[]={TestEventButton, LogoutButton,CalendarButton,NotifButton,SettingsButton,CreateEventButton,RefreshButton,EventManagementButton};
         List<Button> buttons;
@@ -241,8 +243,14 @@ public class MainMenu implements Initializable {
     }
     @FXML
     protected void onJoinEventPressed(){
+
         EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
-        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        testEvent=eventSelected;
+
+        serJoin.start();
+        serJoin.setOnSucceeded(e -> { serJoin.reset();});
+        System.out.println("passed serjoin");
+        //DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
         joinEventButton.setDisable(true);
         joinEventButton.setText("Joined");
         interestedButton.setVisible(false);
@@ -251,7 +259,11 @@ public class MainMenu implements Initializable {
     @FXML
     protected void onJoinEventPressedOut(EventModel event){
         EventModel eventSelected = event;
-        DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
+        testEvent=event;
+        serJoin.start();
+        serJoin.setOnSucceeded(e -> { serJoin.reset();});
+        System.out.println("passed serjoin");
+       // DatabaseComm.add_participant(eventSelected.getID(), Session.getInstance().getUser().getId());
         joinEventButton.setDisable(true);
         joinEventButton.setText("Joined");
         interestedButton.setVisible(false);
@@ -307,7 +319,7 @@ public class MainMenu implements Initializable {
                 joinEventButton.setText("Edit");
                 joinEventButton.setOnAction((event) -> {
                     eventViewPane.setVisible(false);
-                    EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();;
+                    EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();
                     mainmenu.setVisible(false);
                     eventEditPane.setVisible(true);
                     setEventData(rowData);
@@ -531,7 +543,7 @@ public class MainMenu implements Initializable {
 //--------------------------------------------------------------------------------------------------------------------------
                     userModels = DatabaseComm.getParticipants(rowData.getID());
                     userID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
-                    userName.setCellValueFactory(new PropertyValueFactory<>("Nume"));;
+                    userName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
                     UserTable.setItems(userModels);
 
                 }
@@ -713,7 +725,7 @@ public class MainMenu implements Initializable {
             joinEventButton.setText("Edit");
             joinEventButton.setOnAction((event) -> {
                 eventViewPane.setVisible(false);
-                EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();;
+                EventModel rowData = eventTableView.getSelectionModel().getSelectedItem();
                 mainmenu.setVisible(false);
                 eventEditPane.setVisible(true);
                 setEventData(rowData);
@@ -1030,7 +1042,7 @@ public class MainMenu implements Initializable {
                     while (true) {
                         synchronized (this) {
                             try {
-                                wait(5000);
+                                wait(60000);
                                 if (isCancelled()) {
                                     break;
                                 } else {
@@ -1070,7 +1082,7 @@ public class MainMenu implements Initializable {
                             }
                         }
 
-                        System.out.println("Refreshed after 5 seconds");
+                        System.out.println("Refreshed after 60 seconds");
                     }
                     return null;
                 }
@@ -1078,33 +1090,15 @@ public class MainMenu implements Initializable {
         }
     });
 
-    Service<Void> serNotif = new Service<Void>() {
+    Service<Void> serJoin = new Service<Void>() {
         @Override protected Task createTask() {
             return new Task<Void>() {
                 @Override protected Void call() throws InterruptedException {
-                    while(true){
                         synchronized(this){
-                            try {
-                                wait(5000);
-                                if(isCancelled()){
-                                    break;
-                                }
-                                else{
-                                    long tempmin;
-                                    LocalDateTime tempatm;
-                                    for(EventModel i : eventManagerModels){
-                                        if(i.getStatus()==0){
-                                            //gotta think how I'm gonna create notifications here
-                                        }
-                                    }
-                                }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            System.out.println("started!!!");
+                                    DatabaseComm.add_participant(testEvent.getID(), Session.getInstance().getUser().getId());
                         }
-
-                        System.out.println("Refreshed after 5 seconds");
-                    }
+                    System.out.println("Serjoin complete??");
                     // You code you want to execute in service backgroundgoes here
                     //return null;
                     return null;

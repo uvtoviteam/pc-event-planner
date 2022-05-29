@@ -62,14 +62,14 @@ public class LoginController {
                 //MainMenu obj= new MainMenu();
                 //Thread thread = new Thread(controller);
                 //thread.start();
-                Service ser = controller.startBackgroundService();
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent event) {
-                       ser.cancel();
-                       System.exit(0);
-                    }
-                });
+                //Service ser = controller.startBackgroundService();
+//                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//                    @Override
+//                    public void handle(WindowEvent event) {
+//                       ser.cancel();
+//                       System.exit(0);
+//                    }
+//                });
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

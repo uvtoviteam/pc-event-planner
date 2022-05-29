@@ -575,6 +575,7 @@ public class DatabaseComm {
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
         ObservableList<EventModel> Rflist = FXCollections.observableArrayList();
+        System.out.println(userId+" Happened");
 
         try {
             conn = dataSource.getConnection();
@@ -904,7 +905,8 @@ public class DatabaseComm {
     public static int add_participant(int event, int user){
         MysqlDataSource dataSource = SQLOnLaunch();
         Connection conn= null;
-
+        System.out.println("event "+event);
+        System.out.println("user "+user);
         try {
             conn = dataSource.getConnection();
         } catch (SQLException var12) {
