@@ -8,9 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import com.example.eventplanner.EventModel;
 import com.example.eventplanner.NotificationModel;
 import com.example.eventplanner.UserModel;
@@ -669,7 +668,7 @@ public class DatabaseComm {
 
     }
 
-    public static ObservableList<EventModel> interestEvents(){
+    public static ObservableList<EventModel> interestEvents(int user){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         MysqlDataSource dataSource=SQLOnLaunch();
         Connection conn= null;
@@ -683,38 +682,55 @@ public class DatabaseComm {
 
         PreparedStatement stmnt = null;
 
-        try {
-            String query = "SELECT events.* , count(enrolments.event_id) as participants FROM EVENTS left JOIN enrolments on events.event_id = enrolments.event_id group by events.event_id\n" +
-                    "/*where END_DATE > Sysdate()*/\n" +
-                    "ORDER BY participants DESC LIMIT 6;";
-            stmnt = conn.prepareStatement(query);
+        ArrayList<Integer> filters = getFilters(user);
 
-            //stmnt.setString(2, pass);
-            ResultSet rs = stmnt.executeQuery();
-            ResultSet rs2;
-            int id, limit ;
-            int creator, status;
-            String name , description, location;
-            LocalDateTime sdate , edate ;
-            ArrayList<User> Luser = new ArrayList<>();
+        for(int f : filters) {
 
-            while(rs.next()){
+            try {
+                String query = "SELECT events.*, event_filter.filter_id FROM EVENTS left JOIN event_filter on events.event_id = event_filter.event_id  where filter_id = " + f + " group by events.event_id limit 1";
+                stmnt = conn.prepareStatement(query);
 
-                id = rs.getInt("event_id");
-                creator = rs.getInt("creator");
-                name = rs.getString("name");
-                description = rs.getString("description");
-                sdate =  LocalDateTime.parse(rs.getString("start_date"),formatter);
-                edate = LocalDateTime.parse(rs.getString("end_date"),formatter);
-                limit = rs.getInt("limit");
-                location = rs.getString("location");
+                ResultSet rs = stmnt.executeQuery();
+                int id, limit;
+                int creator, status;
+                String name, description, location;
+                LocalDateTime sdate, edate;
+                ArrayList<User> Luser = new ArrayList<>();
 
-                Rflist.add(new EventModel(id,name ,description,sdate ,edate, Luser, limit,creator, location));
+                while (rs.next()) {
+
+                    id = rs.getInt("event_id");
+                    creator = rs.getInt("creator");
+                    name = rs.getString("name");
+                    description = rs.getString("description");
+                    sdate = LocalDateTime.parse(rs.getString("start_date"), formatter);
+                    edate = LocalDateTime.parse(rs.getString("end_date"), formatter);
+                    limit = rs.getInt("limit");
+                    location = rs.getString("location");
+
+                    Rflist.add(new EventModel(id, name, description, sdate, edate, Luser, limit, creator, location));
+                }
+
+
+            } catch (SQLException var11) {
+                var11.printStackTrace();
             }
+        }
 
+        Collections.shuffle(Rflist);
+        for(EventModel r : Rflist){
+            System.out.println(r);
+        }
 
-        }catch(SQLException var11){
-            var11.printStackTrace();
+        for(int i=0; i<Rflist.size()-1; i++) {
+            for(int j=i+1; j<Rflist.size(); j++) {
+                if(Rflist.get(i).getID() == Rflist.get(j).getID())
+                    Rflist.remove(j);
+            }
+        }
+        System.out.println("------------");
+        for(EventModel r : Rflist){
+            System.out.println(r);
         }
 
         return Rflist ;
@@ -843,6 +859,35 @@ public class DatabaseComm {
         }
 
         return events;
+    }
+
+    public static ArrayList<Integer> getFilters(int user){
+        MysqlDataSource dataSource=SQLOnLaunch();
+        Connection conn= null;
+        ArrayList<Integer> filters = new ArrayList<>();
+
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLException var12) {
+            var12.printStackTrace();
+        }
+
+        PreparedStatement stmnt = null;
+
+        try {
+            String query = "select filter_id from event_filter join enrolments on enrolments.event_id = event_filter.event_id where user_id = " + user + " group by filter_id";
+            stmnt = conn.prepareStatement(query);
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                filters.add(rs.getInt(1));
+            }
+            return filters;
+
+        }catch(SQLException var11){
+            var11.printStackTrace();
+        }
+
+        return filters;
     }
 
     public static int add_participant(int event, int user){
