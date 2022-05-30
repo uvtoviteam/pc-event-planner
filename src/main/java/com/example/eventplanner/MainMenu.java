@@ -732,7 +732,7 @@ public class MainMenu implements Initializable {
 
         for(Event e : events)
             for(String k : keys)
-                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                if(e.getNume().toLowerCase().contains(k) || e.getDescription().toLowerCase().contains(k)) {
                     results.add(e);
                     continue;
                 }
@@ -761,7 +761,7 @@ public class MainMenu implements Initializable {
 
         for(Event e : events)
             for(String k : keys)
-                if(e.getNume().contains(k) || e.getDescription().contains(k)) {
+                if(e.getNume().toLowerCase().contains(k) || e.getDescription().toLowerCase().contains(k)) {
                     results.add(e);
                     continue;
                 }
