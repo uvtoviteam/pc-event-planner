@@ -296,21 +296,24 @@ public class MainMenu implements Initializable {
             System.out.println(eventSelected.getNume());
             fillEventPane(eventSelected);
 
-            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
-                joinEventButton.setDisable(true);
-                joinEventButton.setText("Joined");
-                interestedButton.setVisible(false);
-            }
+            serTableView.start();
+            serTableView.setOnSucceeded(e -> { serTableView.reset();});
 
-            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
-                interestedButton.setVisible(false);
-
-            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit() && DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) == 0) {
-                joinEventButton.setDisable(true);
-                joinEventButton.setText("Full event");
-                System.out.println("limit " + eventSelected.getLimit());
-                interestedButton.setVisible(false);
-            }
+//            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+//                joinEventButton.setDisable(true);
+//                joinEventButton.setText("Joined");
+//                interestedButton.setVisible(false);
+//            }
+//
+//            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+//                interestedButton.setVisible(false);
+//
+//            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit()) {
+//                joinEventButton.setDisable(true);
+//                joinEventButton.setText("Full event");
+//                System.out.println("limit " + eventSelected.getLimit());
+//                interestedButton.setVisible(false);
+//            }
 
             if(Session.getInstance().getUser().getType() == 2) {
                 interestedButton.setVisible(false);
@@ -339,6 +342,37 @@ public class MainMenu implements Initializable {
         }
     }
 
+    Service<Void> serTableView = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    synchronized(this){
+                        EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
+                        if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                            joinEventButton.setDisable(true);
+                            joinEventButton.setText("Joined");
+                            interestedButton.setVisible(false);
+                        }
+
+                        if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                            interestedButton.setVisible(false);
+
+                        if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit()) {
+                            joinEventButton.setDisable(true);
+                            joinEventButton.setText("Full event");
+                            System.out.println("limit " + eventSelected.getLimit());
+                            interestedButton.setVisible(false);
+                        }
+                    }
+
+                    // You code you want to execute in service backgroundgoes here
+                    //return null;
+                    return null;
+                }
+            };
+        }
+    };
+
     @FXML
     protected void onMouseClickTable2(){
         //eventTableView.getSelectionModel().getSelectedItem();
@@ -352,20 +386,23 @@ public class MainMenu implements Initializable {
             System.out.println(eventSelected.getNume());
             fillEventPane(eventSelected);
 
-            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
-                joinEventButton.setDisable(true);
-                joinEventButton.setText("Joined");
-                interestedButton.setVisible(false);
-            }
+            serTableView2.start();
+            serTableView2.setOnSucceeded(e -> { serTableView2.reset();});
 
-            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
-                interestedButton.setVisible(false);
-
-            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit() && DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) == 0) {
-                joinEventButton.setDisable(true);
-                joinEventButton.setText("Full event");
-                interestedButton.setVisible(false);
-            }
+//            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+//                joinEventButton.setDisable(true);
+//                joinEventButton.setText("Joined");
+//                interestedButton.setVisible(false);
+//            }
+//
+//            if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+//                interestedButton.setVisible(false);
+//
+//            if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit()) {
+//                joinEventButton.setDisable(true);
+//                joinEventButton.setText("Full event");
+//                interestedButton.setVisible(false);
+//            }
 
             eventViewPane.setVisible(true);
             backEventButton.setOnAction((event) -> {
@@ -373,6 +410,36 @@ public class MainMenu implements Initializable {
             });
         }
     }
+
+    Service<Void> serTableView2 = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    synchronized(this){
+                        EventModel eventSelected = eventManagerTableView2.getSelectionModel().getSelectedItem();
+                        if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
+                            joinEventButton.setDisable(true);
+                            joinEventButton.setText("Joined");
+                            interestedButton.setVisible(false);
+                        }
+
+                        if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 2) != 0)
+                            interestedButton.setVisible(false);
+
+                        if(DatabaseComm.checkParticipants(eventSelected.getID()) >= eventSelected.getLimit()) {
+                            joinEventButton.setDisable(true);
+                            joinEventButton.setText("Full event");
+                            interestedButton.setVisible(false);
+                        }
+                    }
+
+                    // You code you want to execute in service backgroundgoes here
+                    //return null;
+                    return null;
+                }
+            };
+        }
+    };
 
     @FXML
     protected void onBackEventPressed2(){
@@ -813,8 +880,10 @@ public class MainMenu implements Initializable {
             joinEventButton.setText("Joined");
             interestedButton.setVisible(false);
         }
+
         if(DatabaseComm.checkEnrolment(eventG.getID(), Session.getInstance().getUser().getId(), 2) != 0)
             interestedButton.setVisible(false);
+
         eventViewPane.setVisible(true);
         backEventButton.setOnAction((event) -> {
             onBackEventPressed3();
@@ -1106,6 +1175,24 @@ public class MainMenu implements Initializable {
             };
         }
     };
+
+    Service<Void> serTableJoined = new Service<Void>() {
+        @Override protected Task createTask() {
+            return new Task<Void>() {
+                @Override protected Void call() throws InterruptedException {
+                    synchronized(this){
+                        System.out.println("started!!!");
+                        DatabaseComm.add_participant(testEvent.getID(), Session.getInstance().getUser().getId());
+                    }
+                    System.out.println("Serjoin complete??");
+                    // You code you want to execute in service backgroundgoes here
+                    //return null;
+                    return null;
+                }
+            };
+        }
+    };
+
     public Service startBackgroundService(){
 //        ser.setOnSucceeded((WorkerStateEvent event) -> {
 //            // Anything which you want to update on javafx thread (GUI) after completion of background process.

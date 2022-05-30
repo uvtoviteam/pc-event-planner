@@ -922,6 +922,7 @@ public class DatabaseComm {
             stmnt.setInt(2, user);
 
             stmnt.executeUpdate();
+            System.out.println("===========================================================");
 
         }catch(SQLException var11){
             var11.printStackTrace();
