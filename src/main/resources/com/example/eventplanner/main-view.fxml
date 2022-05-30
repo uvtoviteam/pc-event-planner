@@ -51,6 +51,7 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="DeleteButton2" layoutX="73.0" layoutY="33.0" mnemonicParsing="false" onAction="#onDeleteButtonClickManager" prefHeight="26.0" prefWidth="70.0" style="-fx-background-color: F32424;" text="Delete" textFill="WHITE" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="eventEditPane" layoutX="164.0" prefHeight="550.0" prefWidth="690.0" style="-fx-background-color: #f2f2f2;" visible="false">

@@ -347,6 +347,7 @@ public class MainMenu implements Initializable {
             return new Task<Void>() {
                 @Override protected Void call() throws InterruptedException {
                     synchronized(this){
+                        if(Session.getInstance().getUser().getType() == 1) {
                         EventModel eventSelected = eventTableView.getSelectionModel().getSelectedItem();
                         if(DatabaseComm.checkEnrolment(eventSelected.getID(), Session.getInstance().getUser().getId(), 1) != 0) {
                             joinEventButton.setDisable(true);
@@ -363,7 +364,10 @@ public class MainMenu implements Initializable {
                             System.out.println("limit " + eventSelected.getLimit());
                             interestedButton.setVisible(false);
                         }
+                        }
                     }
+
+                    System.out.println("tableView service");
 
                     // You code you want to execute in service backgroundgoes here
                     //return null;
@@ -403,6 +407,8 @@ public class MainMenu implements Initializable {
 //                joinEventButton.setText("Full event");
 //                interestedButton.setVisible(false);
 //            }
+
+            System.out.println("tableView2 service");
 
             eventViewPane.setVisible(true);
             backEventButton.setOnAction((event) -> {
@@ -472,6 +478,7 @@ public class MainMenu implements Initializable {
     void onManagerMouseClickTable(javafx.scene.input.MouseEvent event) {
 
     }
+
     @FXML
     void onManagerMouseClickTable2(javafx.scene.input.MouseEvent event) {
 
@@ -486,6 +493,21 @@ public class MainMenu implements Initializable {
                 eventManagerTableView.getItems().clear();
                 eventManagerModels=DatabaseComm.refreshlist(Session.getInstance().getUser().getId(),true);
                 eventManagerTableView.setItems(eventManagerModels);
+            }
+            else { //error
+            }
+        }
+    }
+
+    @FXML
+    void onDeleteButtonClickManager(ActionEvent event) {
+        EventModel selectedEvent=eventTableView.getSelectionModel().getSelectedItem();
+        if(selectedEvent!=null){
+            if(DatabaseComm.deleteEvent(selectedEvent)==0)
+            {
+                eventTableView.getItems().clear();
+                eventModels=DatabaseComm.refreshlist(Session.getInstance().getUser().getId(),false);
+                eventTableView.setItems(eventModels);
             }
             else { //error
             }
@@ -559,6 +581,36 @@ public class MainMenu implements Initializable {
             DatabaseComm.updateEvent(currentEvent);
             eventEditPane.setVisible(false);
             eventmanagerpane.setVisible(true);
+        }
+        else{
+            System.out.println("Error occured.");
+        }
+    }
+
+    @FXML
+    void onSaveButtonPressManager(ActionEvent event) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime sDate,eDate;
+        String eName,Desc;
+        eName = EventNameField.getText();
+        Desc = DescArea.getText();
+        String formattedHour1 = String.format("%02d", Hour1.getValue());
+        String formattedHour2 = String.format("%02d", Hour2.getValue());
+        String formattedMin1 = String.format("%02d", Min1.getValue());
+        String formattedMin2 = String.format("%02d", Min2.getValue());
+        sDate = LocalDateTime.parse(StartDateField.getValue()+" "+formattedHour1+":"+formattedMin1+":00",formatter);
+        eDate = LocalDateTime.parse(EndDateField.getValue()+" "+formattedHour2+":"+formattedMin2+":00",formatter);
+        System.out.println(sDate);
+        System.out.println(eDate);
+        if(DatabaseComm.updateEvent(currentEvent)==0){
+            //DatabaseComm.commitQueries();
+            currentEvent.setNume(eName);
+            currentEvent.setDescription(Desc);
+            currentEvent.setStartDatePrivate(sDate);
+            currentEvent.setEndDatePrivate(eDate);
+            DatabaseComm.updateEvent(currentEvent);
+            eventEditPane.setVisible(false);
+            mainmenu.setVisible(true);
         }
         else{
             System.out.println("Error occured.");
@@ -776,7 +828,7 @@ public class MainMenu implements Initializable {
     ObservableList<EventModel> interest = DatabaseComm.interestEvents(Session.getInstance().getUser().getId());
 
     @FXML
-    Button BackButton;
+    Button BackButton, DeleteButton2, SaveButton;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -803,8 +855,36 @@ public class MainMenu implements Initializable {
                 eventEditPane.setVisible(false);
             });
 
+            SaveButton.setOnAction((event) -> {
+                onSaveButtonPressManager(event);
+            });
             interestedButton.setVisible(false);
+            DeleteButton2.setVisible(true);
 
+//*******************************************************************************
+            eventTableView.setOnMouseClicked((event) -> {
+                onManagerMouseClickTable2(event);
+            });
+
+            eventTableView.setRowFactory(tv -> {
+                TableRow<EventModel> row = new TableRow<>();
+                row.setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                        EventModel rowData = row.getItem();
+                        mainmenu.setVisible(false);
+                        eventEditPane.setVisible(true);
+                        setEventData(rowData);
+                        System.out.println("Double click on: "+rowData.getNume());
+//--------------------------------------------------------------------------------------------------------------------------
+                        userModels = DatabaseComm.getParticipants(rowData.getID());
+                        userID.setCellValueFactory(new PropertyValueFactory<>("ID"));  //GETTER NAME
+                        userName.setCellValueFactory(new PropertyValueFactory<>("Nume"));
+                        UserTable.setItems(userModels);
+
+                    }
+                });
+                return row ;
+            });
         }
 
         filters.setItems(filtersName);

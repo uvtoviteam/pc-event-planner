@@ -21,7 +21,7 @@ public class DatabaseComm {
     private static MysqlDataSource SQLOnLaunch() {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUser("root"); // user
-        dataSource.setPassword("K@rate2332"); //pass
+        dataSource.setPassword("Cr157124"); //pass
         dataSource.setURL("jdbc:mysql://localhost:3306/event_planner"); //in loc de event_planner, pui ce database ai
         return dataSource;
     }
@@ -285,16 +285,16 @@ public class DatabaseComm {
         PreparedStatement stmnt = null;
 
         try {
-            String queryEvent = "UPDATE EVENTS SET `NAME`=?, `DESCRIPTION`=?, `START_DATE`=?, `END_DATE`=?, `CREATOR`=?, `LIMIT`=? WHERE event_id=?";
+            String queryEvent = "UPDATE EVENTS SET `NAME`=?, `DESCRIPTION`=?, `START_DATE`=?, `END_DATE`=?/*, `CREATOR`=?*/, `LIMIT`=? WHERE event_id=?";
             System.out.println(event.getEndDatePrivate());
             stmnt = conn.prepareStatement(queryEvent);
             stmnt.setString(1, event.getNume());
             stmnt.setString(2, event.getDescription());
             stmnt.setTimestamp(3, event.getStartDatePrivate());
             stmnt.setTimestamp(4, event.getEndDatePrivate());
-            stmnt.setInt(5, event.getCreator().get());
-            stmnt.setInt(6, event.getLimit());
-            stmnt.setInt(7,event.getID());
+          //  stmnt.setInt(5, event.getCreator().get());
+            stmnt.setInt(6-1, event.getLimit());
+            stmnt.setInt(7-1,event.getID());
             //System.out.println(queryEvent);
             stmnt.executeUpdate();
 
